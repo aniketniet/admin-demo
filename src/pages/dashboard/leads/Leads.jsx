@@ -6,6 +6,7 @@ import {
   CardFooter,
   CardHeader,
   IconButton,
+  Spinner,
   Tooltip,
   Typography,
 } from "@material-tailwind/react";
@@ -17,7 +18,7 @@ import { PencilIcon, TrashIcon } from "@heroicons/react/24/solid";
 
 function Leads() {
   const [leads, setLeads] = useState([]);
-  // const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const token = Cookies.get("token");
@@ -27,7 +28,7 @@ function Leads() {
   const fetchLeads = useCallback(
     async (page) => {
       if (!token) return;
-      // setLoading(true);
+      setLoading(true);
       try {
         const { data } = await axios.get(
           `${import.meta.env.VITE_BASE_URL}/leads?page=${page}&limit=10`,
@@ -38,7 +39,7 @@ function Leads() {
       } catch (error) {
         console.error("Error fetching leads:", error);
       } finally {
-        // setLoading(false);
+        setLoading(false);
       }
     },
     [token]
@@ -127,27 +128,26 @@ function Leads() {
     },
     { key: "bid_count", label: "Bids", width: "w-20" },
     { key: "mobile_count", label: "Mobile Count", width: "w-24" },
-   
+
     {
       key: "actions",
       label: "Actions",
       render: (row) => (
-      <td className="px-4 py-2 flex gap-2">
-        <Tooltip content="Edit">
-        <button onClick={() => handleEdit(row.id)}>
-          <PencilIcon className="h-5 w-5 text-blue-500" />
-        </button>
-        </Tooltip>
-        <Tooltip content="Delete">
-        <button onClick={() => deleteLead(row.id)}>
-          <TrashIcon className="h-5 w-5 text-red-500" />
-        </button>
-        </Tooltip>
-      </td>
+        <td className="px-4 py-2 flex gap-2">
+          <Tooltip content="Edit">
+            <button onClick={() => handleEdit(row.id)}>
+              <PencilIcon className="h-5 w-5 text-blue-500" />
+            </button>
+          </Tooltip>
+          <Tooltip content="Delete">
+            <button onClick={() => deleteLead(row.id)}>
+              <TrashIcon className="h-5 w-5 text-red-500" />
+            </button>
+          </Tooltip>
+        </td>
       ),
       width: "w-24",
-    }
-   
+    },
   ];
 
   return (
@@ -167,11 +167,13 @@ function Leads() {
       </CardHeader>
 
       <CardBody>
-        <CustomTable
-          columns={columns}
-          data={leads}
-         
-        />
+        {loading ? (
+          <div className="flex justify-center items-center">
+            <Spinner className="h-8 w-8 text-blue-500" />
+          </div>
+        ) : (
+          <CustomTable columns={columns} data={leads} />
+        )}
       </CardBody>
 
       <CardFooter className="flex justify-between">

@@ -11,6 +11,7 @@ import {
   Input,
   Switch,
   Tooltip,
+  Spinner,
 } from "@material-tailwind/react";
 import axios from "axios";
 import Cookies from "js-cookie";
@@ -27,6 +28,7 @@ function Coupon() {
   const [credits, setCredits] = useState("");
   const [discountValue, setDiscountValue] = useState(""); // New state for discount value
   const [discountType, setDiscountType] = useState(""); // New state for discount type
+  const [loading, setLoading] = useState(false);
 
   const [open, setOpen] = React.useState(false);
 
@@ -35,6 +37,7 @@ function Coupon() {
   const handleOpen = () => setOpen((cur) => !cur);
 
   const fetchLeads = useCallback(async () => {
+    setLoading(true);
     if (!token) return;
     try {
       const { data } = await axios.get(
@@ -44,6 +47,9 @@ function Coupon() {
       setLeads(data.data);
     } catch (error) {
       console.error("Error fetching leads:", error);
+    }
+    finally{
+      setLoading(false);
     }
   }, [token]);
 
@@ -66,6 +72,7 @@ function Coupon() {
   };
 
   const handleCouponSubmit = async () => {
+    setLoading(true);
     try {
       const data = new URLSearchParams();
       data.append("code_name", couponName);
@@ -95,6 +102,9 @@ function Coupon() {
       handleOpen(); // Close modal after submission
     } catch (error) {
       console.error("Error submitting coupon:", error);
+    }
+    finally{
+      setLoading(false);
     }
   };
 
@@ -144,14 +154,13 @@ function Coupon() {
     {
       key: "type",
       label: "Type",
-      render: (row) => (row.type === "1" ? " REFER CODE" : "DISCOUNT"),
+      render: (row) => (row.type === "1" ? "REFER CODE" : "DISCOUNT"),
     },
     {
       key: "credits",
       label: "Credits",
       render: (row) => row.credits || "N/A",
     },
-
     {
       key: "discount_value",
       label: "Discount Value",
@@ -161,7 +170,7 @@ function Coupon() {
       key: "discount_type",
       label: "Discount Type",
       render: (row) =>
-        (row.discount_type === "1" ? "FLAT" : "PERCENTAGE") || "N/A",
+        row.discount_type ? (row.discount_type === "1" ? "FLAT" : "PERCENTAGE") : "N/A",
     },
     {
       key: "created_at",
@@ -219,7 +228,13 @@ function Coupon() {
       </CardHeader>
 
       <CardBody>
-        <CustomTable columns={columns} data={leads} />
+      {loading ? (
+          <div className="flex justify-center items-center">
+            <Spinner className="h-8 w-8 text-blue-500" />
+          </div>
+        ) : (
+          <CustomTable columns={columns} data={leads} />
+        )}
       </CardBody>
 
       <CardFooter className="flex justify-between">

@@ -13,7 +13,6 @@ function EditUsers() {
     mobile: "",
     city: "",
     area_code: "",
-   
     organisation: "",
     wallet: 0,
     country: "",
@@ -24,8 +23,14 @@ function EditUsers() {
     is_subscriber: 0,
     is_verified: 0,
     is_kyc_verified: 0,
+    city_requested: ""
 
   });
+  const [passwords, setPasswords] = useState({
+    newPassword: "",
+    confirmPassword: ""
+  });
+
 
   const token = Cookies.get("token");
 
@@ -36,6 +41,7 @@ function EditUsers() {
         { headers: { Authorization: `Bearer ${token}` } }
       );
       setUser(response.data.data);
+    
     } catch (error) {
       console.error("Error fetching user details:", error);
     }
@@ -53,6 +59,11 @@ function EditUsers() {
         ? Number(value)
         : value,
     }));
+  };
+
+  const handlePasswordChange = (e) => {
+    const { name, value } = e.target;
+    setPasswords((prev) => ({ ...prev, [name]: value }));
   };
 
   const validateForm = () => {
@@ -110,11 +121,46 @@ function EditUsers() {
     }
   };
 
+ 
+
+  const handlePasswordUpdate = async (e) => {
+    e.preventDefault();
+  
+    if (passwords.newPassword !== passwords.confirmPassword) {
+      showErrorToast("Passwords do not match.");
+      return;
+    }
+  
+    const formData = new FormData();
+    formData.append("id", id);  // Replace with dynamic user ID if needed
+   
+    formData.append("pass", passwords.newPassword);
+  
+    try {
+     await axios.post(
+        "https://sooprs.com/api2/public/index.php/update-professional-password",
+        formData,
+        {
+         }
+      );
+  
+      showSuccessToast("Password updated successfully!");
+      setPasswords({ newPassword: "", confirmPassword: "" });
+  
+    } catch (error) {
+      console.error("Error updating password:", error);
+      showErrorToast("Failed to update password.");
+    }
+  };
+  
+
   return (
     <>
       <Toaster />
-      <div className="max-w-4xl mx-auto mt-5 px-4">
+      <div className="flex flex-col xl:flex-row justify-center w-full">
+      <div className=" w-full  mt-5 px-4">
         <Card color="transparent" shadow={false} className="p-6 border border-gray-300 shadow-sm rounded-2xl">
+          {/* Update User */}
           <Typography variant="h4" color="blue-gray">Update User</Typography>
           <form onSubmit={handleUpdate} className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
             
@@ -168,6 +214,10 @@ function EditUsers() {
             </div>
 
             
+            <div className="flex flex-col md:col-span-2">
+              <Typography variant="h6">City Requested</Typography>
+              <Input type="city_requested" size="lg" name="city_requested" value={user.city_requested} onChange={handleChange} placeholder="Enter Credit Amount" />
+            </div>
 
             {/* About */}
              <div className="flex flex-col md:col-span-2">
@@ -228,6 +278,7 @@ function EditUsers() {
                 <option value="1">Yes</option>
               </select>
             </div>
+          
 
             {/* Submit Button */}
             <div className="md:col-span-2 flex justify-end">
@@ -235,8 +286,37 @@ function EditUsers() {
             </div>
 
           </form>
+
+
+      
         </Card>
       </div>
+
+      <div className="w-full md:w-1/2 mt-5 px-4">
+      <Card color="transparent" shadow={false} className="p-6 border border-gray-300 shadow-sm rounded-2xl">
+
+      {/* Update Password */}  
+
+          {/* Update Password */}
+          <Typography variant="h4" color="blue-gray">Update Password</Typography>
+          <form onSubmit={handlePasswordUpdate} className="mt-4 grid grid-cols-1 gap-4">
+            <div className="flex flex-col">
+              <Typography variant="h6">New Password</Typography>
+              <Input type="password" size="lg" name="newPassword" value={passwords.newPassword} onChange={handlePasswordChange} placeholder="Enter New Password" />
+            </div>
+            <div className="flex flex-col">
+              <Typography variant="h6">Confirm Password</Typography>
+              <Input type="password" size="lg" name="confirmPassword" value={passwords.confirmPassword} onChange={handlePasswordChange} placeholder="Confirm New Password" />
+            </div>
+            <div className="flex justify-end">
+              <Button type="submit" className="mt-4">Update Password</Button>
+            </div>
+          </form>
+
+      </Card>
+    </div>
+    </div>
+
     </>
   );
 }

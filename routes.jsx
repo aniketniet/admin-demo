@@ -6,6 +6,7 @@ import {
   ArchiveBoxArrowDownIcon,
   UsersIcon,
   TicketIcon,
+  BellIcon,
 } from "@heroicons/react/24/solid";
 import Home from "./src/pages/dashboard/home"; // Fixed path
 import Profile from "./src/pages/dashboard/profile"; // Fixed path
@@ -17,6 +18,7 @@ import Coupon from "./src/pages/dashboard/Coupon";
 import Professional from "./src/pages/dashboard/AllUser/professional/Professional";
 import Client from "./src/pages/dashboard/AllUser/client/Client";
 import Agency from "./src/pages/dashboard/AllUser/agency/Agency";
+import Susbscriber from "./src/pages/dashboard/subscriber/Subscriber";
 
 
 const iconClass = "w-5 h-5 text-inherit";
@@ -49,6 +51,35 @@ export const routes = [
           { name: "Agency", path: "/users/agency" , element: <Agency /> },
         ],
       },
+      {
+        icon: <UsersIcon className={iconClass} />,
+        name: "Leads",
+        path: "/users", // Main path for "All Users" without any element
+        subPages: [
+          { name: "Leads", path: "/users/all", element: <Users /> },
+          { name: "Lead Sharing", path: "/users/professional" , element: <Professional /> },
+          { name: "Active Leads", path: "/users/client",  element: <Client /> },
+         
+        ],
+      },
+      {
+        icon: <UsersIcon className={iconClass} />,
+        name: "Gigs",
+        path: "/users", // Main path for "All Users" without any element
+        subPages: [
+          { name: "All Gigs", path: "/users/all", element: <Users /> },
+          { name: "Gigs Purchase", path: "/users/professional" , element: <Professional /> },
+         
+         
+        ],
+      },
+      {
+        icon: <BellIcon className={iconClass} />,
+        name: "Subscriber",
+        path: "/subscriber", // Fixed path
+        element: <Susbscriber />,
+      },
+   
       {
         icon: <UserCircleIcon className={iconClass} />,
         name: "Profile",
