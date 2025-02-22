@@ -29,12 +29,15 @@ const Login = () => {
         }
       );
 
-      if (res.status == 200) {
+      if (res.data.success) {
+        console.log("Login Success");
         const token = res.data.data.token;
         console.log("Response:", token);
 
         // Store the token in cookies
         Cookies.set("token", token, { expires: 7, secure: true, sameSite: "Strict" });
+        console.log('cookies set');
+        
         // Redirect to dashboard
         navigate("/");
       } else {

@@ -19,6 +19,8 @@ import Professional from "./src/pages/dashboard/AllUser/professional/Professiona
 import Client from "./src/pages/dashboard/AllUser/client/Client";
 import Agency from "./src/pages/dashboard/AllUser/agency/Agency";
 import Susbscriber from "./src/pages/dashboard/subscriber/Subscriber";
+import CreateInvoice from "./src/pages/dashboard/invocie/CreateInvoice";
+import AllInvoice from "./src/pages/dashboard/invocie/AllInvoice";
 
 
 const iconClass = "w-5 h-5 text-inherit";
@@ -69,6 +71,17 @@ export const routes = [
         subPages: [
           { name: "All Gigs", path: "/users/all", element: <Users /> },
           { name: "Gigs Purchase", path: "/users/professional" , element: <Professional /> },
+         
+         
+        ],
+      },
+      {
+        icon: <UsersIcon className={iconClass} />,
+        name: "Account",
+        path: "/invoice", // Main path for "All Users" without any element
+        subPages: [
+          { name: "Create Invoice", path: "/invoice/create", element: <CreateInvoice /> },
+          { name: "All Invoice", path: "/invoice/all" , element: <AllInvoice /> },
          
          
         ],
