@@ -3,7 +3,7 @@ import Sidebar from "../layout/Sidebar";
 import routes from "../../routes";
 import DashboardNavbar from "../layout/dashboard-navbar";
 import { useState } from "react";
-import LeadDetail from "../pages/dashboard/leads/leadDetail";
+import LeadDetail from "../pages/dashboard/leads/LeadDetail";
 import EditUsers from "../pages/dashboard/AllUser/Users/EditUsers";
 import AddSubscriber from "../pages/dashboard/subscriber/AddSubscriber";
 
