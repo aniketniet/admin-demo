@@ -21,7 +21,7 @@ import Agency from "./src/pages/dashboard/AllUser/agency/Agency";
 import Susbscriber from "./src/pages/dashboard/subscriber/Subscriber";
 import CreateInvoice from "./src/pages/dashboard/invocie/CreateInvoice";
 import AllInvoice from "./src/pages/dashboard/invocie/AllInvoice";
-
+import Newsubscriber from "./src/pages/dashboard/newsubscriber/Newsubscriber";
 
 const iconClass = "w-5 h-5 text-inherit";
 
@@ -48,9 +48,13 @@ export const routes = [
         path: "/users", // Main path for "All Users" without any element
         subPages: [
           { name: "Users", path: "/users/all", element: <Users /> },
-          { name: "Professional", path: "/users/professional" , element: <Professional /> },
-          { name: "Client", path: "/users/client",  element: <Client /> },
-          { name: "Agency", path: "/users/agency" , element: <Agency /> },
+          {
+            name: "Professional",
+            path: "/users/professional",
+            element: <Professional />,
+          },
+          { name: "Client", path: "/users/client", element: <Client /> },
+          { name: "Agency", path: "/users/agency", element: <Agency /> },
         ],
       },
       {
@@ -59,9 +63,12 @@ export const routes = [
         path: "/users", // Main path for "All Users" without any element
         subPages: [
           { name: "Leads", path: "/users/all", element: <Users /> },
-          { name: "Lead Sharing", path: "/users/professional" , element: <Professional /> },
-          { name: "Active Leads", path: "/users/client",  element: <Client /> },
-         
+          {
+            name: "Lead Sharing",
+            path: "/users/professional",
+            element: <Professional />,
+          },
+          { name: "Active Leads", path: "/users/client", element: <Client /> },
         ],
       },
       {
@@ -70,9 +77,11 @@ export const routes = [
         path: "/users", // Main path for "All Users" without any element
         subPages: [
           { name: "All Gigs", path: "/users/all", element: <Users /> },
-          { name: "Gigs Purchase", path: "/users/professional" , element: <Professional /> },
-         
-         
+          {
+            name: "Gigs Purchase",
+            path: "/users/professional",
+            element: <Professional />,
+          },
         ],
       },
       {
@@ -80,10 +89,16 @@ export const routes = [
         name: "Account",
         path: "/invoice", // Main path for "All Users" without any element
         subPages: [
-          { name: "Create Invoice", path: "/invoice/create", element: <CreateInvoice /> },
-          { name: "All Invoice", path: "/invoice/all" , element: <AllInvoice /> },
-         
-         
+          {
+            name: "Create Invoice",
+            path: "/invoice/create",
+            element: <CreateInvoice />,
+          },
+          {
+            name: "All Invoice",
+            path: "/invoice/all",
+            element: <AllInvoice />,
+          },
         ],
       },
       {
@@ -92,7 +107,14 @@ export const routes = [
         path: "/subscriber", // Fixed path
         element: <Susbscriber />,
       },
-   
+
+      {
+        icon: <BellIcon className={iconClass} />,
+        name: "new",
+        path: "/newsubscriber", // Fixed path
+        element: <Newsubscriber />,
+      },
+
       {
         icon: <UserCircleIcon className={iconClass} />,
         name: "Profile",
