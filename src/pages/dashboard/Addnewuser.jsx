@@ -3,32 +3,12 @@ import axios from "axios";
 import Toaster, {
   showSuccessToast,
   showErrorToast,
-} from "../../../components/Toaster";
-import { Card, Input, Typography } from "@material-tailwind/react";
+} from "../../components/Toaster";
+import { Card, Input, Button, Typography } from "@material-tailwind/react";
 import Cookies from "js-cookie";
-import * as React from "react";
-import { Check, ChevronsUpDown } from "lucide-react";
-
-import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList,
-} from "@/components/ui/command";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
 
 function AddnewSubscriber() {
   const token = Cookies.get("token");
-  const [open, setOpen] = React.useState(false);
-  const [value, setValue] = React.useState("");
 
   const [user, setUser] = useState({
     user_id: "",
@@ -59,7 +39,6 @@ function AddnewSubscriber() {
 
   useEffect(() => {
     fetchProfessionals();
-    console.log("Professionals:", professionals);
   }, [fetchProfessionals]);
 
   // Handle input change
@@ -123,101 +102,16 @@ function AddnewSubscriber() {
           className="p-6 border border-gray-300 shadow-sm rounded-2xl"
         >
           <Typography variant="h4" color="blue-gray">
-            Add New Subscriber
+            Add New User
           </Typography>
           <form
             onSubmit={handleUpdate}
             className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4"
           >
             {/* User Selection */}
-            <Popover open={open} onOpenChange={setOpen}>
-              <PopoverTrigger asChild>
-                <Button
-                  variant="outline"
-                  role="combobox"
-                  aria-expanded={open}
-                  className="w-[810px] justify-between"
-                >
-                  {value ? (
-                    <span>
-                      {
-                        professionals.find(
-                          (professional) => professional.id.toString() === value
-                        )?.name
-                      }{" "}
-                      ({" "}
-                      {
-                        professionals.find(
-                          (professional) => professional.id.toString() === value
-                        )?.email
-                      }{" "}
-                      )
-                    </span>
-                  ) : (
-                    "Select professional..."
-                  )}
-                  <ChevronsUpDown className="opacity-50" />
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent className="w-[810px] p-0">
-                <Command>
-                  <CommandInput
-                    placeholder="Search professional..."
-                    className="h-9"
-                  />
-                  <CommandList>
-                    <CommandEmpty>No professional found.</CommandEmpty>
-                    <CommandGroup>
-                      {professionals.map((professional) => (
-                        <CommandItem
-                          key={professional.id}
-                          value={professional.name}
-                          onSelect={() => {
-                            setValue(professional.id.toString());
-
-                            setUser((prevUser) => ({
-                              ...prevUser,
-                              user_id: parseInt(professional.id, 10),
-                            }));
-                            setOpen(false);
-                          }}
-                        >
-                          {professional.name} ({professional.email})
-                          <Check
-                            className={cn(
-                              "ml-auto",
-                              value === professional.name
-                                ? "opacity-100"
-                                : "opacity-0"
-                            )}
-                          />
-                        </CommandItem>
-                      ))}
-                    </CommandGroup>
-                  </CommandList>
-                </Command>
-              </PopoverContent>
-            </Popover>
             <div className="flex flex-col">
-              {/* <Typography variant="h6">Search User</Typography> */}
-              {/* <option value=""> */}
-              {/* <input
-                type="text"
-                className="border rounded-md border-gray-500 px-3 py-2 focus:outline-none"
-                placeholder="Search user"
-                onChange={(e) => {
-                  const searchString = e.target.value.toLowerCase();
-                  const filteredUsers = professionals.filter(
-                    (user) =>
-                      user.name.toLowerCase().includes(searchString) ||
-                      user.email.toLowerCase().includes(searchString)
-                  );
-                  filteredUsers(filteredUsers);
-                }}
-              /> */}
-              {/* </option> */}
-
-              {/* <select
+              <Typography variant="h6">Search User</Typography>
+              <select
                 className="border rounded-md border-gray-500 px-3 py-2 focus:outline-none"
                 onChange={(e) => {
                   const selectedUser = professionals.find(
@@ -231,29 +125,29 @@ function AddnewSubscriber() {
                   }
                 }}
                 value={user.user_id}
-              > */}
-              {/* <option value="">
+              >
+                <option value="">
                   <input
-                    type="text"
+                    type="input"
                     className="border rounded-md border-gray-500 px-3 py-2 focus:outline-none"
                     placeholder="Search user"
-                    // onChange={(e) => {
-                    //   const searchString = e.target.value.toLowerCase();
-                    //   const filteredUsers = professionals.filter(
-                    //     (user) =>
-                    //       user.name.toLowerCase().includes(searchString) ||
-                    //       user.email.toLowerCase().includes(searchString)
-                    //   );
-                    //   filteredUsers(filteredUsers);
-                    // }}
+                    onChange={(e) => {
+                      const searchString = e.target.value.toLowerCase();
+                      const filteredUsers = professionals.filter(
+                        (user) =>
+                          user.name.toLowerCase().includes(searchString) ||
+                          user.email.toLowerCase().includes(searchString)
+                      );
+                      filteredUsers(filteredUsers);
+                    }}
                   />
-                </option> */}
-              {/* {professionals.map((user) => (
+                </option>
+                {professionals.map((user) => (
                   <option key={user.id} value={user.id}>
                     {user.name} ({user.email})
                   </option>
                 ))}
-              </select> */}
+              </select>
             </div>
 
             {/* Plan Selection */}

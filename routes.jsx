@@ -22,7 +22,9 @@ import Susbscriber from "./src/pages/dashboard/subscriber/Subscriber";
 import CreateInvoice from "./src/pages/dashboard/invocie/CreateInvoice";
 import AllInvoice from "./src/pages/dashboard/invocie/AllInvoice";
 import Newsubscriber from "./src/pages/dashboard/newsubscriber/Newsubscriber";
-
+import Permissions from "./src/pages/dashboard/role/Permissions";
+import Role from "./src/pages/dashboard/role/Role";
+import AddUserForRole from "./src/pages/dashboard/role/AddUserForRole";
 const iconClass = "w-5 h-5 text-inherit";
 
 export const routes = [
@@ -36,6 +38,7 @@ export const routes = [
         path: "/home", // Fixed path
         element: <Home />,
       },
+
       {
         icon: <ArchiveBoxArrowDownIcon className={iconClass} />,
         name: "All Leads",
@@ -102,6 +105,23 @@ export const routes = [
         ],
       },
       {
+        icon: <UsersIcon className={iconClass} />,
+        name: "Techninza",
+        path: "/invoice", // Main path for "All Users" without any element
+        subPages: [
+          {
+            name: "Create Invoice",
+            path: "/invoice/create",
+            element: <CreateInvoice />,
+          },
+          {
+            name: "All Invoice",
+            path: "/invoice/all",
+            element: <AllInvoice />,
+          },
+        ],
+      },
+      {
         icon: <BellIcon className={iconClass} />,
         name: "Subscriber",
         path: "/subscriber", // Fixed path
@@ -110,7 +130,7 @@ export const routes = [
 
       {
         icon: <BellIcon className={iconClass} />,
-        name: "new",
+        name: "New Subscriber",
         path: "/newsubscriber", // Fixed path
         element: <Newsubscriber />,
       },
@@ -120,6 +140,21 @@ export const routes = [
         name: "Profile",
         path: "/profile", // Fixed path
         element: <Profile />,
+      },
+      {
+        icon: <HomeIcon className={iconClass} />,
+        name: "Role",
+        path: "/role", // Fixed path
+        subPages: [
+          { name: "Add Role", path: "/role", element: <Role /> },
+          {
+            name: "Add Permissions",
+            path: "/Permissions",
+            element: <Permissions />,
+          },
+          { name: "Add User", path: "/adduser", element: <AddUserForRole /> },
+        ],
+        element: <Role />,
       },
       {
         icon: <TableCellsIcon className={iconClass} />,
