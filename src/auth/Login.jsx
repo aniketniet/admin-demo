@@ -37,7 +37,7 @@ const Login = () => {
         // Store the token in cookies
         Cookies.set("token", token, { expires: 7, secure: true, sameSite: "Strict" });
         console.log('cookies set');
-        
+        window.reload();
         // Redirect to dashboard
         navigate("/");
       } else {
