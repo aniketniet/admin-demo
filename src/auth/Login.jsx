@@ -35,9 +35,13 @@ const Login = () => {
         console.log("Response:", token);
 
         // Store the token in cookies
-        Cookies.set("token", token, { expires: 7, secure: true, sameSite: "Strict" });
-        console.log('cookies set');
-        window.reload();
+        Cookies.set("token", token, {
+          expires: 7,
+          secure: false,
+          sameSite: "Strict",
+        });
+        console.log("cookies set");
+
         // Redirect to dashboard
         navigate("/");
       } else {
@@ -45,7 +49,10 @@ const Login = () => {
       }
     } catch (error) {
       console.error("Login Error:", error);
-      alert(error.response?.data?.message || "An error occurred during login. Please try again.");
+      alert(
+        error.response?.data?.message ||
+          "An error occurred during login. Please try again."
+      );
     }
   };
 
@@ -65,7 +72,9 @@ const Login = () => {
           </h2>
           <form className="mt-12" onSubmit={handleSubmit}>
             <div>
-              <label className="text-sm font-bold text-gray-700">Email Address</label>
+              <label className="text-sm font-bold text-gray-700">
+                Email Address
+              </label>
               <input
                 className="w-full text-lg py-2 border-b border-gray-300 focus:outline-none focus:border-indigo-500"
                 type="email"
@@ -77,7 +86,9 @@ const Login = () => {
             </div>
             <div className="mt-8">
               <div className="flex justify-between items-center">
-                <label className="text-sm font-bold text-gray-700">Password</label>
+                <label className="text-sm font-bold text-gray-700">
+                  Password
+                </label>
                 <a
                   href="#"
                   className="text-xs font-semibold text-indigo-600 hover:text-indigo-800 cursor-pointer"
@@ -105,7 +116,10 @@ const Login = () => {
           </form>
           <div className="mt-12 text-sm text-gray-700 text-center">
             Don&apos;t have an account?{" "}
-            <a href="#" className="cursor-pointer text-indigo-600 hover:text-indigo-800">
+            <a
+              href="#"
+              className="cursor-pointer text-indigo-600 hover:text-indigo-800"
+            >
               Sign up
             </a>
           </div>

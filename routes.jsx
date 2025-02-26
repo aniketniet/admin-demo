@@ -21,8 +21,10 @@ import Agency from "./src/pages/dashboard/AllUser/agency/Agency";
 import Susbscriber from "./src/pages/dashboard/subscriber/Subscriber";
 import CreateInvoice from "./src/pages/dashboard/invocie/CreateInvoice";
 import AllInvoice from "./src/pages/dashboard/invocie/AllInvoice";
-
-
+import Newsubscriber from "./src/pages/dashboard/newsubscriber/Newsubscriber";
+import Permissions from "./src/pages/dashboard/role/Permissions";
+import Role from "./src/pages/dashboard/role/Role";
+import AddUserForRole from "./src/pages/dashboard/role/AddUserForRole";
 const iconClass = "w-5 h-5 text-inherit";
 
 export const routes = [
@@ -36,6 +38,7 @@ export const routes = [
         path: "/home", // Fixed path
         element: <Home />,
       },
+
       {
         icon: <ArchiveBoxArrowDownIcon className={iconClass} />,
         name: "All Leads",
@@ -48,9 +51,13 @@ export const routes = [
         path: "/users", // Main path for "All Users" without any element
         subPages: [
           { name: "Users", path: "/users/all", element: <Users /> },
-          { name: "Professional", path: "/users/professional" , element: <Professional /> },
-          { name: "Client", path: "/users/client",  element: <Client /> },
-          { name: "Agency", path: "/users/agency" , element: <Agency /> },
+          {
+            name: "Professional",
+            path: "/users/professional",
+            element: <Professional />,
+          },
+          { name: "Client", path: "/users/client", element: <Client /> },
+          { name: "Agency", path: "/users/agency", element: <Agency /> },
         ],
       },
       {
@@ -59,9 +66,12 @@ export const routes = [
         path: "/users", // Main path for "All Users" without any element
         subPages: [
           { name: "Leads", path: "/users/all", element: <Users /> },
-          { name: "Lead Sharing", path: "/users/professional" , element: <Professional /> },
-          { name: "Active Leads", path: "/users/client",  element: <Client /> },
-         
+          {
+            name: "Lead Sharing",
+            path: "/users/professional",
+            element: <Professional />,
+          },
+          { name: "Active Leads", path: "/users/client", element: <Client /> },
         ],
       },
       {
@@ -70,9 +80,11 @@ export const routes = [
         path: "/users", // Main path for "All Users" without any element
         subPages: [
           { name: "All Gigs", path: "/users/all", element: <Users /> },
-          { name: "Gigs Purchase", path: "/users/professional" , element: <Professional /> },
-         
-         
+          {
+            name: "Gigs Purchase",
+            path: "/users/professional",
+            element: <Professional />,
+          },
         ],
       },
       {
@@ -80,10 +92,33 @@ export const routes = [
         name: "Account",
         path: "/invoice", // Main path for "All Users" without any element
         subPages: [
-          { name: "Create Invoice", path: "/invoice/create", element: <CreateInvoice /> },
-          { name: "All Invoice", path: "/invoice/all" , element: <AllInvoice /> },
-         
-         
+          {
+            name: "Create Invoice",
+            path: "/invoice/create",
+            element: <CreateInvoice />,
+          },
+          {
+            name: "All Invoice",
+            path: "/invoice/all",
+            element: <AllInvoice />,
+          },
+        ],
+      },
+      {
+        icon: <UsersIcon className={iconClass} />,
+        name: "Techninza",
+        path: "/invoice", // Main path for "All Users" without any element
+        subPages: [
+          {
+            name: "Create Invoice",
+            path: "/invoice/create",
+            element: <CreateInvoice />,
+          },
+          {
+            name: "All Invoice",
+            path: "/invoice/all",
+            element: <AllInvoice />,
+          },
         ],
       },
       {
@@ -92,12 +127,34 @@ export const routes = [
         path: "/subscriber", // Fixed path
         element: <Susbscriber />,
       },
-   
+
+      {
+        icon: <BellIcon className={iconClass} />,
+        name: "New Subscriber",
+        path: "/newsubscriber", // Fixed path
+        element: <Newsubscriber />,
+      },
+
       {
         icon: <UserCircleIcon className={iconClass} />,
         name: "Profile",
         path: "/profile", // Fixed path
         element: <Profile />,
+      },
+      {
+        icon: <HomeIcon className={iconClass} />,
+        name: "Role",
+        path: "/role", // Fixed path
+        subPages: [
+          { name: "Add Role", path: "/role", element: <Role /> },
+          {
+            name: "Add Permissions",
+            path: "/Permissions",
+            element: <Permissions />,
+          },
+          { name: "Add User", path: "/adduser", element: <AddUserForRole /> },
+        ],
+        element: <Role />,
       },
       {
         icon: <TableCellsIcon className={iconClass} />,

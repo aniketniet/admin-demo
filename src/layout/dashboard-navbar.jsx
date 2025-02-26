@@ -69,7 +69,7 @@ export function DashboardNavbar({ isOpen, setIsOpen }) {
           <div className="mr-auto md:mr-4 md:w-56">
             <Input
               label="Search"
-               className="border border-gray-500 !border-t-gray-500 focus:!border-gray-700 px-3 py-2 focus:border-t-0 focus:outline-none focus:ring-0"
+              className="border border-gray-500 !border-t-gray-500 focus:!border-gray-700 px-3 py-2 focus:border-t-0 focus:outline-none focus:ring-0"
             />
           </div>
           <IconButton
@@ -93,7 +93,7 @@ export function DashboardNavbar({ isOpen, setIsOpen }) {
             className="hidden items-center gap-1 px-4 xl:flex normal-case"
           >
             <UserCircleIcon className="h-5 w-5 text-gray-500" />
-            Sign In
+            Log Out
           </Button>
           <IconButton variant="text" color="gray" className="grid xl:hidden">
             <UserCircleIcon className="h-5 w-5 text-gray-500" />

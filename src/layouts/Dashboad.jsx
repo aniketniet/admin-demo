@@ -6,6 +6,9 @@ import { useState } from "react";
 import LeadDetail from "../pages/dashboard/leads/LeadDetail";
 import EditUsers from "../pages/dashboard/AllUser/Users/EditUsers";
 import AddSubscriber from "../pages/dashboard/subscriber/AddSubscriber";
+import AddnewSubscriber from "../pages/dashboard/newsubscriber/AddnewSubscriber";
+import Addnewuser from "../pages/dashboard/Addnewuser";
+import Invoice from "../components/Invoice";
 
 const Dashboard = () => {
   // Local state for toggling sidebar visibility on mobile
@@ -30,7 +33,11 @@ const Dashboard = () => {
           <Route path="/" element={<Navigate to="/home" replace />} />
           <Route path="/detail/:id" element={<LeadDetail />} />
           <Route path="/edituser/:id" element={<EditUsers />} />
-          <Route path="/addsubscriber" element={<AddSubscriber/>} />
+          <Route path="/addsubscriber" element={<AddSubscriber />} />
+          <Route path="/addnewsubscriber" element={<AddnewSubscriber />} />
+          <Route path="/addnewuser" element={<Addnewuser />} />
+          <Route path="/asignpermission/:id" element={<EditUsers />} />
+          <Route path="/invoice/:id" element={<Invoice />} />
           {routes.map(({ layout, pages }) =>
             layout === "dashboard"
               ? pages.map(({ path, element, subPages }) => (

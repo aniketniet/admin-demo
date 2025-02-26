@@ -6,30 +6,28 @@ import {
   CardFooter,
   CardHeader,
   IconButton,
-  Progress,
+  Spinner,
+  //   Progress,
   Tooltip,
   Typography,
 } from "@material-tailwind/react";
 import axios from "axios";
-import { Link } from "react-router-dom";
 import Cookies from "js-cookie";
-import CustomTable from "../../components/CustomTable";
-import { useNavigate } from "react-router-dom"; // Import useNavigate
-import { CheckCircleIcon, XCircleIcon } from "@heroicons/react/24/outline";
-import { PencilIcon, TrashIcon } from "@heroicons/react/24/solid";
+import CustomTable from "../../../components/CustomTable";
+import { Link } from "react-router-dom"; // Import useNavigate
+// import { CheckCircleIcon, XCircleIcon } from "@heroicons/react/24/outline";
+import { PaperAirplaneIcon } from "@heroicons/react/24/solid";
 
-function Profile() {
+function Newsubscriber() {
   const [users, setUsers] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [search, setSearch] = useState(""); // Added search filter
   const [isLoading, setIsLoading] = useState(false);
   // State for single filter dropdown
-  const [filter, setFilter] = useState("");
+  //   const [filter, setFilter] = useState("");
 
   const token = Cookies.get("token");
-
-  const navigate = useNavigate(); // Initialize navigate
 
   const fetchUsers = useCallback(
     async (page) => {
@@ -42,30 +40,29 @@ function Profile() {
       form.append("search", search);
 
       // If-else condition based on filter value
-      if (filter === "client") {
-        form.append("is_buyer", "1");
-        // Add any additional form data for "client"
-      } else if (filter === "professional") {
-        form.append("is_buyer", "0");
-        // Add any additional form data for "bugery1"
-      } else if (filter === "subscriber") {
-        form.append("is_subscriber", "1");
-        // Add any additional form data for "bugery1"
-      } else if (filter === "agency") {
-        form.append("is_company", "1");
-        // Add any additional form data for "bugery1"
-      }
+      //   if (filter === "client") {
+      // form.append("is_buyer", "0");
+      // Add any additional form data for "client"
+      //   } else if (filter === "professional") {
+      //     form.append("is_buyer", "0");
+      //     // Add any additional form data for "bugery1"
+      //   } else if (filter === "subscriber") {
+      form.append("is_subscriber", "1");
+      //     // Add any additional form data for "bugery1"
+      //   } else if (filter === "agency") {
+      //     form.append("is_company", "1");
+      //     // Add any additional form data for "bugery1"
+      //   }
       form.append("page", page);
       form.append("limit", 10);
 
       try {
-        const { data } = await axios.post(
-          `${import.meta.env.VITE_BASE_URL}/get-all-users`,
-          form.toString(),
+        const { data } = await axios.get(
+          `${import.meta.env.VITE_BASE_URL}/get-all-subscribers-data`,
           {
+            params: form,
             headers: {
               Authorization: `Bearer ${token}`,
-              "Content-Type": "application/x-www-form-urlencoded",
             },
           }
         );
@@ -77,7 +74,7 @@ function Profile() {
       }
       setIsLoading(false);
     },
-    [token, search, filter]
+    [token, search]
   );
 
   useEffect(() => {
@@ -88,9 +85,9 @@ function Profile() {
     setSearch(e.target.value);
   };
 
-  const handleFilterChange = (e) => {
-    setFilter(e.target.value); // Update filter state
-  };
+  //   const handleFilterChange = (e) => {
+  //     setFilter(e.target.value); // Update filter state
+  //   };
 
   // const handleSearch = () => {
   //   // Only fetch users when the search button is clicked
@@ -98,115 +95,164 @@ function Profile() {
   //   fetchUsers(1); // Fetch users for the first page with the current search and filter
   // };
 
-  const handleDelete = async (id) => {
-    try {
-      await axios.delete(`${import.meta.env.VITE_BASE_URL}/users/${id}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      setUsers(users.filter((user) => user.id !== id));
-    } catch (error) {
-      console.error("Error deleting user:", error);
-    }
-  };
+  //   const handleDelete = async (id) => {
+  //     try {
+  //       await axios.delete(`${import.meta.env.VITE_BASE_URL}/users/${id}`, {
+  //         headers: { Authorization: `Bearer ${token}` },
+  //       });
+  //       setUsers(users.filter((user) => user.id !== id));
+  //     } catch (error) {
+  //       console.error("Error deleting user:", error);
+  //     }
+  //   };
 
-  const handleEdit = (id) => {
-    navigate(`/edituser/${id}`); // Redirect to detail page with ID
+  const sendMail = async (name, email) => {
+    try {
+      const formData = new FormData();
+      formData.append("email", email);
+      formData.append("name", name);
+      const response = await axios.post(
+        "https://sooprs.com/api2/public/index.php/send-reminder-mail-subscriber",
+        formData,
+        {
+          headers: { "Content-Type": "multipart/form-data" },
+        }
+      );
+      alert(response.data.msg);
+    } catch (error) {
+      alert("An error occurred. Please try again later.");
+      console.error("Error sending mail:", error);
+    }
   };
 
   const columns = [
     {
-      key: "flag",
-      label: "Profile",
-      render: (row) => (
-        <div className="w-8 h-8 rounded-full object-cover overflow-hidden">
-          <img src={row.image || "default-avatar.png"} alt="Avatar" />
-        </div>
-      ),
-      width: "w-12",
-    },
-    {
       key: "name",
       label: "Name",
       render: (row) => <div title={row.name}>{row.name || "N/A"}</div>,
-      width: "w-70",
-    },
-    {
-      key: "email",
-      label: "Email",
-      render: (row) => <div title={row.email}>{row.email || "N/A"}</div>,
-      width: "w-52",
-    },
-    {
-      key: "mobile",
-      label: "Mobile",
-      render: (row) => <div title={row.mobile}>{row.mobile || "N/A"}</div>,
-      width: "w-48",
+      width: "w-12",
     },
     {
       key: "status",
-      label: "Email Verify",
+      label: "Status",
       render: (row) => (
-        <div className="w-10/12">
-          <Typography
-            variant="small"
-            className="mb-1 block text-xs font-medium text-blue-gray-600"
-          >
-            {row.is_verified ? "Verify" : "Not Verify"}
-          </Typography>
-          <Progress
-            value={row.is_verified ? 100 : 50}
-            variant="gradient"
-            color={row.is_verified ? "green" : "red"}
-            className="h-1"
-          />
+        <div title={row.status}>
+          {row.status == "1" ? (
+            <Button
+              variant="outlined"
+              color="blue"
+              className="h-4 w-10 flex items-center justify-center"
+            >
+              Active
+            </Button>
+          ) : (
+            <Button
+              variant="outlined"
+              color="red"
+              className="h-4 w-10 flex items-center justify-center text-[10px]"
+            >
+              InActive
+            </Button>
+          )}
         </div>
       ),
+      width: "w-30",
+    },
+    {
+      key: "cradit",
+      label: "Cradit",
+      render: (row) => <div title={row.credits}>{row.credits}</div>,
+      width: "w-25",
+    },
+    {
+      key: "amount",
+      label: "Amount",
+      render: (row) => <div title={row.ammount}>{row.ammount || "N/A"}</div>,
+      width: "w-48",
+    },
+
+    {
+      key: "plan",
+      label: "Plan",
+      render: (row) => {
+        const buttonStyle =
+          row.plan_id == "0"
+            ? "bg-gray-500 text-white"
+            : row.plan_id == "1"
+            ? "bg-blue-600 text-white"
+            : row.plan_id == "2"
+            ? "bg-blue-600 text-white"
+            : "bg-red-600 text-white";
+        const buttonText =
+          row.plan_id == "0"
+            ? "Coustom"
+            : row.plan_id == "1"
+            ? "Standard"
+            : row.plan_id == "2"
+            ? "Pro"
+            : "Elite";
+        const buttonSize =
+          row.plan_id == "0"
+            ? "w-10"
+            : row.plan_id == "1"
+            ? "w-12"
+            : row.plan_id == "2"
+            ? "w-10"
+            : "w-12";
+        return (
+          <button
+            style={{ width: buttonSize }}
+            className={`px-2 py-1 rounded-md ${buttonStyle}`}
+          >
+            {buttonText}
+          </button>
+        );
+      },
       width: "w-32",
     },
     {
-      key: "membership",
-      label: "Membership",
-      render: (row) => (
-        <div className="w-10/12 flex items-center justify-center space-x-2">
-          <Typography
-            variant="small"
-            className="mb-1 block text-xs font-medium"
-          >
-            {row.is_subscriber ? (
-              <CheckCircleIcon className="w-5 h-5 text-green-600" />
-            ) : (
-              <XCircleIcon className="w-5 h-5 text-red-600" />
-            )}
-          </Typography>
-          {/* <Progress value={row.is_subscriber ? 100 : 50} variant="gradient" color={row.is_subscriber ? "green" : "red"} className="h-1" /> */}
-        </div>
-      ),
-      width: "w-32",
+      key: "start_date",
+      label: "Start Date",
+      render: (row) => {
+        const date = new Date(row.created_at);
+        const formattedDate = `${date.getDate().toString().padStart(2, "0")}/${(
+          date.getMonth() + 1
+        )
+          .toString()
+          .padStart(2, "0")}/${date.getFullYear()} ${date
+          .getHours()
+          .toString()
+          .padStart(2, "0")}:${date.getMinutes().toString().padStart(2, "0")}`;
+        return <div>{formattedDate}</div>;
+      },
+      width: "w-48",
     },
     {
-      key: "agency",
-      label: "Agency",
-      render: (row) => (
-        <div className="w-10/12 flex items-center space-x-2">
-          <Typography
-            variant="small"
-            className="mb-1 block text-xs font-medium"
-          >
-            {row.is_company ? (
-              <CheckCircleIcon className="w-5 h-5 text-blue-600" />
-            ) : (
-              <XCircleIcon className="w-5 h-5 text-red-600" />
-            )}
-          </Typography>
-          {/* <Progress value={row.is_company ? 100 : 50} variant="gradient" color={row.is_company ? "blue" : "red"} className="h-1" /> */}
-        </div>
-      ),
-      width: "w-32",
+      key: "end_date",
+      label: "End Date",
+      render: (row) => {
+        const date = new Date(row.created_at);
+        const formattedDate = `${date.getDate().toString().padStart(2, "0")}/${(
+          date.getMonth() + 1
+        )
+          .toString()
+          .padStart(2, "0")}/${date.getFullYear()} ${date
+          .getHours()
+          .toString()
+          .padStart(2, "0")}:${date.getMinutes().toString().padStart(2, "0")}`;
+        return <div>{formattedDate}</div>;
+      },
+      width: "w-48",
     },
+
     {
       key: "wallet",
-      label: "Credit",
-      render: (row) => <div>{row.wallet}</div>,
+      label: "Available Cradits",
+      render: (row) => (
+        <div style={{ color: row.wallet < 100 ? "red" : "inherit" }}>
+          {row.wallet}
+        </div>
+      ),
       width: "w-32",
     },
     {
@@ -214,14 +260,9 @@ function Profile() {
       label: "Actions",
       render: (row) => (
         <td className="px-4 py-2 flex gap-2">
-          <Tooltip content="Edit">
-            <button onClick={() => handleEdit(row.id)}>
-              <PencilIcon className="h-5 w-5 text-blue-500" />
-            </button>
-          </Tooltip>
-          <Tooltip content="Delete">
-            <button onClick={() => handleDelete(row.id)}>
-              <TrashIcon className="h-5 w-5 text-red-500" />
+          <Tooltip content="Send Mail">
+            <button onClick={() => sendMail(row.name, row.email)}>
+              <PaperAirplaneIcon className="h-5 w-5 text-blue-500 transform rotate-315" />
             </button>
           </Tooltip>
         </td>
@@ -236,14 +277,14 @@ function Profile() {
         <div className="flex items-center justify-between">
           <div>
             <Typography variant="h5" color="blue-gray">
-              Users List
+              Subscribers List
             </Typography>
             <Typography color="gray" className="mt-1 font-normal">
-              View the current active users
+              View the current active Subscribers
             </Typography>
           </div>
           <div className="flex gap-2">
-            <select
+            {/* <select
               onChange={handleFilterChange}
               value={filter}
               className="border border-slate-200 rounded-md  p-1 shadow-sm "
@@ -253,7 +294,8 @@ function Profile() {
               <option value="professional">professional</option>
               <option value="subscriber">Subscriber</option>
               <option value="agency">Agency</option>
-            </select>
+            </select> */}
+
             <div className="relative flex items-center">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -275,8 +317,8 @@ function Profile() {
                 className="w-full bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border border-slate-200 rounded-md pl-10 pr-3 py-2 transition duration-300 ease focus:outline-none focus:border-slate-400 hover:border-slate-300 shadow-sm focus:shadow"
               />
             </div>
-            <Link to="/addnewuser">
-              <Button color="blue">Add New User</Button>
+            <Link to="/addnewsubscriber">
+              <Button color="blue">Add Subscriber</Button>
             </Link>
             {/* <Button variant="gradient" >
               Search
@@ -287,7 +329,9 @@ function Profile() {
 
       <CardBody>
         {isLoading ? (
-          <div>Loading...</div>
+          <div className="flex justify-center items-center">
+            <Spinner className="h-8 w-8 text-blue-500" />
+          </div>
         ) : (
           <CustomTable columns={columns} data={users} />
         )}
@@ -358,4 +402,4 @@ function Profile() {
   );
 }
 
-export default Profile;
+export default Newsubscriber;
