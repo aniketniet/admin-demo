@@ -1,23 +1,21 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import Cookies from "js-cookie";
-// import Sidebar from "../components/Sidebar";
-// import Header from "../components/Header";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { TrashIcon } from "lucide-react";
+import { PencilIcon, TrashIcon } from "lucide-react";
 import { Tooltip } from "@material-tailwind/react";
 import { EyeIcon } from "@heroicons/react/24/outline";
 
 const AllInvoice = () => {
   const [invoices, setInvoices] = useState([]);
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   useEffect(() => {
     const fetchInvoices = async () => {
-      const token = Cookies.get("token");
       try {
+        const token = Cookies.get("token");
         const response = await axios.get(
           `${import.meta.env.VITE_BASE_URL}/get-all-bills`,
           {
@@ -43,27 +41,6 @@ const AllInvoice = () => {
       year: "numeric",
     }).format(date);
   };
-
-  // const handleDeleteInvoice = async (invoiceId) => {
-  //   try {
-  //     const response = await axios.delete(
-  //       `${import.meta.env.VITE_BASE_URL}api/invoices/${invoiceId}`
-  //     );
-  //     if (response.status === 200) {
-  //       setInvoices(
-  //         invoices.filter((prevInvoice) => prevInvoice._id !== invoiceId)
-  //       );
-  //       toast.error("Invoice Deleted Successfully!", {
-  //         style: {
-  //           backgroundColor: "#4c3575",
-  //           color: "white",
-  //         },
-  //       });
-  //     }
-  //   } catch (error) {
-  //     console.error("Error deleting invoice:", error);
-  //   }
-  // };
 
   return (
     <div className="flex">
@@ -93,13 +70,13 @@ const AllInvoice = () => {
               <tbody>
                 {invoices.map((invoice) => (
                   <tr key={invoice._id} className="border border-gray-300">
-                    <td className="border border-gray-300 px-4 py-2">
+                    <td className="border border-gray-300 px-4 py-2 text-center">
                       {invoice.invoiceNo}
                     </td>
-                    <td className="border border-gray-300 px-4 py-2">
+                    <td className="border border-gray-300 px-4 py-2 text-center">
                       {formatDateToMonthYear(invoice.invoice_date)}
                     </td>
-                    <td className="border border-gray-300 px-4 py-2">
+                    <td className="border border-gray-300 px-4 py-2 text-center">
                       {invoice.billed_to}
                     </td>
                     <td className="border border-gray-300 px-4 py-2">
@@ -111,12 +88,20 @@ const AllInvoice = () => {
                       <Tooltip content="View Invoice">
                         <Link to={`/invoice/${invoice.invoiceNo}`}>
                           <button>
+                            <PencilIcon className="h-5 w-5 text-blue-500" />
+                          </button>
+                        </Link>
+                      </Tooltip>
+                    </td>
+                    <td className="border border-gray-300 px-4 py-2 text-center">
+                      <Tooltip content="View">
+                        <Link>
+                          <button>
                           <EyeIcon className="h-6 w-6 text-blue-500" />
                           </button>
                         </Link>
                       </Tooltip>
                     </td>
-                    <td className="border border-gray-300 px-4 py-2 text-center"></td>
                   </tr>
                 ))}
               </tbody>

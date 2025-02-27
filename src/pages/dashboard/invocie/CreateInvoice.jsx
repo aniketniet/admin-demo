@@ -121,9 +121,18 @@ const CreateInvoice = () => {
     });
   };
 
+  // const calculateTotal = () => {
+  //   const total = invoiceData.items.reduce((acc, item) => {
+  //     const itemTotal =
+  //       parseFloat(item.rate || 0) * parseFloat(item.quantity || 0);
+  //     const gstAmount = (itemTotal * parseFloat(item.gst || 0)) / 100;
+  //     return acc + itemTotal + gstAmount;
+  //   }, 0);
+  //   setInvoiceData((prevData) => ({ ...prevData, total }));
+  // };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(invoiceData, "data");
 
     try {
       const token = Cookies.get("token");
@@ -140,6 +149,7 @@ const CreateInvoice = () => {
     } catch (error) {
       console.error("Error creating invoice:", error);
     }
+    // calculateTotal();
   };
 
   return (
@@ -332,6 +342,12 @@ const CreateInvoice = () => {
               <Button color="green" onClick={addItem} className="mt-2">
                 Add Item
               </Button>
+            </div>
+            <div className="p-4 bg-purple-100 rounded-md mb-4">
+              <Typography variant="h6" className="font-bold">
+                Total Amount
+              </Typography>
+              <p>{invoiceData.total.toFixed(2)}</p>
             </div>
             <div className="p-4 bg-purple-100 rounded-md mb-4">
               <Typography variant="h6" className="font-bold">

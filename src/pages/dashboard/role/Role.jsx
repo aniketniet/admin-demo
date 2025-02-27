@@ -38,7 +38,7 @@ const Role = () => {
           },
         }
       )
-      .then((res) => {
+      .then(() => {
         setAlert({
           type: "success",
           message: "Permissions assigned successfully!",
@@ -191,16 +191,6 @@ const Role = () => {
         console.error(err);
       });
   };
-
-  const permissionsColumns = [
-    {
-      key: "name",
-      label: "Permissions",
-      render: (data) => <div title={data.name}>{data.name}</div>,
-      width: "w-50",
-    },
-  ];
-
   const rolesColumns = [
     {
       key: "name",

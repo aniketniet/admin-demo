@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import Cookies from "js-cookie";
 import { useParams } from "react-router";
+import { Button } from "@material-tailwind/react";
 
 const Invoice = () => {
   const [bills, setBills] = useState({});
@@ -71,32 +72,43 @@ const Invoice = () => {
         }
         `}
       </style>
+      <div className="flex justify-end mb-4 no-print mr-32">
+        <Button
+          style={{
+            backgroundColor: "#4c3575",
+            color: "white",
+          }}
+          onClick={handlePrint}
+        >
+          Print Invoice
+        </Button>
+      </div>
       <div
         id="invoice"
         className="max-w-4xl mx-auto p-6 bg-white shadow-lg rounded-lg border"
       >
         <h2 className="text-2xl font-bold text-center mb-4">INVOICE</h2>
-        <div className="flex justify-center mb-4 no-print">
-          <button
-            style={{
-              backgroundColor: "#4c3575",
-              color: "white",
-            }}
-            onClick={handlePrint}
-          >
-            Print Invoice
-          </button>
-        </div>
+
         <div className="grid grid-cols-2 gap-4 mb-4">
           <div>
             <p>
-              <strong>Invoice No #:</strong> {bills?.invoiceNo}
+              <strong>Invoice No :</strong> {bills?.invoiceNo}
             </p>
             <p>
-              <strong>Invoice Date:</strong> {bills?.invoice_date}
+              <strong>Invoice Date:</strong>{" "}
+              {new Date(bills?.invoice_date).toLocaleString("en-GB", {
+                day: "2-digit",
+                month: "2-digit",
+                year: "numeric",
+              })}
             </p>
             <p>
-              <strong>Due Date:</strong> {bills?.due_date}
+              <strong>Due Date:</strong>{" "}
+              {new Date(bills?.due_date).toLocaleString("en-GB", {
+                day: "2-digit",
+                month: "2-digit",
+                year: "numeric",
+              })}
             </p>
           </div>
           <div className="text-right">
@@ -106,7 +118,8 @@ const Invoice = () => {
           </div>
           <div className="text-left">
             <p className="text-left">
-              <strong>Billed To:</strong> {bills?.billed_to}
+              <strong>Billed To:</strong> {bills?.billed_to}, {bills?.country},{" "}
+              {bills?.state}
             </p>
           </div>
         </div>
@@ -130,15 +143,21 @@ const Invoice = () => {
                 <td className="border p-2">{item.quantity}</td>
                 <td className="border p-2">{item.gst}%</td>
                 <td className="border p-2">
-                  ₹ {(item.rate * item.quantity * (item.gst / 100)).toFixed(2)}
+                  ₹ {item.rate * item.quantity * (item.gst / 100)}
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
         <div className="text-right mb-4">
+          {/* <p>
+            <strong>Amount:</strong> ₹ {bills?.total}
+          </p> */}
           <p>
-            <strong>Amount:</strong> ₹ {bills?.items?.reduce((total, item) => total + item.rate * item.quantity, 0).toFixed(2)}
+            <strong>Amount</strong> ₹
+            {bills?.items
+              ?.reduce((total, item) => total + item.rate * item.quantity, 0)
+              .toFixed(2)}
           </p>
           <p>
             <strong>Total GST:</strong> ₹
@@ -152,13 +171,13 @@ const Invoice = () => {
           </p>
           <p className="text-lg font-bold">
             Total (INR): ₹
-            {(
-              (bills.items || []).reduce(
+            {bills?.items
+              ?.reduce(
                 (total, item) =>
                   total + item.rate * item.quantity * (1 + item.gst / 100),
                 0
               )
-            ).toFixed(2)}
+              .toFixed(1)}
           </p>
         </div>
         <div className="mb-4">
@@ -179,7 +198,7 @@ const Invoice = () => {
             <strong>Bank:</strong> Kotak Bank
           </p>
         </div>
-        <div>
+        <div className="text-center">
           <h3 className="text-lg font-bold">Terms and Conditions</h3>
           <p>1. Please quote invoice number when remitting funds</p>
         </div>
