@@ -217,6 +217,7 @@ const CreateInvoice = () => {
                 <Typography variant="h6" className="font-bold">
                   Billed By
                 </Typography>
+                
                 <p>VGI Sooprs Technology Pvt. Ltd.</p>
                 <p>
                   BlueOne Square, Udyog Vihar, Phase 4 Rd, Gurugram, Haryana,

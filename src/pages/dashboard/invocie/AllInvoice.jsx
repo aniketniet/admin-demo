@@ -8,6 +8,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { TrashIcon } from "lucide-react";
 import { Tooltip } from "@material-tailwind/react";
+import { EyeIcon } from "@heroicons/react/24/outline";
 
 const AllInvoice = () => {
   const [invoices, setInvoices] = useState([]);
@@ -102,13 +103,15 @@ const AllInvoice = () => {
                       {invoice.billed_to}
                     </td>
                     <td className="border border-gray-300 px-4 py-2">
-                      {invoice.total}
+                      {invoice?.items.reduce(
+                        (total, item) => total + item.rate * item.quantity, 0
+                      ).toFixed(2)}
                     </td>
                     <td className="border border-gray-300 px-4 py-2 text-center">
-                      <Tooltip content="Delete">
+                      <Tooltip content="View Invoice">
                         <Link to={`/invoice/${invoice.invoiceNo}`}>
                           <button>
-                            <TrashIcon className="h-5 w-5 text-red-500" />
+                          <EyeIcon className="h-6 w-6 text-blue-500" />
                           </button>
                         </Link>
                       </Tooltip>

@@ -138,7 +138,7 @@ const Invoice = () => {
         </table>
         <div className="text-right mb-4">
           <p>
-            <strong>Amount:</strong> ₹ {bills?.total}
+            <strong>Amount:</strong> ₹ {bills?.items?.reduce((total, item) => total + item.rate * item.quantity, 0).toFixed(2)}
           </p>
           <p>
             <strong>Total GST:</strong> ₹
@@ -153,10 +153,9 @@ const Invoice = () => {
           <p className="text-lg font-bold">
             Total (INR): ₹
             {(
-              Number(bills?.total) +
-              bills?.items?.reduce(
+              (bills.items || []).reduce(
                 (total, item) =>
-                  total + item.rate * item.quantity * (item.gst / 100),
+                  total + item.rate * item.quantity * (1 + item.gst / 100),
                 0
               )
             ).toFixed(2)}
