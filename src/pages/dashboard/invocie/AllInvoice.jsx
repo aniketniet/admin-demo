@@ -4,7 +4,7 @@ import Cookies from "js-cookie";
 import { Link } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { PencilIcon, TrashIcon } from "lucide-react";
+import {  Trash} from "lucide-react";
 import { Tooltip } from "@material-tailwind/react";
 import { EyeIcon } from "@heroicons/react/24/outline";
 
@@ -88,7 +88,8 @@ const AllInvoice = () => {
                       <Tooltip content="View Invoice">
                         <Link to={`/invoice/${invoice.invoiceNo}`}>
                           <button>
-                            <PencilIcon className="h-5 w-5 text-blue-500" />
+                          <EyeIcon className="h-6 w-6 text-blue-500" />
+                          
                           </button>
                         </Link>
                       </Tooltip>
@@ -97,7 +98,7 @@ const AllInvoice = () => {
                       <Tooltip content="View">
                         <Link>
                           <button>
-                          <EyeIcon className="h-6 w-6 text-blue-500" />
+                          <Trash className="h-5 w-5 text-red-500" />
                           </button>
                         </Link>
                       </Tooltip>
