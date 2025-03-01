@@ -25,6 +25,8 @@ import Newsubscriber from "./src/pages/dashboard/newsubscriber/Newsubscriber";
 import Permissions from "./src/pages/dashboard/role/Permissions";
 import Role from "./src/pages/dashboard/role/Role";
 import AddUserForRole from "./src/pages/dashboard/role/AddUserForRole";
+import TechninzaCreateInvoice from "@/pages/dashboard/invocie-techninza/TechninzaCreateInvoice";
+import TechninzaInvoice from "@/pages/dashboard/invocie-techninza/TechninzaInvoice";
 const iconClass = "w-5 h-5 text-inherit";
 
 export const routes = [
@@ -107,17 +109,17 @@ export const routes = [
       {
         icon: <UsersIcon className={iconClass} />,
         name: "Techninza",
-        path: "/invoice", // Main path for "All Users" without any element
+        path: "/bill", // Main path for "All Users" without any element
         subPages: [
           {
             name: "Create Invoice",
-            path: "/invoice/create",
-            element: <CreateInvoice />,
+            path: "/bill/techninza/billcreate",
+            element: <TechninzaCreateInvoice />,
           },
           {
             name: "All Invoice",
-            path: "/invoice/all",
-            element: <AllInvoice />,
+            path: "/bill/techninza/all",
+            element: <TechninzaInvoice />,
           },
         ],
       },

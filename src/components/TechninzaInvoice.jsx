@@ -4,7 +4,7 @@ import Cookies from "js-cookie";
 import { useParams } from "react-router";
 import { Button, Typography } from "@material-tailwind/react";
 
-const Invoice = () => {
+const TechninzaInvoice = () => {
   const [bills, setBills] = useState({});
   const { id } = useParams(); // URL se id lena
 
@@ -13,7 +13,7 @@ const Invoice = () => {
       try {
         const token = Cookies.get("token");
         const response = await axios.get(
-          `${import.meta.env.VITE_BASE_URL}/get-all-bills/`,
+          `${import.meta.env.VITE_BASE_URL}/get-all-techninza-bills`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -47,47 +47,47 @@ const Invoice = () => {
     <div>
       <style>
         {`
-  @media print {
-    /* Hide everything by default */
-    body * {
-      visibility: hidden;
+@media print {
+  /* Hide everything by default */
+  body * {
+    visibility: hidden;
 
-      
-    }
-      
-    /* Ensure only the invoice is visible */
-    #invoice, #invoice * {
-      visibility: visible;
-    }
-
-    /* Position the invoice correctly for printing */
-    #invoice {
-      position: absolute;
-      left: 0;
-      top: 0;
-      width: 100%;
-      height: 100%; 
-    }
     
-     
-      @page {
-  size: A4; /* Auto-adjust to content */
-  margin:0; /* Remove default browser margins (header/footer) */
+  }
+    
+  /* Ensure only the invoice is visible */
+  #invoice, #invoice * {
+    visibility: visible;
+  }
+
+  /* Position the invoice correctly for printing */
+  #invoice {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%; 
+  }
+  
+   
+    @page {
+size: A4; /* Auto-adjust to content */
+margin:0; /* Remove default browser margins (header/footer) */
 }
 
-    /* Hide specific elements like header, footer, and navbar */
-    .no-print, .header, .navbar, .sidebar, .footer, .routes {
-      display: none !important;
-    }
-    // .terms {
-    //   position: absolute;
-    //   bottom: 10px;
-    //   width: 100%;
-    //   text-align: center;
-    //   padding: 10px;
-    // }
+  /* Hide specific elements like header, footer, and navbar */
+  .no-print, .header, .navbar, .sidebar, .footer, .routes {
+    display: none !important;
   }
-  `}
+  // .terms {
+  //   position: absolute;
+  //   bottom: 10px;
+  //   width: 100%;
+  //   text-align: center;
+  //   padding: 10px;
+  // }
+}
+`}
       </style>
 
       <div className="flex justify-end mb-5 mt-5 no-print">
@@ -108,7 +108,8 @@ const Invoice = () => {
           <div className="flex justify-between">
             <div>
               <p>
-                <strong className="text-gray-600">Invoice No# :</strong> {bills?.invoiceNo}
+                <strong className="text-gray-600">Invoice No# :</strong>{" "}
+                {bills?.invoiceNo}
               </p>
               <p>
                 <strong className="text-gray-600">Invoice Date:</strong>{" "}
@@ -127,9 +128,9 @@ const Invoice = () => {
                 })}
               </p>
             </div>
-            <div className="text-right h-16 w-42 ">
+            <div className="text-right h-10 w-42">
               <img
-                src="https://sooprs.com/images/sooprs_logo.png"
+                src="https://techninza.in/img/techninza-logo-new-(1).png"
                 alt="logo"
                 className="h-full w-full "
               />
@@ -141,20 +142,16 @@ const Invoice = () => {
               <Typography variant="h6" className="font-semibold text-[#343D68]">
                 Billed By
               </Typography>
-              <p className="font-semibold">VGI Sooprs Technology Pvt. Ltd.</p>
+              <p className="font-semibold">Gazetinc Technology LLP </p>
               <p className="font-semibold">
-                BlueOne Square, Udyog Vihar, Phase 4 Rd, Gurugram, Haryana,
-                India - 122016
+              3rd Floor, Rana Tower, Opp: Mahindra Aura, New Palam Vihar,
+              Phase I, Gurugram, Haryana, India - 122017
               </p>
               <div className="font-semibold">
-              <p>
-                GSTIN: 06AAKCV5021D1ZM
-              </p>
-              <p>
-                PAN: AAKCV5021D
-              </p>
+                <p>GSTIN: 06AATFG8894M1Z8</p>
+                <p>PAN: AATFG8894M</p>
               </div>
-              <p className="font-semibold">Email: contact@sooprs.com</p>
+              <p className="font-semibold">Email: vinay@techninza.in</p>
             </div>
 
             {/* Billed To Section */}
@@ -163,7 +160,9 @@ const Invoice = () => {
                 Billed To
               </Typography>
               {bills?.billed_to?.split("\n").map((line, index) => (
-                <p className="font-semibold" key={index}>{line.trim()}</p>
+                <p className="font-semibold" key={index}>
+                  {line.trim()}
+                </p>
               ))}
               <p className="font-semibold">{bills?.country}</p>
               <p className="font-semibold">{bills?.state}</p>
@@ -171,10 +170,17 @@ const Invoice = () => {
           </div>
         </div>
         <div className="flex justify-between mb-4 w-[80%]">
-          <p> <span className="font-bold">Country of Supply :</span> {bills?.country} </p>
-          <p> <span className="font-bold">Place of Supply :</span>   {bills?.state} </p>
+          <p>
+            {" "}
+            <span className="font-bold">Country of Supply :</span>{" "}
+            {bills?.country}{" "}
+          </p>
+          <p>
+            {" "}
+            <span className="font-bold">Place of Supply :</span> {bills?.state}{" "}
+          </p>
         </div>
-        
+
         <table className="w-full border-collapse mb-4">
           <thead>
             <tr className=" text-gray-500">
@@ -199,39 +205,66 @@ const Invoice = () => {
                 </td>
               </tr>
             ))}
-             {/* Totals Row */}
-          <tr>
-            <td className=" blank" colSpan={3}></td>
-            <td className=" blank"></td>
-            <td className="border p-2 text-right ">Amount</td>
-            <td className="border p-2 text-right">₹ {bills?.items?.reduce((total, item) => total + item.rate * item.quantity, 0).toFixed(2)}</td>
-          </tr>
-          <tr>
-            <td className="blank" colSpan={3}></td>
-            <td className="blank"></td>
-            <td className="border p-2 text-right ">Total GST</td>
-            <td className="border p-2 text-right">₹ {bills?.items?.reduce((total, item) => total + item.rate * item.quantity * (item.gst / 100), 0).toFixed(2)}</td>
-          </tr>
-          <tr>
-            <td className="blank" colSpan={3}></td>
-            <td className="blank"></td>
-            <td className="border p-2 text-right font-bold text-gray-500">Total (INR)</td>
-            <td className="border p-2 text-right text-gray-500 font-bold">₹ {bills?.items?.reduce((total, item) => total + item.rate * item.quantity * (1 + item.gst / 100), 0).toFixed(2)}</td>
-          </tr>
+            {/* Totals Row */}
+            <tr>
+              <td className=" blank" colSpan={3}></td>
+              <td className=" blank"></td>
+              <td className="border p-2 text-right ">Amount</td>
+              <td className="border p-2 text-right">
+                ₹{" "}
+                {bills?.items
+                  ?.reduce(
+                    (total, item) => total + item.rate * item.quantity,
+                    0
+                  )
+                  .toFixed(2)}
+              </td>
+            </tr>
+            <tr>
+              <td className="blank" colSpan={3}></td>
+              <td className="blank"></td>
+              <td className="border p-2 text-right ">Total GST</td>
+              <td className="border p-2 text-right">
+                ₹{" "}
+                {bills?.items
+                  ?.reduce(
+                    (total, item) =>
+                      total + item.rate * item.quantity * (item.gst / 100),
+                    0
+                  )
+                  .toFixed(2)}
+              </td>
+            </tr>
+            <tr>
+              <td className="blank" colSpan={3}></td>
+              <td className="blank"></td>
+              <td className="border p-2 text-right font-bold text-gray-500">
+                Total (INR)
+              </td>
+              <td className="border p-2 text-right text-gray-500 font-bold">
+                ₹{" "}
+                {bills?.items
+                  ?.reduce(
+                    (total, item) =>
+                      total + item.rate * item.quantity * (1 + item.gst / 100),
+                    0
+                  )
+                  .toFixed(2)}
+              </td>
+            </tr>
           </tbody>
         </table>
 
-      
         <div className="mb-4">
           <h3 className="text-lg font-semibold text-[#343D68]">Bank Details</h3>
           <p>
-            <span className="font-semibold">Account Name:</span> VGI Sooprs Technology
+            <span className="font-semibold">Account Name:</span> Gazetinc Technology LLP
           </p>
           <p>
-            <span className="font-semibold">Account Number:</span> 0648579371
+            <span className="font-semibold">Account Number:</span> 002105501589
           </p>
           <p>
-            <span className="font-semibold">IFSC:</span> KKBK0004605
+            <span className="font-semibold">IFSC:</span> ICIC0000021
           </p>
           <p>
             <span className="font-semibold">Account Type:</span> Current
@@ -249,4 +282,4 @@ const Invoice = () => {
   );
 };
 
-export default Invoice;
+export default TechninzaInvoice;

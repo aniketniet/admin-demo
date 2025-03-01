@@ -5,6 +5,11 @@ import {
   CardHeader,
   Spinner,
   Typography,
+  Dialog,
+  DialogBody,
+  DialogHeader,
+  DialogFooter,
+  Input,
 } from "@material-tailwind/react";
 import { useState, useEffect } from "react";
 import DatePicker from "react-datepicker";
@@ -18,13 +23,21 @@ import { useNavigate } from "react-router-dom";
 
 import Cookies from "js-cookie";
 // import { Link } from "react-router-dom";
-const CreateInvoice = () => {
+const TechninzaCreateInvoice = () => {
   const [userId, setUserId] = useState("");
   const [countries, setCountries] = useState([]);
   const [states, setStates] = useState([]);
   const [subscribers, setSubscribers] = useState([]);
   const [selectedSubscriber, setSelectedSubscriber] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [open, setOpen] = useState(false);
+  const [customerData, setCustomerData] = useState({
+    name: "",
+    email: "",
+    mobile: "",
+    address: "",
+    gstno: "",
+  });
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -37,7 +50,7 @@ const CreateInvoice = () => {
     invoiceDate: "",
     dueDate: "",
     billedBy:
-      "",
+      "VGI Sooprs Technology Pvt. Ltd., BlueOne Square, Udyog Vihar, Phase 4 Rd, Gurugram, Haryana, India - 122016",
     billedTo: "",
     country: "",
     state: "",
@@ -60,7 +73,7 @@ const CreateInvoice = () => {
       try {
         const token = Cookies.get("token");
         const response = await axios.get(
-          `${import.meta.env.VITE_BASE_URL}/get-all-subscriber-data`,
+          `${import.meta.env.VITE_BASE_URL}/get-all-techninza-customers`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -101,12 +114,9 @@ const CreateInvoice = () => {
       setInvoiceData((prevData) => ({
         ...prevData,
         user_id: value,
-        billedTo: `${selectedClient?.name || ""} 
-        ${selectedClient?.address || ""} 
-        ${selectedClient?.city || ""} ${selectedClient?.state || ""} ${selectedClient?.pincode || ""}
-        GSTIN:${ selectedClient?.gst_no || ""}
-        Email: ${selectedClient?.email || ""}
-        `
+        billedTo: `${selectedClient?.name || ""} ${
+          selectedClient?.address || ""
+        }`,
       }));
     }
 
@@ -154,7 +164,7 @@ const CreateInvoice = () => {
     try {
       const token = Cookies.get("token");
       const response = await axios.post(
-        `${import.meta.env.VITE_BASE_URL}/create-bill`,
+        `${import.meta.env.VITE_BASE_URL}/create-techninza-bill`,
         invoiceData,
         {
           headers: {
@@ -165,7 +175,7 @@ const CreateInvoice = () => {
 
       showSuccessToast("Invoice created successfully!");
       setLoading(false);
-      navigate(`/invoice/${response.data.invoice.invoiceNo}`);
+      navigate(`/techninza-bill/${response.data.invoice.id}`);
     } catch (error) {
       showErrorToast("Failed to create invoice.");
       setLoading(false);
@@ -173,6 +183,33 @@ const CreateInvoice = () => {
     }
   };
   // calculateTotal();
+
+  const handleOpen = () => setOpen(!open);
+
+  const handleCustomerChange = (e) => {
+    setCustomerData({ ...customerData, [e.target.name]: e.target.value });
+  };
+
+  const addCustomer = async () => {
+    try {
+      const token = Cookies.get("token");
+      await axios.post(
+        "http://103.189.172.154:3004/api/create-techninza-customer",
+        new URLSearchParams(customerData),
+        {
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      showSuccessToast("Customer added successfully!");
+      setOpen(false);
+    } catch (error) {
+      showErrorToast("Failed to add customer.");
+      console.error("Error adding customer:", error);
+    }
+  };
 
   return (
     <>
@@ -191,8 +228,9 @@ const CreateInvoice = () => {
           >
             <div className="flex justify-between items-center">
               <Typography variant="h5" color="blue-gray" className="font-bold">
-                Print INVOICE
+                Print Techninza Bill
               </Typography>
+              <Button onClick={handleOpen}>Add Customer</Button>
             </div>
           </CardHeader>
 
@@ -253,14 +291,14 @@ const CreateInvoice = () => {
                     Billed By
                   </Typography>
 
-                  <p>VGI Sooprs Technology Pvt. Ltd.</p>
+                  <p>Gazetinc Technology LLP </p>
                   <p>
-                    BlueOne Square, Udyog Vihar, Phase 4 Rd, Gurugram, Haryana,
-                    India - 122016
+                    3rd Floor, Rana Tower, Opp: Mahindra Aura, New Palam Vihar,
+                    Phase I, Gurugram, Haryana, India - 122017
                   </p>
-                  <p>GSTIN: 06AAKCV5021D1ZM</p>
-                  <p>PAN: AAKCV5021D</p>
-                  <p>Email: contact@sooprs.com</p>
+                  <p>GSTIN: 06AATFG8894M1Z8</p>
+                  <p>PAN: AATFG8894M</p>
+                  <p>Email: vinay@techninza.in</p>
                 </div>
                 <div className="p-4 bg-purple-100 rounded-md">
                   <Typography variant="h6" className="font-bold">
@@ -273,7 +311,7 @@ const CreateInvoice = () => {
                       {/* <p>
                       {selectedSubscriber.city}, {selectedSubscriber.state}
                     </p> */}
-                      <p>GSTIN: {selectedSubscriber.gst_no}</p>
+                      <p>GSTIN: {selectedSubscriber.gstno}</p>
                       <p>Email: {selectedSubscriber.email}</p>
                     </>
                   ) : (
@@ -378,23 +416,55 @@ const CreateInvoice = () => {
                 <Typography variant="h6" className="font-bold">
                   Bank Details
                 </Typography>
-                <p>Account Name: VGI Sooprs Technology Pvt. Ltd.</p>
-                <p>Account Number: 0648579371</p>
-                <p>IFSC: KKBK0004605</p>
+                <p>Account Name: Gazetinc Technology LLP </p>
+                <p>Account Number: 002105501589</p>
+                <p>IFSC:ICIC0000021</p>
                 <p>Account Type: Current</p>
-                <p>Bank: Kotak Bank</p>
+                <p>Bank: ICICI Bank</p>
               </div>
               <div className="flex justify-end">
                 <Button color="blue" className="mt-4" type="submit">
-                  Create Invoice
+                  print Bill
                 </Button>
               </div>
             </CardBody>
           </form>
         </Card>
       </div>
+      <Dialog open={open} handler={handleOpen}>
+        <DialogHeader>Add New Customer</DialogHeader>
+        <DialogBody>
+          <div className="grid grid-cols-1 gap-4">
+            <Input label="Name" name="name" onChange={handleCustomerChange} />
+            <Input label="Email" name="email" onChange={handleCustomerChange} />
+            <Input
+              label="Mobile"
+              name="mobile"
+              onChange={handleCustomerChange}
+            />
+            <Input
+              label="Address"
+              name="address"
+              onChange={handleCustomerChange}
+            />
+            <Input
+              label="GST No"
+              name="gstno"
+              onChange={handleCustomerChange}
+            />
+          </div>
+        </DialogBody>
+        <DialogFooter>
+          <Button variant="text" onClick={handleOpen} className="mr-2">
+            Cancel
+          </Button>
+          <Button color="blue" onClick={addCustomer} disabled={loading}>
+            {loading ? <Spinner className="h-4 w-4" /> : "Add"}
+          </Button>
+        </DialogFooter>
+      </Dialog>
     </>
   );
 };
 
-export default CreateInvoice;
+export default TechninzaCreateInvoice;

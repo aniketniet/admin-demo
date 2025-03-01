@@ -8,7 +8,7 @@ import {  Trash} from "lucide-react";
 import { Tooltip } from "@material-tailwind/react";
 import { EyeIcon } from "@heroicons/react/24/outline";
 
-const AllInvoice = () => {
+const TechninzaInvoice = () => {
   const [invoices, setInvoices] = useState([]);
   // const navigate = useNavigate();
 
@@ -17,7 +17,7 @@ const AllInvoice = () => {
       try {
         const token = Cookies.get("token");
         const response = await axios.get(
-          `${import.meta.env.VITE_BASE_URL}/get-all-bills`,
+          `${import.meta.env.VITE_BASE_URL}/get-all-techninza-bills`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -46,7 +46,7 @@ const AllInvoice = () => {
     <div className="flex">
       <div className="flex-1 p-6">
         <div className="container mx-auto">
-          <h3 className="text-2xl font-bold mb-4">ALL Invoices</h3>
+          <h3 className="text-2xl font-bold mb-4">See All Techninza Bills</h3>
           <div className="overflow-x-auto bg-white shadow-md rounded-lg p-4">
             <table className="w-full table-auto border-collapse border border-gray-300">
               <thead>
@@ -84,7 +84,7 @@ const AllInvoice = () => {
                     </td>
                     <td className="border border-gray-300 px-4 py-2 text-center">
                       <Tooltip content="View Invoice">
-                        <Link to={`/invoice/${invoice.invoiceNo}`}>
+                        <Link to={`/techninza-bill/${invoice.invoiceNo}`}>
                           <button>
                           <EyeIcon className="h-6 w-6 text-blue-500" />
                           
@@ -113,4 +113,4 @@ const AllInvoice = () => {
   );
 };
 
-export default AllInvoice;
+export default TechninzaInvoice;

@@ -39,6 +39,7 @@ function AddnewSubscriber() {
     credits: 0,
     amount: 0,
     type: 0,
+    gst_no: "",
   });
 
   const [professionals, setProfessionals] = useState([]);
@@ -340,6 +341,16 @@ function AddnewSubscriber() {
                 type="number"
                 name="amount"
                 value={user.amount}
+                className="border border-gray-500 px-3 py-2 focus:outline-none"
+                onChange={handleChange}
+              />
+            </div>
+            <div className="flex flex-col">
+              <Typography variant="h6">GST No.</Typography>
+              <Input
+                type="text"
+                name="gst_no"
+                value={user.gst_no}
                 className="border border-gray-500 px-3 py-2 focus:outline-none"
                 onChange={handleChange}
               />

@@ -16,6 +16,7 @@ import CustomTable from "../../../../components/CustomTable";
 import { useNavigate } from "react-router-dom"; // Import useNavigate
 import { CheckCircleIcon, XCircleIcon } from "@heroicons/react/24/outline";
 import { PencilIcon, TrashIcon } from "@heroicons/react/24/solid";
+// import CustomerForm from "./CustomForm";
 
 function Users() {
   const [users, setUsers] = useState([]);
@@ -27,6 +28,9 @@ function Users() {
   const [filter, setFilter] = useState("");
 
   const token = Cookies.get("token");
+  // const [open, setOpen] = useState(false);
+
+  // const handleOpen = () => setOpen(!open);
 
   const navigate = useNavigate(); // Initialize navigate
 
@@ -242,6 +246,7 @@ function Users() {
             </Typography>
           </div>
           <div className="flex gap-2">
+
             <select
               onChange={handleFilterChange}
               value={filter}
@@ -273,6 +278,7 @@ function Users() {
                 placeholder="Search by name"
                 className="w-full bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border border-slate-200 rounded-md pl-10 pr-3 py-2 transition duration-300 ease focus:outline-none focus:border-slate-400 hover:border-slate-300 shadow-sm focus:shadow"
               />
+             
             </div>
             {/* <Button variant="gradient" >
               Search
