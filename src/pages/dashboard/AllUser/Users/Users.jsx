@@ -16,7 +16,7 @@ import CustomTable from "../../../../components/CustomTable";
 import { useNavigate } from "react-router-dom"; // Import useNavigate
 import { CheckCircleIcon, XCircleIcon } from "@heroicons/react/24/outline";
 import { PencilIcon, TrashIcon } from "@heroicons/react/24/solid";
-// import CustomerForm from "./CustomForm";
+import CustomerForm from "./CustomForm";
 
 function Users() {
   const [users, setUsers] = useState([]);
@@ -28,9 +28,9 @@ function Users() {
   const [filter, setFilter] = useState("");
 
   const token = Cookies.get("token");
-  // const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(false);
 
-  // const handleOpen = () => setOpen(!open);
+  const handleOpen = () => setOpen(!open);
 
   const navigate = useNavigate(); // Initialize navigate
 
@@ -280,9 +280,8 @@ function Users() {
               />
              
             </div>
-            {/* <Button variant="gradient" >
-              Search
-            </Button> */}
+            <Button onClick={handleOpen}>Create User</Button>
+            <CustomerForm open={open} handleOpen={handleOpen} />
           </div>
         </div>
       </CardHeader>
