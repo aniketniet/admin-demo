@@ -177,7 +177,8 @@ const TechninzaCreateInvoice = () => {
       setLoading(false);
       navigate(`/techninza-bill/${response.data.invoice.id}`);
     } catch (error) {
-      showErrorToast("Failed to create invoice.");
+      const errorMessage = error.response?.data?.message || "Failed to create invoice.";
+      showErrorToast({errorMessage});
       setLoading(false);
       console.error("Error creating invoice:", error);
     }

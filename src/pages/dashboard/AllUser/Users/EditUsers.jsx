@@ -87,10 +87,10 @@ function EditUsers() {
     //   showErrorToast("Mobile number must be 10 digits.");
     //   return false;
     // }
-    if (!user.city.trim()) {
-      showErrorToast("City is required.");
-      return false;
-    }
+    // if (!user.city.trim()) {
+    //   showErrorToast("City is required.");
+    //   return false;
+    // }
     if (user.wallet < 0 || isNaN(user.wallet)) {
       showErrorToast("Wallet balance cannot be negative.");
       return false;
