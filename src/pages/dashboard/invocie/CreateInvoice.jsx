@@ -34,6 +34,7 @@ const CreateInvoice = () => {
 
   const [invoiceData, setInvoiceData] = useState({
     user_id: "",
+    invoiceNo: "",
     invoiceDate: "",
     dueDate: "",
     billedBy:
@@ -199,6 +200,17 @@ const CreateInvoice = () => {
           <form onSubmit={handleSubmit}>
             <CardBody id="invoice">
               <div className="grid grid-cols-2 gap-4 mb-4">
+              <div className="flex flex-col">
+                  <label className="font-semibold">Invoice NO</label>
+                  <input
+                    type="text"
+                    name="invoiceNo"
+                    value={invoiceData.invoiceNo}
+                    onChange={handleInputChange}
+                    placeholder="Enter invoice number"
+                    className="border rounded-md p-2 w-full"
+                  />
+                </div>
                 <div className="flex flex-col">
                   <label className="font-semibold">Invoice Date</label>
                   <DatePicker

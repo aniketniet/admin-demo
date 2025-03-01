@@ -34,13 +34,15 @@ const TechninzaInvoice = () => {
   }, []);
 
   const formatDateToMonthYear = (dateString) => {
+    if (!dateString) return "Invalid Date"; // Handle undefined/null
+
     const date = new Date(dateString);
-    return new Intl.DateTimeFormat("en-US", {
-      day: "2-digit",
-      month: "long",
-      year: "numeric",
-    }).format(date);
-  };
+    if (isNaN(date.getTime())) return "Invalid Date"; // Handle invalid dates
+
+    return date.toLocaleDateString("en-US", { month: "long", year: "numeric" });
+};
+
+
 
   return (
     <div className="flex">
@@ -58,7 +60,7 @@ const TechninzaInvoice = () => {
                     Invoice Date
                   </th>
                   <th className="border border-gray-300 px-4 py-2">
-                    Client Name
+                    Billed To
                   </th>
                   <th className="border border-gray-300 px-4 py-2">
                     Total Amount
@@ -74,17 +76,17 @@ const TechninzaInvoice = () => {
                       {invoice.invoiceNo}
                     </td>
                     <td className="border border-gray-300 px-4 py-2 text-center">
-                      {formatDateToMonthYear(invoice.invoice_date)}
+                      {formatDateToMonthYear(invoice.invoiceDate)}
                     </td>
                     <td className="border border-gray-300 px-4 py-2 text-center">
-                      {invoice.billed_to}
+                      {invoice.billedTo}
                     </td>
                     <td className="border border-gray-300 px-4 py-2">
                       {invoice?.total}
                     </td>
                     <td className="border border-gray-300 px-4 py-2 text-center">
                       <Tooltip content="View Invoice">
-                        <Link to={`/techninza-bill/${invoice.invoiceNo}`}>
+                        <Link to={`/techninza-bill/${invoice._id}`}>
                           <button>
                           <EyeIcon className="h-6 w-6 text-blue-500" />
                           

@@ -47,6 +47,7 @@ const TechninzaCreateInvoice = () => {
 
   const [invoiceData, setInvoiceData] = useState({
     user_id: "",
+    invoiceNo: "",
     invoiceDate: "",
     dueDate: "",
     billedBy:
@@ -107,16 +108,20 @@ const TechninzaCreateInvoice = () => {
       setUserId(e.target.value);
 
       const selectedClient = subscribers.find(
-        (subscriber) => subscriber.id == value
+        (subscriber) => subscriber._id == value
       );
       setSelectedSubscriber(selectedClient || null);
 
+     
       setInvoiceData((prevData) => ({
         ...prevData,
         user_id: value,
-        billedTo: `${selectedClient?.name || ""} ${
-          selectedClient?.address || ""
-        }`,
+        billedTo: `${selectedClient?.name || ""} 
+        ${selectedClient?.address || ""} 
+        ${selectedClient?.city || ""} ${selectedClient?.state || ""} ${selectedClient?.pincode || ""}
+        GSTIN:${ selectedClient?.gstno || ""}
+        Email: ${selectedClient?.email || ""}
+        `
       }));
     }
 
@@ -175,7 +180,7 @@ const TechninzaCreateInvoice = () => {
 
       showSuccessToast("Invoice created successfully!");
       setLoading(false);
-      navigate(`/techninza-bill/${response.data.invoice.id}`);
+      navigate(`/techninza-bill/${response.data.invoice._id}`);
     } catch (error) {
       const errorMessage = error.response?.data?.message || "Failed to create invoice.";
       showErrorToast({errorMessage});
@@ -238,6 +243,17 @@ const TechninzaCreateInvoice = () => {
           <form onSubmit={handleSubmit}>
             <CardBody id="invoice">
               <div className="grid grid-cols-2 gap-4 mb-4">
+              <div className="flex flex-col">
+                  <label className="font-semibold">Invoice NO</label>
+                  <input
+                    type="text"
+                    name="invoiceNo"
+                    value={invoiceData.invoiceNo}
+                    onChange={handleInputChange}
+                    placeholder="Enter invoice number"
+                    className="border rounded-md p-2 w-full"
+                  />
+                </div>
                 <div className="flex flex-col">
                   <label className="font-semibold">Invoice Date</label>
                   <DatePicker
@@ -249,6 +265,7 @@ const TechninzaCreateInvoice = () => {
                     className="border rounded-md p-2 w-full"
                   />
                 </div>
+              
                 <div className="flex flex-col">
                   <label className="font-semibold">Due Date</label>
                   <DatePicker
@@ -265,20 +282,13 @@ const TechninzaCreateInvoice = () => {
                   <select
                     name="billedTo"
                     onChange={(e) => {
-                      // const selectedName = e.target.value;
-                      // const selectedClient = subscribers.find(
-                      //   (subscriber) => subscriber.name === selectedName
-                      // );
-                      // if (selectedClient) {
-                      //   setUserId(selectedClient.id); // Assuming the subscriber object has an 'id' field
-                      // }
                       handleInputChange(e);
                     }}
                     className="border rounded-md p-2 w-full"
                   >
                     <option>Select Client</option>
                     {subscribers.map((subscriber, index) => (
-                      <option key={index} value={subscriber.id}>
+                      <option key={index} value={subscriber._id}>
                         {subscriber.name}
                       </option>
                     ))}
@@ -309,9 +319,6 @@ const TechninzaCreateInvoice = () => {
                     <>
                       <p>{selectedSubscriber.name}</p>
                       <p>{selectedSubscriber.address}</p>
-                      {/* <p>
-                      {selectedSubscriber.city}, {selectedSubscriber.state}
-                    </p> */}
                       <p>GSTIN: {selectedSubscriber.gstno}</p>
                       <p>Email: {selectedSubscriber.email}</p>
                     </>

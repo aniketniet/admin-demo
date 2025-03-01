@@ -22,8 +22,9 @@ const TechninzaInvoice = () => {
         );
 
         const data = response.data.data;
+        console.log(data, "id");
         const invoice = data.find(
-          (bill) => String(bill.invoiceNo) === String(id)
+          (bill) => String(bill._id) === String(id)
         );
 
         if (invoice) {
@@ -113,7 +114,7 @@ margin:0; /* Remove default browser margins (header/footer) */
               </p>
               <p>
                 <strong className="text-gray-600">Invoice Date:</strong>{" "}
-                {new Date(bills?.invoice_date).toLocaleString("en-GB", {
+                {new Date(bills?.invoiceDate).toLocaleString("en-GB", {
                   day: "2-digit",
                   month: "2-digit",
                   year: "numeric",
@@ -121,7 +122,7 @@ margin:0; /* Remove default browser margins (header/footer) */
               </p>
               <p>
                 <strong className="text-gray-600">Due Date:</strong>{" "}
-                {new Date(bills?.due_date).toLocaleString("en-GB", {
+                {new Date(bills?.dueDate).toLocaleString("en-GB", {
                   day: "2-digit",
                   month: "2-digit",
                   year: "numeric",
@@ -159,13 +160,12 @@ margin:0; /* Remove default browser margins (header/footer) */
               <Typography variant="h6" className="font-semibold text-[#343D68]">
                 Billed To
               </Typography>
-              {bills?.billed_to?.split("\n").map((line, index) => (
+              {bills?.billedTo?.split("\n").map((line, index) => (
                 <p className="font-semibold" key={index}>
                   {line.trim()}
                 </p>
               ))}
-              <p className="font-semibold">{bills?.country}</p>
-              <p className="font-semibold">{bills?.state}</p>
+           
             </div>
           </div>
         </div>
@@ -201,7 +201,7 @@ margin:0; /* Remove default browser margins (header/footer) */
                 <td className="border p-2">{item.quantity}</td>
                 <td className="border p-2">{item.gst}%</td>
                 <td className="border p-2">
-                  ₹ {item.rate * item.quantity * (item.gst / 100)}
+                  ₹ {item.rate * item.quantity * (item.gst / 100).toFixed(2)}
                 </td>
               </tr>
             ))}

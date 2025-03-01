@@ -165,8 +165,7 @@ const Invoice = () => {
               {bills?.billed_to?.split("\n").map((line, index) => (
                 <p className="font-semibold" key={index}>{line.trim()}</p>
               ))}
-              <p className="font-semibold">{bills?.country}</p>
-              <p className="font-semibold">{bills?.state}</p>
+       
             </div>
           </div>
         </div>
