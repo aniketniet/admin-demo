@@ -32,7 +32,8 @@ const Login = () => {
       if (res.data.success) {
         console.log("Login Success");
         const token = res.data.data.token;
-        console.log("Response:", token);
+        const user = res.data.data.user;
+
 
         // Store the token in cookies
         Cookies.set("token", token, {
@@ -40,6 +41,10 @@ const Login = () => {
           secure: false,
           sameSite: "Strict",
         });
+        Cookies.set("user", JSON.stringify(user), { expires: 1 });
+        const permissions = user.permissions
+        console.log("permissions",permissions);
+        Cookies.set("permissions", JSON.stringify(permissions), { expires: 1 });
         console.log("cookies set");
 
         // Redirect to dashboard

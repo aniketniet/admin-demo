@@ -220,7 +220,7 @@ const columns = [
         key: "actions",
         label: "Actions",
         render: (row) => (
-            <td className="px-4 py-2 flex gap-2">
+            <div className="px-4 py-2 flex gap-2">
                 <Tooltip content="Edit">
                     <button onClick={() => handleEdit(row.id)}>
                         <PencilIcon className="h-5 w-5 text-blue-500" />
@@ -231,7 +231,7 @@ const columns = [
                         <TrashIcon className="h-5 w-5 text-red-500" />
                     </button>
                 </Tooltip>
-            </td>
+            </div>
         ),
         width: "w-32",
     }

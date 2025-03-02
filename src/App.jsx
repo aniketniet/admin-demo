@@ -1,7 +1,7 @@
 import { Routes, Route } from "react-router-dom";
 import Dashboard from "./layouts/Dashboad"; // Fixed typo
 import Login from "./auth/Login";
-import PrivateRoute from "./components/PrivateRoute";
+
 
 
 
@@ -15,9 +15,9 @@ function App() {
       <Route
         path="/*"
         element={
-          <PrivateRoute>
+    
             <Dashboard />
-          </PrivateRoute>
+      
         }
       />
      

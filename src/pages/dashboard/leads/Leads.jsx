@@ -22,6 +22,16 @@ function Leads() {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const token = Cookies.get("token");
+  // const permissions = Cookies.get("permissions");
+  // const currentRoute = useLocation().pathname;
+
+  // console.log("currentRoute", currentRoute);
+
+  // const accessArray = JSON.parse(permissions);
+  // const accessRoutes = accessArray.map((route) => `/${route}`);
+  // console.log("accessRoutes", accessRoutes);
+
+  
 
   const navigate = useNavigate(); // Initialize navigate
 
@@ -47,6 +57,10 @@ function Leads() {
 
   useEffect(() => {
     if (token) fetchLeads(currentPage);
+    // const hasAccess = accessRoutes.includes(currentRoute);
+    // if (!hasAccess) {
+    //   navigate("/");
+    // }
   }, [token, currentPage, fetchLeads]);
 
   const deleteLead = async (id) => {
@@ -133,7 +147,7 @@ function Leads() {
       key: "actions",
       label: "Actions",
       render: (row) => (
-        <td className="px-4 py-2 flex gap-2">
+        <div className="px-4 py-2 flex gap-2">
           <Tooltip content="Edit">
             <button onClick={() => handleEdit(row.id)}>
               <PencilIcon className="h-5 w-5 text-blue-500" />
@@ -144,7 +158,7 @@ function Leads() {
               <TrashIcon className="h-5 w-5 text-red-500" />
             </button>
           </Tooltip>
-        </td>
+        </div>
       ),
       width: "w-24",
     },

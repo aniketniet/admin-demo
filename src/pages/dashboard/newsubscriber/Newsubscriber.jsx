@@ -259,13 +259,13 @@ function Newsubscriber() {
       key: "actions",
       label: "Actions",
       render: (row) => (
-        <td className="px-4 py-2 flex gap-2">
+        <div className="px-4 py-2 flex gap-2">
           <Tooltip content="Send Mail">
             <button onClick={() => sendMail(row.name, row.email)}>
               <PaperAirplaneIcon className="h-5 w-5 text-blue-500 transform rotate-315" />
             </button>
           </Tooltip>
-        </td>
+        </div>
       ),
       width: "w-32",
     },

@@ -2,7 +2,7 @@ import {
   HomeIcon,
   UserCircleIcon,
   TableCellsIcon,
-  InformationCircleIcon,
+  // InformationCircleIcon,
   ArchiveBoxArrowDownIcon,
   UsersIcon,
   TicketIcon,
@@ -11,7 +11,7 @@ import {
 import Home from "./src/pages/dashboard/home"; // Fixed path
 import Profile from "./src/pages/dashboard/profile"; // Fixed path
 import Tables from "./src/pages/dashboard/tables"; // Fixed path
-import Notifications from "./src/pages/dashboard/notifications"; // Fixed path
+// import Notifications from "./src/pages/dashboard/notifications"; // Fixed path
 import Leads from "./src/pages/dashboard/leads/Leads"; // Fixed path
 import Users from "./src/pages/dashboard/AllUser/Users/Users"; // Fixed path
 import Coupon from "./src/pages/dashboard/Coupon";
@@ -27,6 +27,7 @@ import Role from "./src/pages/dashboard/role/Role";
 import AddUserForRole from "./src/pages/dashboard/role/AddUserForRole";
 import TechninzaCreateInvoice from "@/pages/dashboard/invocie-techninza/TechninzaCreateInvoice";
 import TechninzaInvoice from "@/pages/dashboard/invocie-techninza/TechninzaInvoice";
+import PrivateRoute from "@/components/PrivateRoute";
 const iconClass = "w-5 h-5 text-inherit";
 
 export const routes = [
@@ -38,88 +39,92 @@ export const routes = [
         icon: <HomeIcon className={iconClass} />,
         name: "Dashboard",
         path: "/home", // Fixed path
-        element: <Home />,
+        element:
+          <Home />
+        
       },
 
       {
         icon: <ArchiveBoxArrowDownIcon className={iconClass} />,
         name: "All Leads",
         path: "/leads", // Fixed path
-        element: <Leads />,
+        element: <PrivateRoute>
+          <Leads />
+        </PrivateRoute>,
       },
       {
         icon: <UsersIcon className={iconClass} />,
         name: "All Users",
         path: "/users", // Main path for "All Users" without any element
         subPages: [
-          { name: "Users", path: "/users/all", element: <Users /> },
+          { name: "Users", path: "/users/all", element: <PrivateRoute> <Users /> </PrivateRoute>  },
           {
             name: "Professional",
             path: "/users/professional",
-            element: <Professional />,
+            element: <PrivateRoute> <Professional /> </PrivateRoute>,
           },
-          { name: "Client", path: "/users/client", element: <Client /> },
-          { name: "Agency", path: "/users/agency", element: <Agency /> },
+          { name: "Client", path: "/users/client", element:  <PrivateRoute><Client /> </PrivateRoute> },
+          { name: "Agency", path: "/users/agency", element: <PrivateRoute> <Agency /> </PrivateRoute> },
         ],
       },
+      // {
+      //   icon: <UsersIcon className={iconClass} />,
+      //   name: "Leads",
+      //   path: "/users", // Main path for "All Users" without any element
+      //   subPages: [
+      //     { name: "Leads", path: "/users/all", element: <Users /> },
+      //     {
+      //       name: "Lead Sharing",
+      //       path: "/users/professional",
+      //       element: <Professional />,
+      //     },
+      //     { name: "Active Leads", path: "/users/client", element: <Client /> },
+      //   ],
+      // },
+      // {
+      //   icon: <UsersIcon className={iconClass} />,
+      //   name: "Gigs",
+      //   path: "/users", // Main path for "All Users" without any element
+      //   subPages: [
+      //     { name: "All Gigs", path: "/users/all", element: <Users /> },
+      //     {
+      //       name: "Gigs Purchase",
+      //       path: "/users/professional",
+      //       element: <Professional />,
+      //     },
+      //   ],
+      // },
       {
         icon: <UsersIcon className={iconClass} />,
-        name: "Leads",
-        path: "/users", // Main path for "All Users" without any element
-        subPages: [
-          { name: "Leads", path: "/users/all", element: <Users /> },
-          {
-            name: "Lead Sharing",
-            path: "/users/professional",
-            element: <Professional />,
-          },
-          { name: "Active Leads", path: "/users/client", element: <Client /> },
-        ],
-      },
-      {
-        icon: <UsersIcon className={iconClass} />,
-        name: "Gigs",
-        path: "/users", // Main path for "All Users" without any element
-        subPages: [
-          { name: "All Gigs", path: "/users/all", element: <Users /> },
-          {
-            name: "Gigs Purchase",
-            path: "/users/professional",
-            element: <Professional />,
-          },
-        ],
-      },
-      {
-        icon: <UsersIcon className={iconClass} />,
-        name: "Account",
-        path: "/invoice", // Main path for "All Users" without any element
-        subPages: [
-          {
-            name: "Create Invoice",
-            path: "/invoice/create",
-            element: <CreateInvoice />,
-          },
-          {
-            name: "All Invoice",
-            path: "/invoice/all",
-            element: <AllInvoice />,
-          },
-        ],
-      },
-      {
-        icon: <UsersIcon className={iconClass} />,
-        name: "Techninza",
-        path: "/bill", // Main path for "All Users" without any element
+        name: "Sooprs Billing",
+        path: "/sooprsbill", // Main path for "All Users" without any element
         subPages: [
           {
             name: "Create Invoice",
-            path: "/bill/techninza/billcreate",
-            element: <TechninzaCreateInvoice />,
+            path: "/sooprsbill/create",
+            element: <PrivateRoute> <CreateInvoice /> </PrivateRoute>,
           },
           {
             name: "All Invoice",
-            path: "/bill/techninza/all",
-            element: <TechninzaInvoice />,
+            path: "/sooprsbill/all",
+            element: <PrivateRoute> <AllInvoice /> </PrivateRoute>,
+          },
+        ],
+      },
+      {
+        icon: <UsersIcon className={iconClass} />,
+        name: "Techninza Billing",
+        path: "/techninzabill", // Main path for "All Users" without any element
+        subPages: [
+          {
+            name: "Create Invoice",
+            path: "/techninzabill/billcreate",
+            element:<PrivateRoute> <TechninzaCreateInvoice /> </PrivateRoute>,
+          },
+          {
+            name: "All Invoice",
+            path: "/techninzabill/all",
+            element: <PrivateRoute><TechninzaInvoice /> </PrivateRoute>,
           },
         ],
       },
@@ -127,14 +132,14 @@ export const routes = [
         icon: <BellIcon className={iconClass} />,
         name: "Subscriber",
         path: "/subscriber", // Fixed path
-        element: <Susbscriber />,
+        element: <PrivateRoute><Susbscriber /> </PrivateRoute>,
       },
 
       {
         icon: <BellIcon className={iconClass} />,
         name: "New Subscriber",
         path: "/newsubscriber", // Fixed path
-        element: <Newsubscriber />,
+        element:<PrivateRoute> <Newsubscriber /> </PrivateRoute>,
       },
 
       {
@@ -148,15 +153,15 @@ export const routes = [
         name: "Role",
         path: "/role", // Fixed path
         subPages: [
-          { name: "Add Role", path: "/role", element: <Role /> },
+          { name: "Add Role", path: "/role/addrole", element: <PrivateRoute> <Role /> </PrivateRoute>},
           {
             name: "Add Permissions",
-            path: "/Permissions",
-            element: <Permissions />,
+            path: "/role/Permissions",
+            element: <PrivateRoute><Permissions /> </PrivateRoute>,
           },
-          { name: "Add User", path: "/adduser", element: <AddUserForRole /> },
+          { name: "Add User", path: "/role/adduser", element:<AddUserForRole />  },
         ],
-        element: <Role />,
+        element: <PrivateRoute> <Role /> </PrivateRoute>,
       },
       {
         icon: <TableCellsIcon className={iconClass} />,
@@ -164,17 +169,12 @@ export const routes = [
         path: "/tables", // Fixed path
         element: <Tables />,
       },
-      {
-        icon: <InformationCircleIcon className={iconClass} />,
-        name: "Notifications",
-        path: "/notifications", // Fixed path
-        element: <Notifications />,
-      },
+  
       {
         icon: <TicketIcon className={iconClass} />,
         name: "Coupons",
         path: "/coupons", // Fixed path
-        element: <Coupon />,
+        element:<PrivateRoute> <Coupon /></PrivateRoute>,
       },
     ],
   },

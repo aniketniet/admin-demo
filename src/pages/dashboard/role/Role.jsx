@@ -203,7 +203,7 @@ const Role = () => {
       key: "delete",
       label: "Delete",
       render: (row) => (
-        <td className="px-4 py-2 flex gap-2">
+        <div className="px-4 py-2 flex gap-2">
           <Tooltip content="Edit">
             <button type="button" onClick={() => openModal(row.id)}>
               <PencilIcon className="h-5 w-5 text-blue-500" />
@@ -214,7 +214,7 @@ const Role = () => {
               <TrashIcon className="h-5 w-5 text-red-500" />
             </button>
           </Tooltip>
-        </td>
+        </div>
       ),
       width: "w-20",
     },

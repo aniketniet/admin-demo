@@ -29,12 +29,13 @@ function AddUserForRole() {
   const token = Cookies.get("token");
   const [open, setOpen] = React.useState(false);
   const [values, setValues] = React.useState([]);
+  const [selectedRole, setSelectedRole] = useState("");
 
   const [user, setUser] = useState({
     name: "",
     email: "",
     mobile: "",
-    role: [],
+    role: "",
     password: "",
   });
 
@@ -75,6 +76,7 @@ function AddUserForRole() {
     if (!user.mobile.trim())
       return showErrorToast("Mobile number is required.");
     if (!user.password.trim()) return showErrorToast("Password is required.");
+    if (!user.role) return showErrorToast("Role is required.");
     return true;
   };
 
@@ -118,80 +120,49 @@ function AddUserForRole() {
             className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4"
           >
             {/* User Selection */}
-            <Popover open={open} onOpenChange={setOpen}>
-              <PopoverTrigger asChild>
-                <Button
-                  variant="outline"
-                  role="combobox"
-                  aria-expanded={open}
-                  className="w-[810px] justify-between"
-                >
-                  {values.length > 0 ? (
-                    <span>
-                      {values
-                        .map((value) => {
-                          const professional = professionals.find(
-                            (p) => p.id.toString() === value
-                          );
-                          return professional?.name;
-                        })
-                        .join(", ")}
-                    </span>
-                  ) : (
-                    "Select Roles..."
-                  )}
-                  <ChevronsUpDown className="opacity-50" />
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent className="w-[810px] p-0">
-                <Command>
-                  <CommandInput
-                    placeholder="Search professional..."
-                    className="h-9"
-                  />
-                  <CommandList>
-                    <CommandEmpty>No Role found.</CommandEmpty>
-                    <CommandGroup>
-                      {professionals.map((professional) => (
-                        <CommandItem
-                          key={professional.id}
-                          value={professional.id.toString()}
-                          onSelect={() => {
-                            if (values.includes(professional.id.toString())) {
-                              setValues(
-                                values.filter(
-                                  (v) => v !== professional.id.toString()
-                                )
-                              );
-                            } else {
-                              setValues([
-                                ...values,
-                                professional.id.toString(),
-                              ]);
-                            }
-                            setUser((prevUser) => ({
-                              ...prevUser,
-                              role: values,
-                            }));
-                            setOpen(false);
-                          }}
-                        >
-                          {professional.name}
-                          <Check
-                            className={cn(
-                              "ml-auto",
-                              values.includes(professional.id.toString())
-                                ? "opacity-100"
-                                : "opacity-0"
-                            )}
-                          />
-                        </CommandItem>
-                      ))}
-                    </CommandGroup>
-                  </CommandList>
-                </Command>
-              </PopoverContent>
-            </Popover>
+            {/* Role Selection */}
+<Popover open={open} onOpenChange={setOpen}>
+  <PopoverTrigger asChild>
+    <Button variant="outline" role="combobox" aria-expanded={open} className="w-[810px] justify-between">
+      {selectedRole
+        ? professionals.find((p) => p.id.toString() === selectedRole)?.name
+        : "Select Role..."}
+      <ChevronsUpDown className="opacity-50" />
+    </Button>
+  </PopoverTrigger>
+  <PopoverContent className="w-[810px] p-0">
+    <Command>
+      <CommandInput placeholder="Search role..." className="h-9" />
+      <CommandList>
+        <CommandEmpty>No Role found.</CommandEmpty>
+        <CommandGroup>
+          {professionals.map((professional) => (
+            <CommandItem
+              key={professional.id}
+              value={professional.id.toString()}
+              onSelect={() => {
+                setSelectedRole(professional.id.toString());
+                setUser((prevUser) => ({
+                  ...prevUser,
+                  role: professional.id.toString(), // Set only one role
+                }));
+                setOpen(false);
+              }}
+            >
+              {professional.name}
+              <Check
+                className={cn(
+                  "ml-auto",
+                  selectedRole === professional.id.toString() ? "opacity-100" : "opacity-0"
+                )}
+              />
+            </CommandItem>
+          ))}
+        </CommandGroup>
+      </CommandList>
+    </Command>
+  </PopoverContent>
+</Popover>
             <div className="flex flex-col"></div>
 
             {/* Name */}

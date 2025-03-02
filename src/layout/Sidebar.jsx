@@ -13,11 +13,33 @@ import {
   UserIcon,
   UsersIcon,
 } from "@heroicons/react/24/outline";
-import { useState } from "react";
+import {  useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import Cookies from "js-cookie";
 
 function Sidebar({ routes, isOpen }) {
   const [openDropdown, setOpenDropdown] = useState(null);
+  const [accessTo, setAccessTo] = useState([]);
+
+useEffect(() => {
+  const interval = setInterval(() => {
+    const permissions = Cookies.get("permissions");
+    if (permissions) {
+      try {
+        const accessArray = JSON.parse(permissions);
+        setAccessTo(accessArray);
+        // console.log("Updated Permissions:", accessArray); // Debugging line
+      } catch (error) {
+        console.error("Error parsing permissions:", error);
+      }
+    }
+  }, 1000);
+  return () => clearInterval(interval);
+}, []);
+
+    
+
+
 
   const toggleDropdown = (name) => {
     setOpenDropdown(openDropdown === name ? null : name);
@@ -28,7 +50,7 @@ function Sidebar({ routes, isOpen }) {
         isOpen ? "translate-x-0" : "-translate-x-full"
       } md:translate-x-0`}
     >
-      <Card className="h-full w-72 border border-blue-100 bg-gradient-to-br from-gray-800 to-gray-900">
+      <Card className="h-[100vh] w-72 border border-blue-100 bg-gradient-to-br from-gray-800 to-gray-900">
         <div className="mb-4 flex items-center gap-4 p-4">
           <div className="h-10 w-10 rounded-lg flex items-center justify-center">
             <img
@@ -43,9 +65,11 @@ function Sidebar({ routes, isOpen }) {
         </div>
         <List>
           {routes.map(({ layout, pages }) =>
+        
             layout === "dashboard"
               ? pages.map(({ name, path, icon, subPages }) => (
-                  <div key={path}>
+                
+                   accessTo.includes(path.substring(1)) && <div key={path}>
                     <NavLink
                       to={subPages ? "#" : path} // Prevents navigation for "All Users"
                       className={({ isActive }) =>
