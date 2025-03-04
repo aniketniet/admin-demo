@@ -67,20 +67,20 @@ export const routes = [
           { name: "Agency", path: "/users/agency", element: <PrivateRoute> <Agency /> </PrivateRoute> },
         ],
       },
-      // {
-      //   icon: <UsersIcon className={iconClass} />,
-      //   name: "Leads",
-      //   path: "/users", // Main path for "All Users" without any element
-      //   subPages: [
-      //     { name: "Leads", path: "/users/all", element: <Users /> },
-      //     {
-      //       name: "Lead Sharing",
-      //       path: "/users/professional",
-      //       element: <Professional />,
-      //     },
-      //     { name: "Active Leads", path: "/users/client", element: <Client /> },
-      //   ],
-      // },
+      {
+        icon: <UsersIcon className={iconClass} />,
+        name: "All Ads Data",
+        path: "/ads", // Main path for "All Users" without any element
+        subPages: [
+        
+          {
+            name: "Travels & Movers Data",
+            path: "/ads/travels-movers",
+            element:  <Professional />,
+          },
+          { name: "Active Leads", path: "/users/client", element: <Client /> },
+        ],
+      },
       // {
       //   icon: <UsersIcon className={iconClass} />,
       //   name: "Gigs",

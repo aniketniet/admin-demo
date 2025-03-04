@@ -6,37 +6,35 @@ import Cookies from "js-cookie";
 const PrivateRoute = ({ children }) => {
   const navigate = useNavigate();
   const token = Cookies.get("token");
-
   const permissions = Cookies.get("permissions");
-  console.log("permissions", permissions);
-  const currentRoute = useLocation().pathname;
-  console.log("currentRoute", currentRoute);
 
+  const currentRoute = useLocation().pathname;
   const route = currentRoute.split("/")[1];
 
-  console.log("route", route);
-
-  // console.log("currentRoute", route);
-
-  const accessArray = JSON.parse(permissions);
-  console.log("accessArray", accessArray);
-  const accessRoutes = accessArray.map((route) => `/${route}`);
-  console.log("accessRoutes", accessRoutes);
-
-  const hasAccess = accessRoutes.includes(`/${route}`);
+  let hasAccess = false;
+  
+  if (permissions) {
+    try {
+      const accessArray = JSON.parse(permissions);
+      const accessRoutes = accessArray.map((r) => `/${r}`);
+      hasAccess = accessRoutes.includes(`/${route}`);
+    } catch (error) {
+      console.error("Error parsing permissions", error);
+    }
+  }
 
   useEffect(() => {
+    const token = Cookies.get("token");
     if (!token) {
       navigate("/login");
+    } else if (!hasAccess) {
+      navigate("/unauthorized");
     }
-    if (!hasAccess) {
-      navigate("/");
-    }
-  }, [token, navigate, hasAccess]);
+  }, [token, hasAccess, navigate]);
 
-  // If token exists, render children; otherwise, return null until redirect happens
   return token && hasAccess ? children : null;
 };
+
 PrivateRoute.propTypes = {
   children: PropTypes.node.isRequired,
 };

@@ -26,8 +26,20 @@ import {
   ordersOverviewData,
 } from "@/data";
 import { CheckCircleIcon, ClockIcon } from "@heroicons/react/24/solid";
+// import { useNavigate } from "react-router-dom";
+// import Cookies from "js-cookie";
 
 export function Home() {
+  // const navigate = useNavigate();
+  // const token = Cookies.get("token");
+  
+  // useEffect(() => {
+  //   if (!token) {
+  //     navigate("/login");
+  //   }
+
+  // }, [token])
+
   return (
     <div className="mt-12">
       <div className="mb-12 grid gap-y-10 gap-x-6 md:grid-cols-2 xl:grid-cols-4">

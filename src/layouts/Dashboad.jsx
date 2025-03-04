@@ -11,6 +11,8 @@ import Addnewuser from "../pages/dashboard/Addnewuser";
 import Invoice from "../components/Invoice";
 import TechninzaInvoice from "@/components/TechninzaInvoice";
 
+// import PrivateRoute from "@/components/PrivateRoute";
+
 const Dashboard = () => {
   // Local state for toggling sidebar visibility on mobile
   const [isOpen, setIsOpen] = useState(false);
@@ -32,11 +34,46 @@ const Dashboard = () => {
         <Routes>
           {/* Redirect /dashboard to /dashboard/home */}
           <Route path="/" element={<Navigate to="/home" replace />} />
-          <Route path="/detail/:id" element={<LeadDetail />} />
-          <Route path="/edituser/:id" element={<EditUsers />} />
-          <Route path="/addsubscriber" element={<AddSubscriber />} />
-          <Route path="/addnewsubscriber" element={<AddnewSubscriber />} />
-          <Route path="/addnewuser" element={<Addnewuser />} />
+          <Route
+            path="/detail/:id"
+            element={
+                <LeadDetail />
+            }
+          />
+          
+
+          <Route
+            path="/edituser/:id"
+            element={
+             
+                <EditUsers />
+            
+            }
+          />
+          <Route
+            path="/addsubscriber"
+            element={
+              
+                <AddSubscriber />
+           
+            }
+          />
+          <Route
+            path="/addnewsubscriber"
+            element={
+            
+                <AddnewSubscriber />
+           
+            }
+          />
+          <Route
+            path="/addnewuser"
+            element={
+            
+                <Addnewuser />
+            
+            }
+          />
           <Route path="/asignpermission/:id" element={<EditUsers />} />
           <Route path="/invoice/:id" element={<Invoice />} />
           <Route path="/techninza-bill/:id" element={<TechninzaInvoice />} />

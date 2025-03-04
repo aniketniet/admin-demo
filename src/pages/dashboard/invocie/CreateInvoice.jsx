@@ -3,6 +3,11 @@ import {
   Card,
   CardBody,
   CardHeader,
+  Dialog,
+  DialogBody,
+  DialogFooter,
+  DialogHeader,
+  Input,
   Spinner,
   Typography,
 } from "@material-tailwind/react";
@@ -22,31 +27,69 @@ const CreateInvoice = () => {
   const [userId, setUserId] = useState("");
   const [countries, setCountries] = useState([]);
   const [states, setStates] = useState([]);
+  const [userType, setUserType] = useState("client");
+  const [clients, setClients] = useState([]);
   const [subscribers, setSubscribers] = useState([]);
-  const [selectedSubscriber, setSelectedSubscriber] = useState(null);
+  const [selectedUser, setSelectedUser] = useState(null);
   const [loading, setLoading] = useState(false);
+
+  const [open, setOpen] = useState(false);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    console.log(userId, "user id ");
-    console.log(selectedSubscriber, "selected subscriber");
-  }, [userId, selectedSubscriber]);
+
+
+ 
+
+
 
   const [invoiceData, setInvoiceData] = useState({
     user_id: "",
     invoiceNo: "",
     invoiceDate: "",
     dueDate: "",
-    billedBy:
-      "",
+    billedBy: "",
     billedTo: "",
     country: "",
     state: "",
     items: [{ description: "", rate: "", quantity: "", gst: "" }],
     total: 0,
+    type: userType === "client" ? 1 : 0,
+  });
+
+  const [customerData, setCustomerData] = useState({
+    name: "",
+    email: "",
+    mobile: "",
+    address: "",
+    gst_no: "",
   });
 
   console.log(invoiceData);
+
+  const handleOpen = () => setOpen(!open);
+  const handleCustomerChange = (e) => {
+    setCustomerData({ ...customerData, [e.target.name]: e.target.value });
+  };
+  const addCustomer = async () => {
+    try {
+      const token = Cookies.get("token");
+      await axios.post(
+        `${import.meta.env.VITE_BASE_URL}/create-sooprs-customer`,
+        new URLSearchParams(customerData),
+        {
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      showSuccessToast("Customer added successfully!");
+      setOpen(false);
+    } catch (error) {
+      showErrorToast("Failed to add customer.");
+      console.error("Error adding customer:", error);
+    }
+  };
 
   useEffect(() => {
     const fetchCountries = async () => {
@@ -57,25 +100,37 @@ const CreateInvoice = () => {
       setCountries(data.data);
     };
 
-    const fetchSubscribers = async () => {
+    fetchCountries();
+
+  }, []);
+
+  useEffect(() => {
+    const fetchClientsAndSubscribers = async () => {
       try {
         const token = Cookies.get("token");
-        const response = await axios.get(
-          `${import.meta.env.VITE_BASE_URL}/get-all-subscriber-data`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-        setSubscribers(response.data.data);
+        const [clientsResponse, subscribersResponse] = await Promise.all([
+          axios.get(
+            `${import.meta.env.VITE_BASE_URL}/get-all-sooprs-customers`,
+            {
+              headers: { Authorization: `Bearer ${token}` },
+            }
+          ),
+          axios.get(
+            `${import.meta.env.VITE_BASE_URL}/get-all-subscriber-data`,
+            {
+              headers: { Authorization: `Bearer ${token}` },
+            }
+          ),
+        ]);
+
+        setClients(clientsResponse.data.data);
+        setSubscribers(subscribersResponse.data.data);
       } catch (error) {
-        console.error("Error fetching subscribers:", error);
+        console.error("Error fetching data:", error);
       }
     };
 
-    fetchCountries();
-    fetchSubscribers();
+    fetchClientsAndSubscribers();
   }, []);
 
   const handleInputChange = (e) => {
@@ -88,39 +143,38 @@ const CreateInvoice = () => {
       );
       setStates(selectedCountry ? selectedCountry.states : []);
     }
+  };
 
-    if (name === "billedTo") {
-      console.log(value, "value");
+  const handleUserTypeChange = (e) => {
+    setUserType(e.target.value);
+    setSelectedUser(null);
+    setInvoiceData((prevData) => ({ ...prevData, billedTo: "" }));
+  };
 
-      setUserId(e.target.value);
+  const handleUserSelection = (e) => {
+    const { value } = e.target;
+    setUserId(value);
+    console.log(userId, "vnfevne");
 
-      const selectedClient = subscribers.find(
-        (subscriber) => subscriber.id == value
-      );
-      setSelectedSubscriber(selectedClient || null);
+    // const userList = userType === "client" ? clients : subscribers;
+    // const selected = userList.find((user) => user.id == userId);
 
-      setInvoiceData((prevData) => ({
-        ...prevData,
-        user_id: value,
-        billedTo: `${selectedClient?.name || ""} 
-        ${selectedClient?.address || ""} 
-        ${selectedClient?.city || ""} ${selectedClient?.state || ""} ${selectedClient?.pincode || ""}
-        GSTIN:${ selectedClient?.gst_no || ""}
-        Email: ${selectedClient?.email || ""}
-        `
-      }));
-    }
+    const selected =
+      userType === "subscriber"
+        ? subscribers.find((sub) => sub.id == value)
+        : clients.find((client) => client._id == value);
 
-    // if (name === "user_id") {
-    //   setInvoiceData({ ...invoiceData, user_id: value });
+    setSelectedUser(selected || null);
 
-    //   setUserId(e.target.value);
-    //   const selectedClient = subscribers.find(
-    //     (subscriber) => subscriber.id == value
-    //   );
-    //   setSelectedSubscriber(selectedClient || null);
-    //   setInvoiceData({ ...invoiceData, user_id: selectedClient?.id });
-    // }
+    // setSelectedUser(selected);
+
+    setInvoiceData((prevData) => ({
+      ...prevData,
+      user_id: value,
+      billedTo: selected
+        ? `${selected.name}, ${selected.address}, GSTIN: ${selected.gst_no}, Email: ${selected.email}`
+        : "",
+    }));
   };
 
   const addItem = () => {
@@ -194,13 +248,14 @@ const CreateInvoice = () => {
               <Typography variant="h5" color="blue-gray" className="font-bold">
                 Print INVOICE
               </Typography>
+              <Button onClick={handleOpen}>Add Customer</Button>
             </div>
           </CardHeader>
 
           <form onSubmit={handleSubmit}>
             <CardBody id="invoice">
               <div className="grid grid-cols-2 gap-4 mb-4">
-              <div className="flex flex-col">
+                <div className="flex flex-col">
                   <label className="font-semibold">Invoice NO</label>
                   <input
                     type="text"
@@ -233,28 +288,38 @@ const CreateInvoice = () => {
                     className="border rounded-md p-2 w-full"
                   />
                 </div>
+
                 <div>
-                  <label className="font-semibold">Client Name</label>
+                  <label>User Type</label>
                   <select
-                    name="billedTo"
-                    onChange={(e) => {
-                      // const selectedName = e.target.value;
-                      // const selectedClient = subscribers.find(
-                      //   (subscriber) => subscriber.name === selectedName
-                      // );
-                      // if (selectedClient) {
-                      //   setUserId(selectedClient.id); // Assuming the subscriber object has an 'id' field
-                      // }
-                      handleInputChange(e);
-                    }}
+                    value={userType}
+                    onChange={handleUserTypeChange}
                     className="border rounded-md p-2 w-full"
                   >
-                    <option>Select Client</option>
-                    {subscribers.map((subscriber, index) => (
-                      <option key={index} value={subscriber.id}>
-                        {subscriber.name}
-                      </option>
-                    ))}
+                    <option value="client">Client</option>
+                    <option value="subscriber">Subscriber</option>
+                  </select>
+                </div>
+                <div className="mb-4">
+                  <label className="font-semibold">
+                    {userType === "subscriber" ? "Subscriber" : "Client"} Name
+                  </label>
+                  <select
+                    name="billedTo"
+                    onChange={handleUserSelection}
+                    className="border rounded-md p-2 w-full"
+                  >
+                    <option>Select {userType}</option>
+                    {(userType === "subscriber" ? subscribers : clients).map(
+                      (user, index) => (
+                        <option
+                          key={index}
+                          value={userType === "subscriber" ? user.id : user._id}
+                        >
+                          {user.name}
+                        </option>
+                      )
+                    )}
                   </select>
                 </div>
               </div>
@@ -274,22 +339,19 @@ const CreateInvoice = () => {
                   <p>PAN: AAKCV5021D</p>
                   <p>Email: contact@sooprs.com</p>
                 </div>
-                <div className="p-4 bg-purple-100 rounded-md">
+                <div className="p-4 bg-purple-100 rounded-md mt-4">
                   <Typography variant="h6" className="font-bold">
                     Billed To
                   </Typography>
-                  {selectedSubscriber ? (
+                  {selectedUser ? (
                     <>
-                      <p>{selectedSubscriber.name}</p>
-                      <p>{selectedSubscriber.address}</p>
-                      {/* <p>
-                      {selectedSubscriber.city}, {selectedSubscriber.state}
-                    </p> */}
-                      <p>GSTIN: {selectedSubscriber.gst_no}</p>
-                      <p>Email: {selectedSubscriber.email}</p>
+                      <p>{selectedUser.name}</p>
+                      <p>{selectedUser.address}</p>
+                      <p>GSTIN: {selectedUser.gst_no}</p>
+                      <p>Email: {selectedUser.email}</p>
                     </>
                   ) : (
-                    <p>Select a client to view details</p>
+                    <p>Select a {userType} to view details</p>
                   )}
                 </div>
               </div>
@@ -405,6 +467,38 @@ const CreateInvoice = () => {
           </form>
         </Card>
       </div>
+      <Dialog open={open} handler={handleOpen}>
+        <DialogHeader>Add New Customer</DialogHeader>
+        <DialogBody>
+          <div className="grid grid-cols-1 gap-4">
+            <Input label="Name" name="name" onChange={handleCustomerChange} />
+            <Input label="Email" name="email" onChange={handleCustomerChange} />
+            <Input
+              label="Mobile"
+              name="mobile"
+              onChange={handleCustomerChange}
+            />
+            <Input
+              label="Address"
+              name="address"
+              onChange={handleCustomerChange}
+            />
+            <Input
+              label="GST No"
+              name="gst_no"
+              onChange={handleCustomerChange}
+            />
+          </div>
+        </DialogBody>
+        <DialogFooter>
+          <Button variant="text" onClick={handleOpen} className="mr-2">
+            Cancel
+          </Button>
+          <Button color="blue" onClick={addCustomer} disabled={loading}>
+            {loading ? <Spinner className="h-4 w-4" /> : "Add"}
+          </Button>
+        </DialogFooter>
+      </Dialog>
     </>
   );
 };

@@ -21,6 +21,11 @@ function Sidebar({ routes, isOpen }) {
   const [openDropdown, setOpenDropdown] = useState(null);
   const [accessTo, setAccessTo] = useState([]);
 
+  // const user = Cookies.get("user");
+  // const role = JSON.parse(user)?.role || "";
+
+
+
 useEffect(() => {
   const interval = setInterval(() => {
     const permissions = Cookies.get("permissions");
@@ -60,7 +65,7 @@ useEffect(() => {
             />
           </div>
           <Typography variant="h5" color="white">
-            Sooprs
+            Sooprs 
           </Typography>
         </div>
         <List>

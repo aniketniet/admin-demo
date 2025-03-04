@@ -34,6 +34,8 @@ export function DashboardNavbar({ isOpen, setIsOpen }) {
   const handleLogout = () => {
     // Remove token from cookies
     Cookies.remove("token");
+    Cookies.remove("user");
+    Cookies.remove("permissions");
 
     // Redirect to login page
     navigate("/login");
@@ -95,7 +97,7 @@ export function DashboardNavbar({ isOpen, setIsOpen }) {
             <UserCircleIcon className="h-5 w-5 text-gray-500" />
             Log Out
           </Button>
-          <IconButton variant="text" color="gray" className="grid xl:hidden">
+          <IconButton onClick={handleLogout} variant="text" color="gray" className="grid xl:hidden">
             <UserCircleIcon className="h-5 w-5 text-gray-500" />
           </IconButton>
 

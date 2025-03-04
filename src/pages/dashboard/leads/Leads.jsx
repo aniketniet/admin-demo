@@ -14,7 +14,9 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import CustomTable from "../../../components/CustomTable";
 import { useNavigate } from "react-router-dom"; // Import useNavigate
-import { PencilIcon, TrashIcon } from "@heroicons/react/24/solid";
+import { PencilIcon, PlusCircleIcon, TrashIcon } from "@heroicons/react/24/solid";
+
+import AddCustomBid from "./addCustomBid";
 
 function Leads() {
   const [leads, setLeads] = useState([]);
@@ -22,6 +24,26 @@ function Leads() {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const token = Cookies.get("token");
+  const [open, setOpen] = useState(false);
+  const [bidId, setBidId] = useState(null);
+  
+
+
+  const handleOpen = (id,projectTitle,min,max) =>{
+
+    const bids ={
+      id:id,
+      projectTitle:projectTitle,
+      min:min,
+      max:max
+    }
+
+    setOpen(!open);
+    setBidId(bids);
+   
+
+  } 
+  
   // const permissions = Cookies.get("permissions");
   // const currentRoute = useLocation().pathname;
 
@@ -148,6 +170,13 @@ function Leads() {
       label: "Actions",
       render: (row) => (
         <div className="px-4 py-2 flex gap-2">
+          <Tooltip content="Add Bid">
+          <button onClick={()=>handleOpen(row.id , row.project_title, row.min_budget,row.max_budget_amount)}>
+               <PlusCircleIcon className="h-5 w-5 text-green-500" />
+          </button>
+       
+         
+          </Tooltip>
           <Tooltip content="Edit">
             <button onClick={() => handleEdit(row.id)}>
               <PencilIcon className="h-5 w-5 text-blue-500" />
@@ -187,6 +216,7 @@ function Leads() {
           </div>
         ) : (
           <CustomTable columns={columns} data={leads} />
+          
         )}
       </CardBody>
 
@@ -251,6 +281,8 @@ function Leads() {
           Next
         </Button>
       </CardFooter>
+    
+      <AddCustomBid open={open} handleOpen={handleOpen} bidId={bidId} />
     </Card>
   );
 }
