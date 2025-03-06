@@ -55,7 +55,11 @@ useEffect(() => {
         isOpen ? "translate-x-0" : "-translate-x-full"
       } md:translate-x-0`}
     >
-      <Card className="h-[100vh] w-72 border border-blue-100 bg-gradient-to-br from-gray-800 to-gray-900">
+      <Card className="h-[100vh] w-72 border border-blue-100 bg-gradient-to-br from-gray-800 to-gray-900"
+        style={{
+          background: 'linear-gradient(to bottom right, #2d3748, #1a202c), #2d3748', // Fallback for older browsers
+        }}
+      >
         <div className="mb-4 flex items-center gap-4 p-4">
           <div className="h-10 w-10 rounded-lg flex items-center justify-center">
             <img

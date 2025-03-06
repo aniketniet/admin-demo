@@ -57,6 +57,7 @@ const TechninzaCreateInvoice = () => {
     state: "",
     items: [{ description: "", rate: "", quantity: "", gst: "" }],
     total: 0,
+    discount: 0,
   });
 
   console.log(invoiceData);
@@ -112,16 +113,17 @@ const TechninzaCreateInvoice = () => {
       );
       setSelectedSubscriber(selectedClient || null);
 
-     
       setInvoiceData((prevData) => ({
         ...prevData,
         user_id: value,
         billedTo: `${selectedClient?.name || ""} 
         ${selectedClient?.address || ""} 
-        ${selectedClient?.city || ""} ${selectedClient?.state || ""} ${selectedClient?.pincode || ""}
-        GSTIN:${ selectedClient?.gstno || ""}
+        ${selectedClient?.city || ""} ${selectedClient?.state || ""} ${
+          selectedClient?.pincode || ""
+        }
+        GSTIN:${selectedClient?.gstno || ""}
         Email: ${selectedClient?.email || ""}
-        `
+        `,
       }));
     }
 
@@ -182,8 +184,9 @@ const TechninzaCreateInvoice = () => {
       setLoading(false);
       navigate(`/techninza-bill/${response.data.invoice._id}`);
     } catch (error) {
-      const errorMessage = error.response?.data?.message || "Failed to create invoice.";
-      showErrorToast({errorMessage});
+      const errorMessage =
+        error.response?.data?.message || "Failed to create invoice.";
+      showErrorToast({ errorMessage });
       setLoading(false);
       console.error("Error creating invoice:", error);
     }
@@ -243,7 +246,7 @@ const TechninzaCreateInvoice = () => {
           <form onSubmit={handleSubmit}>
             <CardBody id="invoice">
               <div className="grid grid-cols-2 gap-4 mb-4">
-              <div className="flex flex-col">
+                <div className="flex flex-col">
                   <label className="font-semibold">Invoice NO</label>
                   <input
                     type="text"
@@ -265,7 +268,7 @@ const TechninzaCreateInvoice = () => {
                     className="border rounded-md p-2 w-full"
                   />
                 </div>
-              
+
                 <div className="flex flex-col">
                   <label className="font-semibold">Due Date</label>
                   <DatePicker
@@ -410,15 +413,30 @@ const TechninzaCreateInvoice = () => {
                     />
                   </div>
                 ))}
-                <Button color="green" onClick={addItem} className="mt-2">
-                  Add Item
-                </Button>
+                <div className="flex justify-between mt-2">
+                  <Button color="green" onClick={addItem} className="mt-2">
+                    Add Item
+                  </Button>
+                  <input
+                    type="number"
+                    name="discount"
+                    value={invoiceData.discount}
+                    onChange={handleInputChange}
+                    placeholder="Enter Discount"
+                    className="border rounded-md p-2"
+                  />
+                </div>
               </div>
               <div className="p-4 bg-purple-100 rounded-md mb-4">
                 <Typography variant="h6" className="font-bold">
                   Total Amount
                 </Typography>
-                <p>₹{invoiceData.total.toFixed(2)}</p>
+                <p>
+                  ₹
+                  {invoiceData.discount
+                    ? (invoiceData.total - invoiceData.discount).toFixed(2)
+                    : invoiceData.total.toFixed(2)}
+                </p>
               </div>
               <div className="p-4 bg-purple-100 rounded-md mb-4">
                 <Typography variant="h6" className="font-bold">
@@ -466,7 +484,7 @@ const TechninzaCreateInvoice = () => {
           <Button variant="text" onClick={handleOpen} className="mr-2">
             Cancel
           </Button>
-          <Button color="blue" onClick={addCustomer} disabled={loading}>
+          <Button variant="text" onClick={addCustomer} disabled={loading}>
             {loading ? <Spinner className="h-4 w-4" /> : "Add"}
           </Button>
         </DialogFooter>

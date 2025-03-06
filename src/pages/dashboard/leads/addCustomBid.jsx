@@ -150,7 +150,7 @@ const AddCustomBid = ({ open, handleOpen, bidId  }) => {
                     <Button variant="text" onClick={handleOpen} className="mr-2">
                         Cancel
                     </Button>
-                    <Button color="blue" onClick={submitBid} disabled={loading}>
+                    <Button variant="text" onClick={submitBid} disabled={loading}>
                         {loading ? <Spinner className="h-4 w-4" /> : "Submit"}
                     </Button>
                 </DialogFooter>

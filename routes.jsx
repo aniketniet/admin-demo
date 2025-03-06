@@ -28,6 +28,9 @@ import AddUserForRole from "./src/pages/dashboard/role/AddUserForRole";
 import TechninzaCreateInvoice from "@/pages/dashboard/invocie-techninza/TechninzaCreateInvoice";
 import TechninzaInvoice from "@/pages/dashboard/invocie-techninza/TechninzaInvoice";
 import PrivateRoute from "@/components/PrivateRoute";
+import MainCetogory from "@/pages/dashboard/urban-cetogory/Main-cetogory";
+import SubCategory from "@/pages/dashboard/urban-cetogory/SubCetogory";
+import SubSubCategory from "@/pages/dashboard/urban-cetogory/Sub-Sub-category";
 const iconClass = "w-5 h-5 text-inherit";
 
 export const routes = [
@@ -81,19 +84,24 @@ export const routes = [
           { name: "Active Leads", path: "/users/client", element: <Client /> },
         ],
       },
-      // {
-      //   icon: <UsersIcon className={iconClass} />,
-      //   name: "Gigs",
-      //   path: "/users", // Main path for "All Users" without any element
-      //   subPages: [
-      //     { name: "All Gigs", path: "/users/all", element: <Users /> },
-      //     {
-      //       name: "Gigs Purchase",
-      //       path: "/users/professional",
-      //       element: <Professional />,
-      //     },
-      //   ],
-      // },
+      {
+        icon: <UsersIcon className={iconClass} />,
+        name: "Category",
+        path: "/category", // Main path for "All Users" without any element
+        subPages: [
+          { name: "Main Category", path: "/category/main", element: <MainCetogory/> },
+          {
+            name: "Sub Category",
+            path: "/category/sub",
+            element: <SubCategory />,
+          },
+          {
+            name: "Sub Sub Category",
+            path: "/category/sub-sub",
+            element: <SubSubCategory />,
+          },
+        ],
+      },
       {
         icon: <UsersIcon className={iconClass} />,
         name: "Sooprs Billing",

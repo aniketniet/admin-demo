@@ -52,6 +52,8 @@ const TechninzaInvoice = () => {
   /* Hide everything by default */
   body * {
     visibility: hidden;
+      -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
 
     
   }
@@ -139,7 +141,7 @@ margin:0; /* Remove default browser margins (header/footer) */
           </div>
           <div className="mt-4 grid grid-cols-2 gap-4 mb-4">
             {/* Billed By Section */}
-            <div className="p-4 flex flex-col gap-2 rounded-md">
+            <div className="p-4 bg-purple-100 flex flex-col gap-2 rounded-md">
               <Typography variant="h6" className="font-semibold text-[#343D68]">
                 Billed By
               </Typography>
@@ -156,7 +158,7 @@ margin:0; /* Remove default browser margins (header/footer) */
             </div>
 
             {/* Billed To Section */}
-            <div className="p-4 flex flex-col gap-2 ">
+            <div className="p-4 bg-purple-100 rounded-md flex flex-col gap-2 ">
               <Typography variant="h6" className="font-semibold text-[#343D68]">
                 Billed To
               </Typography>
@@ -183,25 +185,25 @@ margin:0; /* Remove default browser margins (header/footer) */
 
         <table className="w-full border-collapse mb-4">
           <thead>
-            <tr className=" text-gray-500">
+            <tr className=" bg-purple-600 text-white">
               <th className="border p-2">Item</th>
               <th className="border p-2">Description</th>
               <th className="border p-2">Rate</th>
               <th className="border p-2">Quantity</th>
               <th className="border p-2">GST %</th>
-              <th className="border p-2">IGST</th>
+              <th className="border p-2">Total</th>
             </tr>
           </thead>
           <tbody>
             {bills?.items?.map((item, index) => (
-              <tr key={item.id}>
+              <tr key={item.id || index}>
                 <td className="border p-2">{index + 1}</td>
                 <td className="border p-2">{item.description}</td>
                 <td className="border p-2">₹ {item.rate}</td>
                 <td className="border p-2">{item.quantity}</td>
                 <td className="border p-2">{item.gst}%</td>
                 <td className="border p-2">
-                  ₹ {item.rate * item.quantity * (item.gst / 100).toFixed(2)}
+                ₹ {((item.rate * item.quantity) + (item.gst /100 * (item.rate * item.quantity)  ) ).toFixed(2) }
                 </td>
               </tr>
             ))}
@@ -238,6 +240,17 @@ margin:0; /* Remove default browser margins (header/footer) */
             <tr>
               <td className="blank" colSpan={3}></td>
               <td className="blank"></td>
+              <td className="border p-2 text-right">
+                Discount (INR)
+              </td>
+              <td className="border p-2 text-right text-gray-500 font-bold">
+                ₹{" "}
+                {bills?.discount || 0}
+              </td>
+            </tr>
+            <tr>
+              <td className="blank" colSpan={3}></td>
+              <td className="blank"></td>
               <td className="border p-2 text-right font-bold text-gray-500">
                 Total (INR)
               </td>
@@ -246,7 +259,7 @@ margin:0; /* Remove default browser margins (header/footer) */
                 {bills?.items
                   ?.reduce(
                     (total, item) =>
-                      total + item.rate * item.quantity * (1 + item.gst / 100),
+                      total + item.rate * item.quantity * (1 + item.gst / 100)-bills?.discount,
                     0
                   )
                   .toFixed(2)}
@@ -255,7 +268,7 @@ margin:0; /* Remove default browser margins (header/footer) */
           </tbody>
         </table>
 
-        <div className="mb-4">
+        <div className="mb-4 rounded-md p-4 bg-purple-100">
           <h3 className="text-lg font-semibold text-[#343D68]">Bank Details</h3>
           <p>
             <span className="font-semibold">Account Name:</span> Gazetinc Technology LLP

@@ -22,6 +22,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 import Cookies from "js-cookie";
+
 // import { Link } from "react-router-dom";
 const CreateInvoice = () => {
   const [userId, setUserId] = useState("");
@@ -43,6 +44,7 @@ const CreateInvoice = () => {
 
 
   const [invoiceData, setInvoiceData] = useState({
+    discount: 0,
     user_id: "",
     invoiceNo: "",
     invoiceDate: "",
@@ -55,6 +57,16 @@ const CreateInvoice = () => {
     total: 0,
     type: userType === "client" ? 1 : 0,
   });
+  // console.log(invoiceData.type, "invoiceData");
+
+  useEffect(() => {
+    setInvoiceData((prevData) => ({
+      ...prevData,
+      type: userType === "client" ? 1 : 0,
+    }));
+  
+  }, [userType]);
+
 
   const [customerData, setCustomerData] = useState({
     name: "",
@@ -433,20 +445,36 @@ const CreateInvoice = () => {
                         let items = [...invoiceData.items];
                         items[index].gst = e.target.value;
                         setInvoiceData({ ...invoiceData, items });
-                      }}
-                      className="border rounded-md p-2 w-full"
-                    />
-                  </div>
-                ))}
-                <Button color="green" onClick={addItem} className="mt-2">
-                  Add Item
-                </Button>
-              </div>
-              <div className="p-4 bg-purple-100 rounded-md mb-4">
-                <Typography variant="h6" className="font-bold">
-                  Total Amount
-                </Typography>
-                <p>₹{invoiceData.total.toFixed(2)}</p>
+                        }}
+                        className="border rounded-md p-2 w-full"
+                      />
+                      </div>
+                    ))}
+                    <div className="flex justify-between items-center mt-2">
+                    <Button color="green" onClick={addItem} className="mt-2">
+                      Add Item
+                    </Button>
+                    <input
+                      type="number"
+                      name="discount"
+                      value={invoiceData.discount}
+                      onChange={handleInputChange}
+                      placeholder="Enter Discount"
+                      className="border rounded-md p-2"
+                      />
+                      </div>
+                    
+                    </div>
+                    <div className="p-4 bg-purple-100 rounded-md mb-4">
+                    <Typography variant="h6" className="font-bold">
+                      Total Amount
+                    </Typography>
+                    <p>
+                  ₹
+                  {invoiceData.discount
+                    ? (invoiceData.total - invoiceData.discount).toFixed(2)
+                    : invoiceData.total.toFixed(2)}
+                </p>
               </div>
               <div className="p-4 bg-purple-100 rounded-md mb-4">
                 <Typography variant="h6" className="font-bold">
@@ -494,7 +522,7 @@ const CreateInvoice = () => {
           <Button variant="text" onClick={handleOpen} className="mr-2">
             Cancel
           </Button>
-          <Button color="blue" onClick={addCustomer} disabled={loading}>
+          <Button variant="text" onClick={addCustomer} disabled={loading}>
             {loading ? <Spinner className="h-4 w-4" /> : "Add"}
           </Button>
         </DialogFooter>
