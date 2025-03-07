@@ -10,6 +10,7 @@ import AddnewSubscriber from "../pages/dashboard/newsubscriber/AddnewSubscriber"
 import Addnewuser from "../pages/dashboard/Addnewuser";
 import Invoice from "../components/Invoice";
 import TechninzaInvoice from "@/components/TechninzaInvoice";
+import AddDescription from "@/pages/dashboard/urban-addProduct/DescriptionProduct";
 
 // import PrivateRoute from "@/components/PrivateRoute";
 
@@ -47,6 +48,14 @@ const Dashboard = () => {
             element={
              
                 <EditUsers />
+            
+            }
+          />
+          <Route
+            path="/add-description/:id"
+            element={
+             
+                <AddDescription />
             
             }
           />

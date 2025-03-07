@@ -13,7 +13,8 @@ import Select from "react-select";
 import axios from "axios";
 import Cookies from "js-cookie";
 import CustomTable from "../../../components/CustomTable";
-import { TrashIcon } from "lucide-react";
+import { TrashIcon } from "@heroicons/react/24/solid";
+
 
 const SubSubCategory = () => {
   const [subSubCategories, setsubSubCategories] = useState([]);
@@ -179,9 +180,9 @@ const SubSubCategory = () => {
       key: "actions",
       label: "Actions",
       render: (row) => (
-        <Button color="red" size="sm" onClick={() => handleDelete(row.id)}>
+        <button  size="sm" onClick={() => handleDelete(row.id)}>
           <TrashIcon className="h-5 w-5 text-red-500" />
-        </Button>
+        </button>
       ),
     },
   ];

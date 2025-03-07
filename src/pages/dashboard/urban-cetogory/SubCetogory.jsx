@@ -175,9 +175,9 @@ const SubCategory = () => {
       key: "actions",
       label: "Actions",
       render: (row) => (
-        <Button color="red" size="sm" onClick={() => handleDelete(row.id)}>
+        <button size="sm" onClick={() => handleDelete(row.id)}>
           <TrashIcon className="h-5 w-5 text-red-500" />
-        </Button>
+        </button>
       ),
     },
   ];

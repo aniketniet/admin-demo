@@ -14,6 +14,7 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import CustomTable from "../../../components/CustomTable";
 import { TrashIcon } from "@heroicons/react/24/solid";
+import Toaster, { showSuccessToast, showErrorToast } from "../../../components/Toaster";
 
 
 const MainCategory = () => {
@@ -33,8 +34,10 @@ const MainCategory = () => {
         { headers: { Authorization: `Bearer ${token}` } }
       );
       setLeads(data.data);
+
     } catch (error) {
       console.error("Error fetching leads:", error);
+      showErrorToast(error.response?.data?.message || "Failed to fetch categories");
     } finally {
       setLoading(false);
     }
@@ -66,11 +69,13 @@ const MainCategory = () => {
         }
       );
 
+      showSuccessToast("Category added successfully");
       fetchLeads(); // Refresh table
       setMainCategory("");
       setImage(null);
     } catch (error) {
       console.error("Error submitting category:", error);
+      showErrorToast(error.response?.data?.message || "Failed to add category");
     } finally {
       setLoadigSubmit(false);
     }
@@ -95,8 +100,10 @@ const MainCategory = () => {
           lead.id === id ? { ...lead, status: newStatus } : lead
         )
       );
+      showSuccessToast("Category status updated");
     } catch (error) {
       console.error("Error updating status:", error);
+      showErrorToast(error.response?.data?.message || "Failed to update status");
     }
   };
 
@@ -119,8 +126,10 @@ const MainCategory = () => {
         }
       );
       fetchLeads();
+      showSuccessToast("Category deleted successfully");
     } catch (error) {
       console.error("Error deleting subcategory:", error);
+      showErrorToast(error.response?.data?.message || "Failed to delete category");
     }
   };
 
@@ -164,6 +173,8 @@ const MainCategory = () => {
   ];
 
   return (
+    <>
+    <Toaster />
     <div className="flex flex-col lg:flex-row gap-6 mt-10 px-4">
       {/* Left Side - Form */}
       <Card className="p-4 w-full lg:w-1/3 shadow-lg">
@@ -220,6 +231,7 @@ const MainCategory = () => {
         </CardBody>
       </Card>
     </div>
+    </>
   );
 };
 

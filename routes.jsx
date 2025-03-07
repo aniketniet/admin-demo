@@ -31,6 +31,7 @@ import PrivateRoute from "@/components/PrivateRoute";
 import MainCetogory from "@/pages/dashboard/urban-cetogory/Main-cetogory";
 import SubCategory from "@/pages/dashboard/urban-cetogory/SubCetogory";
 import SubSubCategory from "@/pages/dashboard/urban-cetogory/Sub-Sub-category";
+import AddProduct from "@/pages/dashboard/urban-addProduct/AddProduct";
 const iconClass = "w-5 h-5 text-inherit";
 
 export const routes = [
@@ -99,6 +100,23 @@ export const routes = [
             name: "Sub Sub Category",
             path: "/category/sub-sub",
             element: <SubSubCategory />,
+          },
+        ],
+      },
+      {
+        icon: <UsersIcon className={iconClass} />,
+        name: "Products",
+        path: "/products", // Main path for "All Users" without any element
+        subPages: [
+          {
+            name: "Create Prodcuts",
+            path: "/products/create",
+            element: <PrivateRoute> <AddProduct /> </PrivateRoute>,
+          },
+          {
+            name: "All Product",
+            path: "/productsbill/all",
+            element: <PrivateRoute> <AllInvoice /> </PrivateRoute>,
           },
         ],
       },
