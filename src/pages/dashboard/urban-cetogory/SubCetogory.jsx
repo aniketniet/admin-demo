@@ -19,6 +19,7 @@ const SubCategory = () => {
   const [subCategories, setSubCategories] = useState([]);
   const [mainCategories, setMainCategories] = useState([]);
   const [mainCategoryId, setMainCategoryId] = useState(null);
+  const [categoryId, setCategoryId] = useState(null);
   const [subCategory, setSubCategory] = useState("");
   const [image, setImage] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -48,7 +49,9 @@ const SubCategory = () => {
     if (!token) return;
     try {
       const { data } = await axios.get(
-        `${import.meta.env.VITE_BASE_URL_SOOPRS}/get-sub-categories`,
+        `${import.meta.env.VITE_BASE_URL_SOOPRS}/get-sub-categories/${
+          categoryId ? categoryId : 0
+        }`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -94,6 +97,8 @@ const SubCategory = () => {
       fetchSubCategories(); // Refresh table
       setMainCategoryId(null);
       setSubCategory("");
+      setCategoryId;
+      null;
       setImage(null);
     } catch (error) {
       console.error("Error submitting subcategory:", error);
@@ -123,11 +128,11 @@ const SubCategory = () => {
       console.error("No token found. User may not be authenticated.");
       return;
     }
-  
+
     try {
       await axios.post(
         "https://t5bdtk0b-3004.inc1.devtunnels.ms/api/delete-sub-category",
-        { id:id },
+        { id: id },
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -137,7 +142,6 @@ const SubCategory = () => {
       console.error("Error deleting subcategory:", error);
     }
   };
-  
 
   const columns = [
     {

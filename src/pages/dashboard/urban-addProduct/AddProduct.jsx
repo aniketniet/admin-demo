@@ -18,7 +18,6 @@ import CustomTable from "@/components/CustomTable";
 import { PlusCircleIcon, TrashIcon } from "@heroicons/react/24/solid";
 import { Link } from "react-router-dom";
 
-
 function AddProduct() {
   const [product, setProduct] = useState({
     title: "",
@@ -76,38 +75,47 @@ function AddProduct() {
     }
   }, [token]);
 
-  const fetchSubCategories = useCallback(async (categoryId) => {
-    setLoading(true);
-    if (!token || !categoryId) return;
-    try {
-      const { data } = await axios.get(
-        `${import.meta.env.VITE_BASE_URL_SOOPRS}/get-sub-categories?categoryId=${categoryId}`,
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-      setSubCategories(data.data); // Only set relevant subcategories
-    } catch (error) {
-      console.error("Error fetching subcategories:", error);
-    } finally {
-      setLoading(false);
-    }
-  }, [token]);
-  
-  const fetchSubSubCategories = useCallback(async (subCategoryId) => {
-    setLoading(true);
-    if (!token || !subCategoryId) return;
-    try {
-      const { data } = await axios.get(
-        `${import.meta.env.VITE_BASE_URL_SOOPRS}/get-sub-sub-categories?subCategoryId=${subCategoryId}`,
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-      setSubSubCategories(data.data); // Only set related sub-subcategories
-    } catch (error) {
-      console.error("Error fetching sub-subcategories:", error);
-    } finally {
-      setLoading(false);
-    }
-  }, [token]);
-  
+  const fetchSubCategories = useCallback(
+    async (categoryId) => {
+      setLoading(true);
+      if (!token || !categoryId) return;
+      try {
+        const { data } = await axios.get(
+          `${import.meta.env.VITE_BASE_URL_SOOPRS}/get-sub-categories/${
+            categoryId ? categoryId : 0
+          }`,
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+        setSubCategories(data.data); // Only set relevant subcategories
+      } catch (error) {
+        console.error("Error fetching subcategories:", error);
+      } finally {
+        setLoading(false);
+      }
+    },
+    [token]
+  );
+
+  const fetchSubSubCategories = useCallback(
+    async (subCategoryId) => {
+      setLoading(true);
+      if (!token || !subCategoryId) return;
+      try {
+        const { data } = await axios.get(
+          `${
+            import.meta.env.VITE_BASE_URL_SOOPRS
+          }/get-sub-sub-categories/${subCategoryId}`,
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+        setSubSubCategories(data.data); // Only set related sub-subcategories
+      } catch (error) {
+        console.error("Error fetching sub-subcategories:", error);
+      } finally {
+        setLoading(false);
+      }
+    },
+    [token]
+  );
 
   const handleProductChange = (e) => {
     const { name, value } = e.target;
@@ -115,14 +123,23 @@ function AddProduct() {
   };
 
   const handleCategoryChange = (selectedOption) => {
-    setProduct((prev) => ({ ...prev, categoryId: selectedOption, subCategoryId: null, subSubCategoryId: null }));
+    setProduct((prev) => ({
+      ...prev,
+      categoryId: selectedOption,
+      subCategoryId: null,
+      subSubCategoryId: null,
+    }));
     setSubCategories([]);
     setSubSubCategories([]);
     fetchSubCategories(selectedOption.value);
   };
 
   const handleSubCategoryChange = (selectedOption) => {
-    setProduct((prev) => ({ ...prev, subCategoryId: selectedOption, subSubCategoryId: null }));
+    setProduct((prev) => ({
+      ...prev,
+      subCategoryId: selectedOption,
+      subSubCategoryId: null,
+    }));
     setSubSubCategories([]);
     fetchSubSubCategories(selectedOption.value);
   };
@@ -204,29 +221,27 @@ function AddProduct() {
     { key: "quantity", label: "Quantity", render: (row) => row.quantity },
     { key: "price", label: "Price", render: (row) => `$${row.price}` },
     {
-        key: "actions",
-        label: "Actions",
-        render: (row) => (
-          <div className="px-4 py-2 flex gap-2">
-            <Tooltip content="Add Description & Faq">
-                <Link to={`/add-description/${row.id}`} className="text-blue-500">
-            <button>
-                 <PlusCircleIcon className="h-5 w-5 text-green-500" />
-            </button>
-            </Link>
-         
-            </Tooltip>
-        
-            <Tooltip content="Delete">
-              <button onClick={() =>  handleDelete(row.id)}>
-                <TrashIcon className="h-5 w-5 text-red-500" />
+      key: "actions",
+      label: "Actions",
+      render: (row) => (
+        <div className="px-4 py-2 flex gap-2">
+          <Tooltip content="Add Description & Faq">
+            <Link to={`/add-description/${row.id}`} className="text-blue-500">
+              <button>
+                <PlusCircleIcon className="h-5 w-5 text-green-500" />
               </button>
-            </Tooltip>
-          </div>
-        ),
-        width: "w-24",
-      },
-    
+            </Link>
+          </Tooltip>
+
+          <Tooltip content="Delete">
+            <button onClick={() => handleDelete(row.id)}>
+              <TrashIcon className="h-5 w-5 text-red-500" />
+            </button>
+          </Tooltip>
+        </div>
+      ),
+      width: "w-24",
+    },
   ];
 
   return (
@@ -234,9 +249,7 @@ function AddProduct() {
       <Toaster />
       <div className="flex flex-col gap-6 mt-10 px-4 items-center">
         <Card className="p-6 border border-gray-300 shadow-sm rounded-2xl w-full max-w-5xl">
-          <Typography variant="h4">
-            Add Product
-          </Typography>
+          <Typography variant="h4">Add Product</Typography>
           <form
             onSubmit={handleSubmit}
             className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4"

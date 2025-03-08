@@ -15,7 +15,6 @@ import Cookies from "js-cookie";
 import CustomTable from "../../../components/CustomTable";
 import { TrashIcon } from "@heroicons/react/24/solid";
 
-
 const SubSubCategory = () => {
   const [subSubCategories, setsubSubCategories] = useState([]);
   const [subCategories, setsubCategories] = useState([]);
@@ -31,7 +30,9 @@ const SubSubCategory = () => {
     if (!token) return;
     try {
       const { data } = await axios.get(
-        `${import.meta.env.VITE_BASE_URL_SOOPRS}/get-sub-categories`,
+        `${import.meta.env.VITE_BASE_URL_SOOPRS}/get-sub-categories/${
+          subCategoryId ? `/${subCategoryId}` : "0"
+        }`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -49,7 +50,9 @@ const SubSubCategory = () => {
     if (!token) return;
     try {
       const { data } = await axios.get(
-        `${import.meta.env.VITE_BASE_URL_SOOPRS}/get-sub-sub-categories`,
+        `${import.meta.env.VITE_BASE_URL_SOOPRS}/get-sub-sub-categories/${
+          subCategoryId ? `/${subCategoryId}` : "0"
+        }`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -129,8 +132,8 @@ const SubSubCategory = () => {
     }
 
     try {
-        console.log(token, id, 'i');
-        
+      console.log(token, id, "i");
+
       await axios.post(
         `${import.meta.env.VITE_BASE_URL_SOOPRS}/delete-sub-sub-category`,
         { id },
@@ -180,7 +183,7 @@ const SubSubCategory = () => {
       key: "actions",
       label: "Actions",
       render: (row) => (
-        <button  size="sm" onClick={() => handleDelete(row.id)}>
+        <button size="sm" onClick={() => handleDelete(row.id)}>
           <TrashIcon className="h-5 w-5 text-red-500" />
         </button>
       ),

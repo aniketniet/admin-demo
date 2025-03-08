@@ -96,19 +96,12 @@ function AddDescription() {
   const handleDescriptionSubmit = async (e) => {
     e.preventDefault();
 
-    // Ensure all images are uploaded
-    const hasAllImages = product.description.every((desc) => desc.image);
-    // console.log(product.description, hasAllImages, "product.description");
-    if (!hasAllImages) {
-      showErrorToast("Please upload all images before submitting.");
-      return;
-    }
-
     try {
       await axios.post(
         `${import.meta.env.VITE_BASE_URL_SOOPRS}/add-description`,
         {
           productId,
+          heading: product.heading,
           type: product.description[0].desc !== undefined ? 1 : 0,
           details: product.description,
         },
@@ -130,13 +123,6 @@ function AddDescription() {
   const handleFaqSubmit = async (e) => {
     e.preventDefault();
 
-    // Ensure all images are uploaded
-    const hasAllImages = product.faq.every((faq) => faq.image);
-    if (!hasAllImages) {
-      showErrorToast("Please upload all FAQ images before submitting.");
-      return;
-    }
-
     try {
       await axios.post(
         `${import.meta.env.VITE_BASE_URL_SOOPRS}/add-faq`,
@@ -146,8 +132,8 @@ function AddDescription() {
         },
         {
           headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
           },
         }
       );
@@ -160,142 +146,157 @@ function AddDescription() {
 
   return (
     <>
-    <Toaster />
-    <div className="flex flex-col md:flex-row gap-6 mt-5">
-      {/* Description Section */}
-      <Card className="p-6 border border-gray-300 shadow-sm rounded-2xl w-full max-w-5xl">
-        <Typography variant="h4">Add Product Description</Typography>
-        <form onSubmit={handleDescriptionSubmit} className="grid gap-4">
-          <Typography variant="h5">Product Description</Typography>
-          <label className="font-medium">Choose Description Type</label>
-          <Select
-            label="Choose Description Type"
-            onChange={(value) => addDescription(value)}
-          >
-            <Option value="0">Point</Option>
-            <Option value="1">Process</Option>
-          </Select>
-          {product.description.map((desc, index) => (
-            <div key={index} className="flex flex-col gap-2 border p-2 rounded">
-              <label className="font-medium">Title</label>
-              <Input
-                value={desc.title}
-                onChange={(e) =>
-                  updateDescription(index, "title", e.target.value)
-                }
-                placeholder="Title"
-              />
-              <label className="font-medium">Upload Image</label>
-              <Input
-                type="file"
-                onChange={(e) => {
-                  const file = e.target.files[0];
-                  if (file) {
-                    handleImageUpload(file, (url) =>
-                      updateDescription(index, "image", url)
-                    );
+      <Toaster />
+      <div className="flex flex-col md:flex-row gap-6 mt-5">
+        {/* Description Section */}
+        <Card className="p-6 border border-gray-300 shadow-sm rounded-2xl w-full max-w-5xl">
+          <Typography variant="h4">Add Product Description</Typography>
+          <form onSubmit={handleDescriptionSubmit} className="grid gap-4">
+            <Typography variant="h5">Product Description</Typography>
+            <label className="font-medium">Choose Description Type</label>
+            <Select
+              label="Choose Description Type"
+              onChange={(value) => addDescription(value)}
+            >
+              <Option value="0">Point</Option>
+              <Option value="1">Process</Option>
+              <Option value="2">Image</Option>
+            </Select>
+            <label className="font-medium">Heading</label>
+            <Input
+              value={product.heading}
+              onChange={(e) =>
+                setProduct({ ...product, heading: e.target.value })
+              }
+              placeholder="Heading"
+            />
+
+            {product.description.map((desc, index) => (
+              <div
+                key={index}
+                className="flex flex-col gap-2 border p-2 rounded"
+              >
+                <label className="font-medium">Title</label>
+                <Input
+                  value={desc.title}
+                  onChange={(e) =>
+                    updateDescription(index, "title", e.target.value)
                   }
-                }}
-              />
-              {desc.desc !== undefined && (
-                <>
-                  <label className="font-medium">Description</label>
-                  <Input
-                    value={desc.desc}
-                    onChange={(e) =>
-                      updateDescription(index, "desc", e.target.value)
+                  placeholder="Title (optional)"
+                />
+                <label className="font-medium">Upload Image</label>
+                <Input
+                  type="file"
+                  onChange={(e) => {
+                    const file = e.target.files[0];
+                    if (file) {
+                      handleImageUpload(file, (url) =>
+                        updateDescription(index, "image", url)
+                      );
                     }
-                    placeholder="Description"
-                  />
-                </>
-              )}
-              <div className="flex gap-2">
-                <button
-                  type="button"
-                  onClick={() =>
-                    addDescription(desc.desc !== undefined ? "1" : "0")
-                  }
-                >
-                  <PlusCircle size={20} />
-                </button>
-                <button
-                  type="button"
-                  onClick={() =>
-                    setProduct((prev) => ({
-                      ...prev,
-                      description: prev.description.filter(
-                        (_, i) => i !== index
-                      ),
-                    }))
-                  }
-                >
-                  <Trash size={20} />
-                </button>
+                  }}
+                />
+                {desc.desc !== undefined && (
+                  <>
+                    <label className="font-medium">Description</label>
+                    <Input
+                      value={desc.desc}
+                      onChange={(e) =>
+                        updateDescription(index, "desc", e.target.value)
+                      }
+                      placeholder="Description"
+                    />
+                  </>
+                )}
+                <div className="flex gap-2">
+                  <button
+                    type="button"
+                    onClick={() =>
+                      addDescription(desc.desc !== undefined ? "1" : "0")
+                    }
+                  >
+                    <PlusCircle size={20} />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setProduct((prev) => ({
+                        ...prev,
+                        description: prev.description.filter(
+                          (_, i) => i !== index
+                        ),
+                      }))
+                    }
+                  >
+                    <Trash size={20} />
+                  </button>
+                </div>
               </div>
-            </div>
-          ))}
-          <Button type="submit">Submit Description</Button>
-        </form>
-      </Card>
-  
-      {/* FAQ Section */}
-      <Card className="p-6 border border-gray-300 shadow-sm rounded-2xl w-full max-w-5xl">
-        <Typography variant="h4">Add FAQ</Typography>
-        <form onSubmit={handleFaqSubmit} className="grid gap-4 mt-6">
-          <Typography variant="h5">Frequently Asked Questions</Typography>
-          <Button type="button" onClick={addFaq}>
-            Add FAQ
-          </Button>
-          {product.faq.map((faq, index) => (
-            <div key={index} className="flex flex-col gap-2 border p-2 rounded">
-              <label className="font-medium">Question</label>
-              <Input
-                value={faq.question}
-                onChange={(e) => updateFaq(index, "question", e.target.value)}
-                placeholder="Question"
-              />
-              <label className="font-medium">Answer</label>
-              <Input
-                value={faq.answer}
-                onChange={(e) => updateFaq(index, "answer", e.target.value)}
-                placeholder="Answer"
-              />
-              <label className="font-medium">Upload Image</label>
-              <Input
-                type="file"
-                onChange={(e) => {
-                  const file = e.target.files[0];
-                  if (file) {
-                    handleImageUpload(file, (url) =>
-                      updateFaq(index, "image", url)
-                    );
-                  }
-                }}
-              />
-              <div className="flex gap-2">
-                <button type="button" onClick={addFaq}>
-                  <PlusCircle size={20} />
-                </button>
-                <button
-                  type="button"
-                  onClick={() =>
-                    setProduct((prev) => ({
-                      ...prev,
-                      faq: prev.faq.filter((_, i) => i !== index),
-                    }))
-                  }
-                >
-                  <Trash size={20} />
-                </button>
+            ))}
+            <Button type="submit">Submit Description</Button>
+          </form>
+        </Card>
+
+        {/* FAQ Section */}
+        <Card className="p-6 border border-gray-300 shadow-sm rounded-2xl w-full max-w-5xl">
+          <Typography variant="h4">Add FAQ</Typography>
+          <form onSubmit={handleFaqSubmit} className="grid gap-4 mt-6">
+            <Typography variant="h5">Frequently Asked Questions</Typography>
+            <Button type="button" onClick={addFaq}>
+              Add FAQ
+            </Button>
+            {product.faq.map((faq, index) => (
+              <div
+                key={index}
+                className="flex flex-col gap-2 border p-2 rounded"
+              >
+                <label className="font-medium">Question</label>
+                <Input
+                  value={faq.question}
+                  onChange={(e) => updateFaq(index, "question", e.target.value)}
+                  placeholder="Question"
+                />
+                <label className="font-medium">Answer</label>
+                <Input
+                  value={faq.answer}
+                  onChange={(e) => updateFaq(index, "answer", e.target.value)}
+                  placeholder="Answer"
+                />
+                <label className="font-medium">Upload Image</label>
+                <Input
+                  type="file"
+                  onChange={(e) => {
+                    const file = e.target.files[0];
+                    if (file) {
+                      handleImageUpload(file, (url) =>
+                        updateFaq(index, "image", url)
+                      );
+                    }
+                  }}
+                />
+                <div className="flex gap-2">
+                  <button type="button" onClick={addFaq}>
+                    <PlusCircle size={20} />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setProduct((prev) => ({
+                        ...prev,
+                        faq: prev.faq.filter((_, i) => i !== index),
+                      }))
+                    }
+                  >
+                    <Trash size={20} />
+                  </button>
+                </div>
               </div>
-            </div>
-          ))}
-          <Button type="submit">Submit FAQ</Button>
-        </form>
-      </Card>
-    </div>
-  </>
-  
+            ))}
+            <Button type="submit">Submit FAQ</Button>
+          </form>
+        </Card>
+      </div>
+    </>
   );
 }
 
