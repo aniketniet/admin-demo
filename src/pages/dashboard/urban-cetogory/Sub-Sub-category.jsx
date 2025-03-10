@@ -14,10 +14,14 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import CustomTable from "../../../components/CustomTable";
 import { TrashIcon } from "@heroicons/react/24/solid";
+import { set } from "lodash";
+// import { ca } from "date-fns/locale";
 
 const SubSubCategory = () => {
   const [subSubCategories, setsubSubCategories] = useState([]);
+  const [categories, setCategories] = useState([]);
   const [subCategories, setsubCategories] = useState([]);
+  const [mainCategoryId, setMainCategoryId] = useState(null); // Selected main category
   const [subCategoryId, setsubCategoryId] = useState(null);
   const [subCategory, setSubCategory] = useState("");
   const [image, setImage] = useState(null);
@@ -25,13 +29,35 @@ const SubSubCategory = () => {
   const [loadingSubmit, setLoadingSubmit] = useState(false);
   const token = Cookies.get("token");
 
-  const fetchCategories = useCallback(async () => {
+  
+  // console.log(mainCategoryId.value, "mainCategoryId");
+
+  const fetchMainCategories = useCallback(async () => {
     setLoading(true);
     if (!token) return;
     try {
       const { data } = await axios.get(
+        `${import.meta.env.VITE_BASE_URL_SOOPRS}/get-categories`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      setCategories(data.data);
+    } catch (error) {
+      console.error("Error fetching categories:", error);
+    } finally {
+      setLoading(false);
+    }
+  }, [token]);
+
+  const fetchCategories = useCallback(async () => {
+    setLoading(true);
+    if (!token || !mainCategoryId) return; // Fetch only when main category is selected
+  
+    try {
+      const { data } = await axios.get(
         `${import.meta.env.VITE_BASE_URL_SOOPRS}/get-sub-categories/${
-          subCategoryId ? `/${subCategoryId}` : "0"
+          mainCategoryId ? `${mainCategoryId?.value}` : "0"
         }`,
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -43,7 +69,7 @@ const SubSubCategory = () => {
     } finally {
       setLoading(false);
     }
-  }, [token]);
+  }, [token, mainCategoryId]);
 
   const fetchsubSubCategories = useCallback(async () => {
     setLoading(true);
@@ -69,8 +95,9 @@ const SubSubCategory = () => {
     if (token) {
       fetchCategories();
       fetchsubSubCategories();
+      fetchMainCategories();
     }
-  }, [token, fetchCategories, fetchsubSubCategories]);
+  }, [token, fetchCategories, fetchsubSubCategories, fetchMainCategories]);
 
   const handleImageChange = (e) => {
     setImage(e.target.files[0]);
@@ -82,7 +109,7 @@ const SubSubCategory = () => {
       const formData = new FormData();
 
       formData.append("subCategoryId", subCategoryId?.value);
-      formData.append("categoryId", subCategoryId?.category_id);
+      formData.append("categoryId", mainCategoryId?.value);
       formData.append("name", subCategory);
       if (image) formData.append("image", image);
 
@@ -99,6 +126,7 @@ const SubSubCategory = () => {
 
       fetchsubSubCategories(); // Refresh table
       setsubCategoryId(null);
+      setMainCategoryId(null);
       setSubCategory("");
       setImage(null);
     } catch (error) {
@@ -107,6 +135,8 @@ const SubSubCategory = () => {
       setLoadingSubmit(false);
     }
   };
+
+  
 
   const handleStatusToggle = async (id, status) => {
     try {
@@ -153,7 +183,7 @@ const SubSubCategory = () => {
       label: "Image",
       render: (row) => (
         <img
-          src={row.image}
+          src={`${import.meta.env.VITE_BASE_URL_IMAGE}${row.image}`}
           alt="subcategory"
           className="w-16 h-16 object-cover rounded-md"
         />
@@ -174,7 +204,7 @@ const SubSubCategory = () => {
       label: "Sub Sub category",
       render: (row) => row.name,
     },
- 
+
     {
       key: "status",
       label: "Status",
@@ -204,17 +234,26 @@ const SubSubCategory = () => {
           Add Sub-Sub-category
         </Typography>
         <CardBody className="space-y-4">
+          {/* Main Category Selection */}
           <Select
-            options={subCategories.map((cat) => ({
+            options={categories.map((cat) => ({
               value: cat.id,
-              category_id: cat.category_id,
               label: cat.name,
             }))}
+            value={mainCategoryId}
+            onChange={(selectedOption) => {
+              setMainCategoryId(selectedOption);
+              setsubCategoryId(null); // Reset subcategory when main category changes
+              setsubCategories([]); // Clear previous subcategories
+            }}
+
+            placeholder="Select Main Category"
+          />
+        <Select
+            options={subCategories.map((sub) => ({ value: sub.id, label: sub.name }))}
             value={subCategoryId}
             onChange={setsubCategoryId}
             placeholder="Select Sub Category"
-            isSearchable={true} // Enables search
-            className="basic-single"
           />
           <Input
             label=" Enter Sub Sub category"

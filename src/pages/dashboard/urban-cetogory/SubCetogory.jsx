@@ -149,21 +149,21 @@ const SubCategory = () => {
       label: "Image",
       render: (row) => (
         <img
-          src={row.image}
+        src={`${import.meta.env.VITE_BASE_URL_IMAGE}${row.image}`}
           alt="subcategory"
           className="w-16 h-16 object-cover rounded-md"
         />
       ),
     },
     {
-      key: "name",
-      label: "Subcategory",
-      render: (row) => row.name,
-    },
-    {
       key: "main_category",
       label: "Main Category",
       render: (row) => row.main_category_name,
+    },
+    {
+      key: "name",
+      label: "Sub category",
+      render: (row) => row.name,
     },
     {
       key: "status",

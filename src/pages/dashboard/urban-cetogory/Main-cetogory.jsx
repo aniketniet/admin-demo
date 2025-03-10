@@ -139,7 +139,7 @@ const MainCategory = () => {
       label: "Image",
       render: (row) => (
         <img
-          src={row.image}
+          src={`${import.meta.env.VITE_BASE_URL_IMAGE}${row.image}`}
           alt="image"
           className="w-16 h-16 object-cover rounded-md"
         />

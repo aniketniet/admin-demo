@@ -38,7 +38,7 @@ function AddProduct() {
   useEffect(() => {
     fetchProducts();
     fetchCategories();
-  }, []);
+  }, [token]);
 
   const fetchProducts = async () => {
     setLoading(true);
@@ -186,7 +186,9 @@ function AddProduct() {
         categoryId: null,
         subCategoryId: null,
         subSubCategoryId: null,
+        
       });
+
     } catch (error) {
       showErrorToast("Failed to add product.", error);
     }

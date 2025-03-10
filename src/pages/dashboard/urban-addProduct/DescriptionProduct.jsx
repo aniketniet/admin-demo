@@ -1,4 +1,4 @@
-import { useState } from "react";
+import {  useState } from "react";
 import axios from "axios";
 import {
   Card,
@@ -18,18 +18,20 @@ import { useParams } from "react-router-dom";
 
 function AddDescription() {
   const [product, setProduct] = useState({
+    heading: "",
     title: "",
     price: "",
     description: [],
     faq: [],
   });
 
+  const [selectedType, setSelectedType] = useState();
+
   const { id: productId } = useParams();
   const token = Cookies.get("token");
 
   // Image Upload Function - Updates State Immediately
   const handleImageUpload = async (file, updateFunction) => {
-    if (!file) return;
     const formData = new FormData();
     formData.append("image", file);
 
@@ -51,28 +53,33 @@ function AddDescription() {
     }
   };
 
-  // Add New Description
-  const addDescription = (type) => {
+  const addDescription = () => {
+    // if (product.description.some((desc) => desc.type === selectedType)) return;
+
     setProduct((prev) => ({
       ...prev,
       description: [
         ...prev.description,
         {
-          title: "",
-          image: "",
-          desc: type === "1" ? "" : undefined,
+          title: selectedType === "0" || selectedType === "1" ? "" : undefined,
+          image:
+            selectedType === "0" || selectedType === "1" || selectedType === "2"
+              ? ""
+              : undefined,
+          desc: selectedType === "1" || selectedType === "3" ? "" : undefined,
         },
       ],
     }));
   };
 
-  // Update Description Field
-  const updateDescription = (index, key, value) => {
-    setProduct((prev) => {
-      const updatedDescription = [...prev.description];
-      updatedDescription[index][key] = value;
-      return { ...prev, description: updatedDescription };
-    });
+  // Update Specific Field
+  const updateDescription = (index, field, value) => {
+    setProduct((prev) => ({
+      ...prev,
+      description: prev.description.map((desc, i) =>
+        i === index ? { ...desc, [field]: value } : desc
+      ),
+    }));
   };
 
   // Add FAQ
@@ -102,7 +109,7 @@ function AddDescription() {
         {
           productId,
           heading: product.heading,
-          type: product.description[0].desc !== undefined ? 1 : 0,
+          type: parseInt(selectedType),
           details: product.description,
         },
         {
@@ -113,7 +120,9 @@ function AddDescription() {
         }
       );
       showSuccessToast("Description added successfully!");
+
       setProduct((prev) => ({ ...prev, description: [] }));
+      product.heading = "";
     } catch (error) {
       showErrorToast("Failed to add description.", error);
     }
@@ -153,15 +162,25 @@ function AddDescription() {
           <Typography variant="h4">Add Product Description</Typography>
           <form onSubmit={handleDescriptionSubmit} className="grid gap-4">
             <Typography variant="h5">Product Description</Typography>
-            <label className="font-medium">Choose Description Type</label>
+            <div className="flex items-center gap-4 justify-between">
+              <label className="font-medium">Choose Description Type</label>
+              {selectedType && (
+                <Button type="button" onClick={addDescription}>
+                  Add
+                </Button>
+              )}
+            </div>
+            {/* Select Description Type */}
             <Select
               label="Choose Description Type"
-              onChange={(value) => addDescription(value)}
+              onChange={(value) => setSelectedType(value)}
             >
               <Option value="0">Point</Option>
               <Option value="1">Process</Option>
               <Option value="2">Image</Option>
+              <Option value="3">Description</Option>
             </Select>
+
             <label className="font-medium">Heading</label>
             <Input
               value={product.heading}
@@ -171,32 +190,28 @@ function AddDescription() {
               placeholder="Heading"
             />
 
+            {/* Rendering Description Fields */}
             {product.description.map((desc, index) => (
               <div
                 key={index}
                 className="flex flex-col gap-2 border p-2 rounded"
               >
-                <label className="font-medium">Title</label>
-                <Input
-                  value={desc.title}
-                  onChange={(e) =>
-                    updateDescription(index, "title", e.target.value)
-                  }
-                  placeholder="Title (optional)"
-                />
-                <label className="font-medium">Upload Image</label>
-                <Input
-                  type="file"
-                  onChange={(e) => {
-                    const file = e.target.files[0];
-                    if (file) {
-                      handleImageUpload(file, (url) =>
-                        updateDescription(index, "image", url)
-                      );
-                    }
-                  }}
-                />
-                {desc.desc !== undefined && (
+                {/* Title Field (Only for Type 0 and 1) */}
+                {(selectedType === "0" || selectedType === "1") && (
+                  <>
+                    <label className="font-medium">Title</label>
+                    <Input
+                      value={desc.title}
+                      onChange={(e) =>
+                        updateDescription(index, "title", e.target.value)
+                      }
+                      placeholder="Title"
+                    />
+                  </>
+                )}
+
+                {/* Description Field (Only for Type 1 and 3) */}
+                {(selectedType === "1" || selectedType === "3") && (
                   <>
                     <label className="font-medium">Description</label>
                     <Input
@@ -208,29 +223,41 @@ function AddDescription() {
                     />
                   </>
                 )}
-                <div className="flex gap-2">
-                  <button
-                    type="button"
-                    onClick={() =>
-                      addDescription(desc.desc !== undefined ? "1" : "0")
-                    }
-                  >
-                    <PlusCircle size={20} />
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() =>
-                      setProduct((prev) => ({
-                        ...prev,
-                        description: prev.description.filter(
-                          (_, i) => i !== index
-                        ),
-                      }))
-                    }
-                  >
-                    <Trash size={20} />
-                  </button>
-                </div>
+
+                {/* Image Field (Only for Type 0, 1, and 2) */}
+                {(selectedType === "0" ||
+                  selectedType === "1" ||
+                  selectedType === "2") && (
+                  <>
+                    <label className="font-medium">Upload Image</label>
+                    <Input
+                      type="file"
+                      onChange={(e) => {
+                        const file = e.target.files[0];
+                        if (file) {
+                          handleImageUpload(file, (url) =>
+                            updateDescription(index, "image", url)
+                          );
+                        }
+                      }}
+                    />
+                  </>
+                )}
+
+                {/* Delete Button */}
+                <button
+                  type="button"
+                  onClick={() =>
+                    setProduct((prev) => ({
+                      ...prev,
+                      description: prev.description.filter(
+                        (_, i) => i !== index
+                      ),
+                    }))
+                  }
+                >
+                  <Trash size={20} />
+                </button>
               </div>
             ))}
             <Button type="submit">Submit Description</Button>
