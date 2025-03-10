@@ -160,15 +160,21 @@ const SubSubCategory = () => {
       ),
     },
     {
-      key: "name",
-      label: "Subcategory",
-      render: (row) => row.name,
-    },
-    {
       key: "main_category",
       label: "Main Category",
       render: (row) => row.main_category_name,
     },
+    {
+      key: "sub_category_name",
+      label: "Sub Category",
+      render: (row) => row.sub_category_name,
+    },
+    {
+      key: "name",
+      label: "Sub Sub category",
+      render: (row) => row.name,
+    },
+ 
     {
       key: "status",
       label: "Status",
@@ -206,12 +212,12 @@ const SubSubCategory = () => {
             }))}
             value={subCategoryId}
             onChange={setsubCategoryId}
-            placeholder="Select Main Category"
+            placeholder="Select Sub Category"
             isSearchable={true} // Enables search
             className="basic-single"
           />
           <Input
-            label="Subcategory"
+            label=" Enter Sub Sub category"
             value={subCategory}
             onChange={(e) => setSubCategory(e.target.value)}
           />
