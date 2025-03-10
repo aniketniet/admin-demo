@@ -14,7 +14,7 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import CustomTable from "../../../components/CustomTable";
 import { TrashIcon } from "@heroicons/react/24/solid";
-import { set } from "lodash";
+// import { set } from "lodash";
 // import { ca } from "date-fns/locale";
 
 const SubSubCategory = () => {

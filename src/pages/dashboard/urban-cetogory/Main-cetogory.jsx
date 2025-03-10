@@ -183,7 +183,7 @@ const MainCategory = () => {
         </Typography>
         <CardBody className="space-y-4">
           <Input
-            label="Main Category"
+            label=" Enter Main Category"
             value={mainCategory}
             onChange={(e) => setMainCategory(e.target.value)}
             className="w-full"

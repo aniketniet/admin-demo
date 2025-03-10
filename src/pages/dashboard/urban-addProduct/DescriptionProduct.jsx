@@ -1,4 +1,4 @@
-import {  useState } from "react";
+import {  useEffect, useState } from "react";
 import axios from "axios";
 import {
   Card,
@@ -15,6 +15,7 @@ import Toaster, {
   showErrorToast,
 } from "@/components/Toaster";
 import { useParams } from "react-router-dom";
+
 
 function AddDescription() {
   const [product, setProduct] = useState({
@@ -83,7 +84,10 @@ function AddDescription() {
   };
 
   // Add FAQ
+
+  
   const addFaq = () => {
+    console.log("addFaq");
     setProduct((prev) => ({
       ...prev,
       faq: [...prev.faq, { question: "", answer: "", image: "" }],
@@ -98,6 +102,15 @@ function AddDescription() {
       return { ...prev, faq: updatedFaq };
     });
   };
+
+  useEffect(() => {
+    addFaq();
+  }, []);
+
+
+
+
+
 
   // Handle Description Submit
   const handleDescriptionSubmit = async (e) => {
@@ -180,16 +193,19 @@ function AddDescription() {
               <Option value="2">Image</Option>
               <Option value="3">Description</Option>
             </Select>
-
-            <label className="font-medium">Heading</label>
-            <Input
-              value={product.heading}
-              onChange={(e) =>
-                setProduct({ ...product, heading: e.target.value })
-              }
-              placeholder="Heading"
-            />
-
+            {/* Rendering Heading Field */}
+            {selectedType !== "2" && (
+              <div>
+                <label className="font-medium">Heading</label>
+                <Input
+                  value={product.heading}
+                  onChange={(e) =>
+                    setProduct({ ...product, heading: e.target.value })
+                  }
+                  placeholder="Heading"
+                />
+              </div>
+            )}
             {/* Rendering Description Fields */}
             {product.description.map((desc, index) => (
               <div
@@ -268,10 +284,12 @@ function AddDescription() {
         <Card className="p-6 border border-gray-300 shadow-sm rounded-2xl w-full max-w-5xl">
           <Typography variant="h4">Add FAQ</Typography>
           <form onSubmit={handleFaqSubmit} className="grid gap-4 mt-6">
-            <Typography variant="h5">Frequently Asked Questions</Typography>
-            <Button type="button" onClick={addFaq}>
-              Add FAQ
-            </Button>
+            <div className="flex items-center gap-4 justify-between">
+              <Typography variant="h5">Frequently Asked Questions</Typography>
+              {/* <Button type="button" id="oneClickFaq" className="hidden" onClick={addFaq}>
+                Add FAQ
+              </Button> */}
+            </div>
             {product.faq.map((faq, index) => (
               <div
                 key={index}

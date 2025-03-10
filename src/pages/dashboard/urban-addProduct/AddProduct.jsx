@@ -15,7 +15,7 @@ import Toaster, {
   showErrorToast,
 } from "@/components/Toaster";
 import CustomTable from "@/components/CustomTable";
-import { PlusCircleIcon, TrashIcon } from "@heroicons/react/24/solid";
+import { PlusCircleIcon, TrashIcon, ViewfinderCircleIcon } from "@heroicons/react/24/solid";
 import { Link } from "react-router-dom";
 
 function AddProduct() {
@@ -186,7 +186,7 @@ function AddProduct() {
         categoryId: null,
         subCategoryId: null,
         subSubCategoryId: null,
-        
+
       });
 
     } catch (error) {
@@ -213,7 +213,7 @@ function AddProduct() {
       label: "Image",
       render: (row) => (
         <img
-          src={row.image}
+        src={`${import.meta.env.VITE_BASE_URL_IMAGE}${row.image}`}
           alt="Product"
           className="w-16 h-16 object-cover rounded-md"
         />
@@ -227,6 +227,13 @@ function AddProduct() {
       label: "Actions",
       render: (row) => (
         <div className="px-4 py-2 flex gap-2">
+          <Tooltip content="Product Details">
+            <Link to={`/view-product-detail/${row.id}`} className="text-blue-500">
+              <button>
+                <ViewfinderCircleIcon className="h-5 w-5 text-green-500" />
+              </button>
+            </Link>
+          </Tooltip>
           <Tooltip content="Add Description & Faq">
             <Link to={`/add-description/${row.id}`} className="text-blue-500">
               <button>
@@ -361,7 +368,7 @@ function AddProduct() {
         </Card>
 
         <Card className="w-full max-w-5xl shadow-lg">
-          <Typography variant="h5" className="mb-4 ">
+          <Typography variant="h5" className="p-4"> 
             Products Table
           </Typography>
           <div className="p-4">

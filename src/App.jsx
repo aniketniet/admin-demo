@@ -6,7 +6,7 @@ const Login = lazy(() => import("./auth/Login"));
 
 function App() {
   return (
-    <Suspense fallback={<div>Loading...</div>}>
+    <Suspense fallback={<div className="flex flex-col w-full h-[100vh] justify-center items-center">Loading...</div>}>
       <Routes>
         <Route path="/login" element={<Login />} />
         {/* Private route */}

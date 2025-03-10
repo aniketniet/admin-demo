@@ -41,10 +41,10 @@ const Login = () => {
           secure: false,
           sameSite: "Strict",
         });
-        Cookies.set("user", JSON.stringify(user), { expires: 1 });
+        Cookies.set("user", JSON.stringify(user), { expires: 7 });
         const permissions = user.permissions
         console.log("permissions",permissions);
-        Cookies.set("permissions", JSON.stringify(permissions), { expires: 1 });
+        Cookies.set("permissions", JSON.stringify(permissions), { expires: 7 });
         console.log("cookies set");
 
         // Redirect to dashboard

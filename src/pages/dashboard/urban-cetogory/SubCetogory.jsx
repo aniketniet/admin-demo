@@ -206,7 +206,7 @@ const SubCategory = () => {
             className="basic-single"
           />
           <Input
-            label="Subcategory"
+            label=" Enter Sub Category"
             value={subCategory}
             onChange={(e) => setSubCategory(e.target.value)}
           />

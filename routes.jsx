@@ -7,6 +7,9 @@ import {
   UsersIcon,
   TicketIcon,
   BellIcon,
+  TagIcon,
+  ArrowPathRoundedSquareIcon,
+  ReceiptPercentIcon,
 } from "@heroicons/react/24/solid";
 import Home from "./src/pages/dashboard/home"; // Fixed path
 import Profile from "./src/pages/dashboard/profile"; // Fixed path
@@ -32,6 +35,8 @@ import MainCetogory from "@/pages/dashboard/urban-cetogory/Main-cetogory";
 import SubCategory from "@/pages/dashboard/urban-cetogory/SubCetogory";
 import SubSubCategory from "@/pages/dashboard/urban-cetogory/Sub-Sub-category";
 import AddProduct from "@/pages/dashboard/urban-addProduct/AddProduct";
+import {  TextSelection } from "lucide-react";
+import AllOrder from "@/pages/dashboard/urban-addProduct/AllOrder";
 const iconClass = "w-5 h-5 text-inherit";
 
 export const routes = [
@@ -86,7 +91,7 @@ export const routes = [
         ],
       },
       {
-        icon: <UsersIcon className={iconClass} />,
+        icon: <TagIcon className={iconClass} />,
         name: "Category",
         path: "/category", // Main path for "All Users" without any element
         subPages: [
@@ -104,7 +109,7 @@ export const routes = [
         ],
       },
       {
-        icon: <UsersIcon className={iconClass} />,
+        icon: <ArrowPathRoundedSquareIcon className={iconClass} />,
         name: "Products",
         path: "/products", // Main path for "All Users" without any element
         subPages: [
@@ -114,14 +119,14 @@ export const routes = [
             element: <PrivateRoute> <AddProduct /> </PrivateRoute>,
           },
           {
-            name: "All Product",
-            path: "/productsbill/all",
-            element: <PrivateRoute> <AllInvoice /> </PrivateRoute>,
+            name: "All Orders",
+            path: "/products/order",
+            element: <PrivateRoute> <AllOrder /> </PrivateRoute>,
           },
         ],
       },
       {
-        icon: <UsersIcon className={iconClass} />,
+        icon: <TextSelection className={iconClass} />,
         name: "Sooprs Billing",
         path: "/sooprsbill", // Main path for "All Users" without any element
         subPages: [
@@ -138,7 +143,7 @@ export const routes = [
         ],
       },
       {
-        icon: <UsersIcon className={iconClass} />,
+        icon: <ReceiptPercentIcon className={iconClass} />,
         name: "Techninza Billing",
         path: "/techninzabill", // Main path for "All Users" without any element
         subPages: [
