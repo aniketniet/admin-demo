@@ -8,8 +8,9 @@ import {
   TicketIcon,
   BellIcon,
   TagIcon,
-  ArrowPathRoundedSquareIcon,
+  // ArrowPathRoundedSquareIcon,
   ReceiptPercentIcon,
+  ArrowPathRoundedSquareIcon,
 } from "@heroicons/react/24/solid";
 import Home from "./src/pages/dashboard/home"; // Fixed path
 import Profile from "./src/pages/dashboard/profile"; // Fixed path
@@ -37,6 +38,7 @@ import SubSubCategory from "@/pages/dashboard/urban-cetogory/Sub-Sub-category";
 import AddProduct from "@/pages/dashboard/urban-addProduct/AddProduct";
 import {  TextSelection } from "lucide-react";
 import AllOrder from "@/pages/dashboard/urban-addProduct/AllOrder";
+import TravelAddProduct from "@/pages/dashboard/TravelAndMover/TravelAddProduct";
 const iconClass = "w-5 h-5 text-inherit";
 
 export const routes = [
@@ -92,7 +94,7 @@ export const routes = [
       },
       {
         icon: <TagIcon className={iconClass} />,
-        name: "Category",
+        name: "UC",
         path: "/category", // Main path for "All Users" without any element
         subPages: [
           { name: "Main Category", path: "/category/main", element: <MainCetogory/> },
@@ -106,13 +108,6 @@ export const routes = [
             path: "/category/sub-sub",
             element: <SubSubCategory />,
           },
-        ],
-      },
-      {
-        icon: <ArrowPathRoundedSquareIcon className={iconClass} />,
-        name: "Products",
-        path: "/products", // Main path for "All Users" without any element
-        subPages: [
           {
             name: "Create Prodcuts",
             path: "/products/create",
@@ -121,6 +116,23 @@ export const routes = [
           {
             name: "All Orders",
             path: "/products/order",
+            element: <PrivateRoute> <AllOrder /> </PrivateRoute>,
+          },
+        ],
+      },
+      {
+        icon: <ArrowPathRoundedSquareIcon className={iconClass} />,
+        name: "Travel & Movers",
+        path: "/travel-mover", // Main path for "All Users" without any element
+        subPages: [
+          {
+            name: "Create Prodcuts",
+            path: "/travel-mover/create",
+            element: <PrivateRoute> <TravelAddProduct /> </PrivateRoute>,
+          },
+          {
+            name: "All Orders",
+            path: "/travel-mover/order",
             element: <PrivateRoute> <AllOrder /> </PrivateRoute>,
           },
         ],

@@ -12,6 +12,8 @@ import Invoice from "../components/Invoice";
 import TechninzaInvoice from "@/components/TechninzaInvoice";
 import AddDescription from "@/pages/dashboard/urban-addProduct/DescriptionProduct";
 import ViewProductDetails from "@/pages/dashboard/urban-addProduct/VIewProductDetails";
+import PrivateRoute from "@/components/PrivateRoute";
+import OrderDetail from "@/pages/dashboard/urban-addProduct/OrderDetail";
 
 // import PrivateRoute from "@/components/PrivateRoute";
 
@@ -49,6 +51,14 @@ const Dashboard = () => {
             element={
              
                 <EditUsers />
+            
+            }
+          />
+          <Route
+            path="/order-detail/:id"
+            element={
+             
+              <PrivateRoute> <OrderDetail /></PrivateRoute>
             
             }
           />

@@ -13,7 +13,7 @@ import {
 import axios from "axios";
 import Cookies from "js-cookie";
 
-// import { useNavigate } from "react-router-dom"; // Import useNavigate
+import { useNavigate } from "react-router-dom"; // Import useNavigate
 // import { CheckCircleIcon, XCircleIcon } from "@heroicons/react/24/outline";
 import { PencilIcon, TrashIcon } from "@heroicons/react/24/solid";
 
@@ -23,7 +23,7 @@ function AllOrder() {
   const [users, setUsers] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const [search, setSearch] = useState(""); // Added search filter
+  // const [search, setSearch] = useState(""); // Added search filter
   const [isLoading, setIsLoading] = useState(false);
   // State for single filter dropdown
 //   const [filter, setFilter] = useState("");
@@ -31,7 +31,7 @@ function AllOrder() {
   const token = Cookies.get("token");
  
 
-//   const navigate = useNavigate(); // Initialize navigate
+  const navigate = useNavigate(); // Initialize navigate
 
   const fetchOrders = useCallback(
     async (page) => {
@@ -62,7 +62,8 @@ function AllOrder() {
 
       try {
         const { data } = await axios.post(
-          `${import.meta.env.VITE_BASE_URL}/get-all-orders`,
+          `${import.meta.env.VITE_BASE_URL_SOOPRS}/get-all-orders-uc`,
+         
           form.toString(),
           {
             headers: {
@@ -87,9 +88,9 @@ function AllOrder() {
     if (token) fetchOrders(currentPage);
   }, [token, currentPage, fetchOrders]);
 
-  const handleSearchChange = (e) => {
-    setSearch(e.target.value);
-  };
+  // const handleSearchChange = (e) => {
+  //   setSearch(e.target.value);
+  // };
 
 //   const handleFilterChange = (e) => {
 //     setFilter(e.target.value); // Update filter state
@@ -112,19 +113,34 @@ function AllOrder() {
     }
   };
 
-//   const handleEdit = (id) => {
-//     navigate(`/edituser/${id}`); // Redirect to detail page with ID
-//   };
+  const handleEdit = (id) => {
+    navigate(`/order-detail/${id}`); // Redirect to detail page with ID
+  };
 
   const columns = [
  
     {
-        key: "order_id",
+        key: "id",
         label: "Order ID",
-        render: (row) => <div title={row.order_id}>{row.order_id || "N/A"}</div>,
+        render: (row) => <div title={row.id}>{row.id || "N/A"}</div>,
         
         width: "w-52",
       },
+      {
+        key: "username",
+        label: "Username",
+        render: (row) => <div title={row.username}>{row.username || "N/A"}</div>, 
+        width: "w-52",
+      },
+    {
+        key: "email",
+        label: "Email",
+        render: (row) => <div title={row.email}>{row.email || "N/A"}</div>,
+   
+        
+        width: "w-52",
+      },
+  
     {
       key: "cart_id",
       label: "Cart ID",
@@ -227,12 +243,12 @@ function AllOrder() {
       render: (row) => (
         <div className="px-4 py-2 flex gap-2">
           <Tooltip content="Edit">
-            {/* <button onClick={() => handleEdit(row.id)}>
+             <button onClick={() => handleEdit(row.id)}>
+              <PencilIcon className="h-5 w-5 text-blue-500" />
+            </button> 
+            {/* <button>
               <PencilIcon className="h-5 w-5 text-blue-500" />
             </button> */}
-            <button>
-              <PencilIcon className="h-5 w-5 text-blue-500" />
-            </button>
           </Tooltip>
           <Tooltip content="Delete">
             <button onClick={() => handleDelete(row.id)}>
