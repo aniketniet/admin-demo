@@ -36,7 +36,8 @@ import MainCetogory from "@/pages/dashboard/urban-cetogory/Main-cetogory";
 import SubCategory from "@/pages/dashboard/urban-cetogory/SubCetogory";
 import SubSubCategory from "@/pages/dashboard/urban-cetogory/Sub-Sub-category";
 import AddProduct from "@/pages/dashboard/urban-addProduct/AddProduct";
-import {  TextSelection } from "lucide-react";
+import { TextSelection } from "lucide-react";
+import Qr from "@/pages/Qr";
 import AllOrder from "@/pages/dashboard/urban-addProduct/AllOrder";
 import TravelAddProduct from "@/pages/dashboard/TravelAndMover/TravelAddProduct";
 const iconClass = "w-5 h-5 text-inherit";
@@ -50,32 +51,73 @@ export const routes = [
         icon: <HomeIcon className={iconClass} />,
         name: "Dashboard",
         path: "/home", // Fixed path
-        element:
-          <Home />
-        
+        element: <Home />,
       },
 
       {
         icon: <ArchiveBoxArrowDownIcon className={iconClass} />,
         name: "All Leads",
         path: "/leads", // Fixed path
-        element: <PrivateRoute>
-          <Leads />
-        </PrivateRoute>,
+        element: (
+          <PrivateRoute>
+            <Leads />
+          </PrivateRoute>
+        ),
+      },
+      {
+        icon: <ArchiveBoxArrowDownIcon className={iconClass} />,
+        name: "Share QR",
+        path: "/qr", // Fixed path
+        element: (
+          <PrivateRoute>
+            <Qr />
+          </PrivateRoute>
+        ),
       },
       {
         icon: <UsersIcon className={iconClass} />,
         name: "All Users",
         path: "/users", // Main path for "All Users" without any element
         subPages: [
-          { name: "Users", path: "/users/all", element: <PrivateRoute> <Users /> </PrivateRoute>  },
+          {
+            name: "Users",
+            path: "/users/all",
+            element: (
+              <PrivateRoute>
+                {" "}
+                <Users />{" "}
+              </PrivateRoute>
+            ),
+          },
           {
             name: "Professional",
             path: "/users/professional",
-            element: <PrivateRoute> <Professional /> </PrivateRoute>,
+            element: (
+              <PrivateRoute>
+                {" "}
+                <Professional />{" "}
+              </PrivateRoute>
+            ),
           },
-          { name: "Client", path: "/users/client", element:  <PrivateRoute><Client /> </PrivateRoute> },
-          { name: "Agency", path: "/users/agency", element: <PrivateRoute> <Agency /> </PrivateRoute> },
+          {
+            name: "Client",
+            path: "/users/client",
+            element: (
+              <PrivateRoute>
+                <Client />{" "}
+              </PrivateRoute>
+            ),
+          },
+          {
+            name: "Agency",
+            path: "/users/agency",
+            element: (
+              <PrivateRoute>
+                {" "}
+                <Agency />{" "}
+              </PrivateRoute>
+            ),
+          },
         ],
       },
       {
@@ -83,11 +125,10 @@ export const routes = [
         name: "All Ads Data",
         path: "/ads", // Main path for "All Users" without any element
         subPages: [
-        
           {
             name: "Travels & Movers Data",
             path: "/ads/travels-movers",
-            element:  <Professional />,
+            element: <Professional />,
           },
           { name: "Active Leads", path: "/users/client", element: <Client /> },
         ],
@@ -97,7 +138,11 @@ export const routes = [
         name: "UC",
         path: "/category", // Main path for "All Users" without any element
         subPages: [
-          { name: "Main Category", path: "/category/main", element: <MainCetogory/> },
+          {
+            name: "Main Category",
+            path: "/category/main",
+            element: <MainCetogory />,
+          },
           {
             name: "Sub Category",
             path: "/category/sub",
@@ -111,12 +156,22 @@ export const routes = [
           {
             name: "Create Prodcuts",
             path: "/products/create",
-            element: <PrivateRoute> <AddProduct /> </PrivateRoute>,
+            element: (
+              <PrivateRoute>
+                {" "}
+                <AddProduct />{" "}
+              </PrivateRoute>
+            ),
           },
           {
             name: "All Orders",
             path: "/products/order",
-            element: <PrivateRoute> <AllOrder /> </PrivateRoute>,
+            element: (
+              <PrivateRoute>
+                {" "}
+                <AllOrder />{" "}
+              </PrivateRoute>
+            ),
           },
         ],
       },
@@ -128,12 +183,22 @@ export const routes = [
           {
             name: "Create Prodcuts",
             path: "/travel-mover/create",
-            element: <PrivateRoute> <TravelAddProduct /> </PrivateRoute>,
+            element: (
+              <PrivateRoute>
+                {" "}
+                <TravelAddProduct />{" "}
+              </PrivateRoute>
+            ),
           },
           {
             name: "All Orders",
             path: "/travel-mover/order",
-            element: <PrivateRoute> <AllOrder /> </PrivateRoute>,
+            element: (
+              <PrivateRoute>
+                {" "}
+                <AllOrder />{" "}
+              </PrivateRoute>
+            ),
           },
         ],
       },
@@ -145,12 +210,22 @@ export const routes = [
           {
             name: "Create Invoice",
             path: "/sooprsbill/create",
-            element: <PrivateRoute> <CreateInvoice /> </PrivateRoute>,
+            element: (
+              <PrivateRoute>
+                {" "}
+                <CreateInvoice />{" "}
+              </PrivateRoute>
+            ),
           },
           {
             name: "All Invoice",
             path: "/sooprsbill/all",
-            element: <PrivateRoute> <AllInvoice /> </PrivateRoute>,
+            element: (
+              <PrivateRoute>
+                {" "}
+                <AllInvoice />{" "}
+              </PrivateRoute>
+            ),
           },
         ],
       },
@@ -162,12 +237,21 @@ export const routes = [
           {
             name: "Create Invoice",
             path: "/techninzabill/billcreate",
-            element:<PrivateRoute> <TechninzaCreateInvoice /> </PrivateRoute>,
+            element: (
+              <PrivateRoute>
+                {" "}
+                <TechninzaCreateInvoice />{" "}
+              </PrivateRoute>
+            ),
           },
           {
             name: "All Invoice",
             path: "/techninzabill/all",
-            element: <PrivateRoute><TechninzaInvoice /> </PrivateRoute>,
+            element: (
+              <PrivateRoute>
+                <TechninzaInvoice />{" "}
+              </PrivateRoute>
+            ),
           },
         ],
       },
@@ -175,14 +259,23 @@ export const routes = [
         icon: <BellIcon className={iconClass} />,
         name: "Subscriber",
         path: "/subscriber", // Fixed path
-        element: <PrivateRoute><Susbscriber /> </PrivateRoute>,
+        element: (
+          <PrivateRoute>
+            <Susbscriber />{" "}
+          </PrivateRoute>
+        ),
       },
 
       {
         icon: <BellIcon className={iconClass} />,
         name: "New Subscriber",
         path: "/newsubscriber", // Fixed path
-        element:<PrivateRoute> <Newsubscriber /> </PrivateRoute>,
+        element: (
+          <PrivateRoute>
+            {" "}
+            <Newsubscriber />{" "}
+          </PrivateRoute>
+        ),
       },
 
       {
@@ -196,15 +289,37 @@ export const routes = [
         name: "Role",
         path: "/role", // Fixed path
         subPages: [
-          { name: "Add Role", path: "/role/addrole", element: <PrivateRoute> <Role /> </PrivateRoute>},
+          {
+            name: "Add Role",
+            path: "/role/addrole",
+            element: (
+              <PrivateRoute>
+                {" "}
+                <Role />{" "}
+              </PrivateRoute>
+            ),
+          },
           {
             name: "Add Permissions",
             path: "/role/Permissions",
-            element: <PrivateRoute><Permissions /> </PrivateRoute>,
+            element: (
+              <PrivateRoute>
+                <Permissions />{" "}
+              </PrivateRoute>
+            ),
           },
-          { name: "Add User", path: "/role/adduser", element:<AddUserForRole />  },
+          {
+            name: "Add User",
+            path: "/role/adduser",
+            element: <AddUserForRole />,
+          },
         ],
-        element: <PrivateRoute> <Role /> </PrivateRoute>,
+        element: (
+          <PrivateRoute>
+            {" "}
+            <Role />{" "}
+          </PrivateRoute>
+        ),
       },
       {
         icon: <TableCellsIcon className={iconClass} />,
@@ -212,12 +327,17 @@ export const routes = [
         path: "/tables", // Fixed path
         element: <Tables />,
       },
-  
+
       {
         icon: <TicketIcon className={iconClass} />,
         name: "Coupons",
         path: "/coupons", // Fixed path
-        element:<PrivateRoute> <Coupon /></PrivateRoute>,
+        element: (
+          <PrivateRoute>
+            {" "}
+            <Coupon />
+          </PrivateRoute>
+        ),
       },
     ],
   },
