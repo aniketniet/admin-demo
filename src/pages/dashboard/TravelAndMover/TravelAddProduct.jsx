@@ -10,9 +10,12 @@ import {
   Tooltip,
 } from "@material-tailwind/react";
 import Cookies from "js-cookie";
-import Toaster, { showSuccessToast, showErrorToast } from "@/components/Toaster";
+import Toaster, {
+  showSuccessToast,
+  showErrorToast,
+} from "@/components/Toaster";
 import CustomTable from "@/components/CustomTable";
-import {  TrashIcon, ViewfinderCircleIcon } from "@heroicons/react/24/solid";
+import { PlusCircleIcon, TrashIcon, ViewfinderCircleIcon } from "@heroicons/react/24/solid";
 import { Link } from "react-router-dom";
 
 function TravelAddProduct() {
@@ -33,28 +36,27 @@ function TravelAddProduct() {
     fetchProducts();
   }, [token]);
 
-    const handleImageUpload = async (file, updateFunction) => {
-      const formData = new FormData();
-      formData.append("image", file);
-  
-      try {
-        const { data } = await axios.post(
-          `${import.meta.env.VITE_BASE_URL_SOOPRS}/upload`,
-          formData,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-              "Content-Type": "multipart/form-data",
-            },
-          }
-        );
-        console.log("Image uploaded successfully:", data.data);
-        updateFunction(data.data); // Set image URL in state
-      } catch (error) {
-        showErrorToast("Image upload failed", error);
-      }
-    };
+  const handleImageUpload = async (file, updateFunction) => {
+    const formData = new FormData();
+    formData.append("image", file);
 
+    try {
+      const { data } = await axios.post(
+        `${import.meta.env.VITE_BASE_URL_SOOPRS}/upload`,
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      console.log("Image uploaded successfully:", data.data);
+      updateFunction(data.data); // Set image URL in state
+    } catch (error) {
+      showErrorToast("Image upload failed", error);
+    }
+  };
 
   const fetchProducts = async () => {
     setLoading(true);
@@ -156,7 +158,11 @@ function TravelAddProduct() {
       ),
     },
     { key: "title", label: "Title", render: (row) => row.title },
-    { key: "duration", label: "Duration", render: (row) => `${row.duration} days` },
+    {
+      key: "duration",
+      label: "Duration",
+      render: (row) => `${row.duration} days`,
+    },
     { key: "price", label: "Price", render: (row) => `${row.price}` },
     { key: "phone", label: "Phone", render: (row) => row.phone },
     {
@@ -170,9 +176,19 @@ function TravelAddProduct() {
       render: (row) => (
         <div className="px-4 py-2 flex gap-2">
           <Tooltip content="Package Details">
-            <Link to={`/view-package-detail/${row.id}`} className="text-blue-500">
+            <Link
+              to={`/view-package-detail/${row.id}`}
+              className="text-blue-500"
+            >
               <button>
                 <ViewfinderCircleIcon className="h-5 w-5 text-green-500" />
+              </button>
+            </Link>
+          </Tooltip>
+          <Tooltip content="Add Description & Faq">
+            <Link to={`/add-travel-description/${row.id}`} className="text-blue-500">
+              <button>
+                <PlusCircleIcon className="h-5 w-5 text-green-500" />
               </button>
             </Link>
           </Tooltip>
@@ -193,29 +209,64 @@ function TravelAddProduct() {
       <div className="flex flex-col gap-6 mt-10 px-4 items-center">
         <Card className="p-6 border border-gray-300 shadow-sm rounded-2xl w-full max-w-5xl">
           <Typography variant="h4">Add Travel Package</Typography>
-          <form onSubmit={handleSubmit} className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+          <form
+            onSubmit={handleSubmit}
+            className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4"
+          >
             <div className="col-span-2">
-              <label className="block text-sm font-medium text-gray-700">Package Title</label>
-              <Input name="title" value={product.title} onChange={handleProductChange} placeholder="Enter Title" />
+              <label className="block text-sm font-medium text-gray-700">
+                Package Title
+              </label>
+              <Input
+                name="title"
+                value={product.title}
+                onChange={handleProductChange}
+                placeholder="Enter Title"
+              />
             </div>
 
             <div className="col-span-2 md:col-span-1">
-              <label className="block text-sm font-medium text-gray-700">Duration (Days)</label>
-              <Input type="number" name="duration" value={product.duration} onChange={handleProductChange} placeholder="Enter Duration" />
+              <label className="block text-sm font-medium text-gray-700">
+                Duration (Days)
+              </label>
+              <Input
+                type="number"
+                name="duration"
+                value={product.duration}
+                onChange={handleProductChange}
+                placeholder="Enter Duration"
+              />
             </div>
 
             <div className="col-span-2 md:col-span-1">
-              <label className="block text-sm font-medium text-gray-700">Price</label>
-              <Input type="number" name="price" value={product.price} onChange={handleProductChange} placeholder="Enter Price" />
+              <label className="block text-sm font-medium text-gray-700">
+                Price
+              </label>
+              <Input
+                type="number"
+                name="price"
+                value={product.price}
+                onChange={handleProductChange}
+                placeholder="Enter Price"
+              />
             </div>
 
             <div className="col-span-2">
-              <label className="block text-sm font-medium text-gray-700">Phone</label>
-              <Input name="phone" value={product.phone} onChange={handleProductChange} placeholder="Enter Contact Number" />
+              <label className="block text-sm font-medium text-gray-700">
+                Phone
+              </label>
+              <Input
+                name="phone"
+                value={product.phone}
+                onChange={handleProductChange}
+                placeholder="Enter Contact Number"
+              />
             </div>
 
             <div className="col-span-2">
-              <label className="block text-sm font-medium text-gray-700">Services</label>
+              <label className="block text-sm font-medium text-gray-700">
+                Services
+              </label>
               <Select
                 isMulti
                 options={[
@@ -230,19 +281,35 @@ function TravelAddProduct() {
             </div>
 
             <div className="col-span-2">
-              <label className="block text-sm font-medium text-gray-700">Upload Image</label>
-              <Input type="file" accept="image/*" onChange={handleImageChange} />
+              <label className="block text-sm font-medium text-gray-700">
+                Upload Image
+              </label>
+              <Input
+                type="file"
+                accept="image/*"
+                onChange={handleImageChange}
+              />
             </div>
 
             <div className="col-span-2">
-              <Button type="submit" className="w-full">Submit</Button>
+              <Button type="submit" className="w-full">
+                Submit
+              </Button>
             </div>
           </form>
         </Card>
 
         <Card className="w-full max-w-5xl shadow-lg">
-          <Typography variant="h5" className="p-4">Packages</Typography>
-          <div className="p-4">{loading ? <Spinner /> : <CustomTable columns={columns} data={products} />}</div>
+          <Typography variant="h5" className="p-4">
+            Packages
+          </Typography>
+          <div className="p-4">
+            {loading ? (
+              <Spinner />
+            ) : (
+              <CustomTable columns={columns} data={products} />
+            )}
+          </div>
         </Card>
       </div>
     </>

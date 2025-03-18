@@ -14,6 +14,7 @@ import AddDescription from "@/pages/dashboard/urban-addProduct/DescriptionProduc
 import ViewProductDetails from "@/pages/dashboard/urban-addProduct/VIewProductDetails";
 import PrivateRoute from "@/components/PrivateRoute";
 import OrderDetail from "@/pages/dashboard/urban-addProduct/OrderDetail";
+import TravelDescription from "@/pages/dashboard/TravelAndMover/TravelDescription";
 
 // import PrivateRoute from "@/components/PrivateRoute";
 
@@ -67,6 +68,14 @@ const Dashboard = () => {
             element={
              
                 <AddDescription />
+            
+            }
+          />
+          <Route
+            path="/add-travel-description/:id"
+            element={
+             
+                <TravelDescription />
             
             }
           />
