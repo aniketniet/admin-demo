@@ -17,9 +17,9 @@ import Toaster, {
 import { useParams } from "react-router-dom";
 
 
+
 function TravelDescription() {
   const [product, setProduct] = useState({
-    heading: "",
     title: "",
     price: "",
     description: [],
@@ -62,6 +62,7 @@ function TravelDescription() {
       description: [
         ...prev.description,
         {
+          heading: selectedType === "0" ? product.heading : undefined,
           title: selectedType === "0" || selectedType === "1" ? "" : undefined,
           image:
             selectedType === "0" || selectedType === "1" || selectedType === "2"
@@ -103,9 +104,9 @@ function TravelDescription() {
     });
   };
 
-  useEffect(() => {
-    addFaq();
-  }, []);
+  // useEffect(() => {
+  //   addFaq();
+  // }, []);
 
 
 
@@ -118,10 +119,9 @@ function TravelDescription() {
 
     try {
       await axios.post(
-        `${import.meta.env.VITE_BASE_URL_SOOPRS}/add-description`,
+        `${import.meta.env.VITE_BASE_URL_SOOPRS}/add-package-discription`,
         {
-          productId,
-          heading: product.heading,
+          package_id:productId,
           type: parseInt(selectedType),
           details: product.description,
         },
@@ -147,9 +147,9 @@ function TravelDescription() {
 
     try {
       await axios.post(
-        `${import.meta.env.VITE_BASE_URL_SOOPRS}/add-faq`,
+        `${import.meta.env.VITE_BASE_URL_SOOPRS}/add-package-faqs`,
         {
-          productId: parseInt(productId, 10),
+          package_id: parseInt(productId, 10),
           faqs: product.faq,
         },
         {
@@ -196,7 +196,7 @@ function TravelDescription() {
               </Option>
             </Select>
             {/* Rendering Heading Field */}
-            {selectedType === "0"  && (
+            {/* {selectedType === "0"  && (
               <div>
                 <label className="font-medium">Heading</label>
                 <Input
@@ -207,7 +207,7 @@ function TravelDescription() {
                   placeholder="Heading"
                 />
               </div>
-            )}
+            )} */}
             {/* Rendering Description Fields */}
             {product.description.map((desc, index) => (
               <div
@@ -215,6 +215,19 @@ function TravelDescription() {
                 className="flex flex-col gap-2 border p-2 rounded"
               >
                 {/* Title Field (Only for Type 0 and 1) */}
+                {
+                  (selectedType === "0") && (
+                  <>
+                    <label className="font-medium">Heading</label>
+                    <Input
+                      value={desc.heading}
+                      onChange={(e) =>
+                        updateDescription(index, "heading", e.target.value)
+                      }
+                      placeholder="Heading"
+                    />
+                  </> )
+                }
                 {(selectedType === "0" || selectedType === "1" || selectedType=="2") && (
                   <>
                     <label className="font-medium">Title</label>
@@ -288,9 +301,9 @@ function TravelDescription() {
           <form onSubmit={handleFaqSubmit} className="grid gap-4 mt-6">
             <div className="flex items-center gap-4 justify-between">
               <Typography variant="h5">Frequently Asked Questions</Typography>
-              {/* <Button type="button" id="oneClickFaq" className="hidden" onClick={addFaq}>
+              <Button type="button" id="oneClickFaq"  onClick={addFaq}>
                 Add FAQ
-              </Button> */}
+              </Button>
             </div>
             {product.faq.map((faq, index) => (
               <div
