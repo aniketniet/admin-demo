@@ -5,12 +5,12 @@ import {
   // InformationCircleIcon,
   ArchiveBoxArrowDownIcon,
   UsersIcon,
-  TicketIcon,
+  // TicketIcon,
   BellIcon,
   TagIcon,
   // ArrowPathRoundedSquareIcon,
   ReceiptPercentIcon,
-  ArrowPathRoundedSquareIcon,
+  // ArrowPathRoundedSquareIcon,
 } from "@heroicons/react/24/solid";
 import Home from "./src/pages/dashboard/home"; // Fixed path
 import Profile from "./src/pages/dashboard/profile"; // Fixed path
@@ -18,14 +18,14 @@ import Tables from "./src/pages/dashboard/tables"; // Fixed path
 // import Notifications from "./src/pages/dashboard/notifications"; // Fixed path
 import Leads from "./src/pages/dashboard/leads/Leads"; // Fixed path
 import Users from "./src/pages/dashboard/AllUser/Users/Users"; // Fixed path
-import Coupon from "./src/pages/dashboard/Coupon";
+// import Coupon from "./src/pages/dashboard/Coupon";
 import Professional from "./src/pages/dashboard/AllUser/professional/Professional";
 import Client from "./src/pages/dashboard/AllUser/client/Client";
 import Agency from "./src/pages/dashboard/AllUser/agency/Agency";
 import Susbscriber from "./src/pages/dashboard/subscriber/Subscriber";
-import CreateInvoice from "./src/pages/dashboard/invocie/CreateInvoice";
-import AllInvoice from "./src/pages/dashboard/invocie/AllInvoice";
-import Newsubscriber from "./src/pages/dashboard/newsubscriber/Newsubscriber";
+// import CreateInvoice from "./src/pages/dashboard/invocie/CreateInvoice";
+// import AllInvoice from "./src/pages/dashboard/invocie/AllInvoice";
+// import Newsubscriber from "./src/pages/dashboard/newsubscriber/Newsubscriber";
 import Permissions from "./src/pages/dashboard/role/Permissions";
 import Role from "./src/pages/dashboard/role/Role";
 import AddUserForRole from "./src/pages/dashboard/role/AddUserForRole";
@@ -36,10 +36,13 @@ import MainCetogory from "@/pages/dashboard/urban-cetogory/Main-cetogory";
 import SubCategory from "@/pages/dashboard/urban-cetogory/SubCetogory";
 import SubSubCategory from "@/pages/dashboard/urban-cetogory/Sub-Sub-category";
 import AddProduct from "@/pages/dashboard/urban-addProduct/AddProduct";
-import { TextSelection } from "lucide-react";
-import Qr from "@/pages/Qr";
 import AllOrder from "@/pages/dashboard/urban-addProduct/AllOrder";
-import TravelAddProduct from "@/pages/dashboard/TravelAndMover/TravelAddProduct";
+import BannerManager from "@/pages/dashboard/BannerManager";
+// import AddProduct from "@/pages/dashboard/urban-addProduct/AddProduct";
+
+// import Qr from "@/pages/Qr";
+// import AllOrder from "@/pages/dashboard/urban-addProduct/AllOrder";
+// import TravelAddProduct from "@/pages/dashboard/TravelAndMover/TravelAddProduct";
 const iconClass = "w-5 h-5 text-inherit";
 
 export const routes = [
@@ -56,8 +59,8 @@ export const routes = [
 
       {
         icon: <ArchiveBoxArrowDownIcon className={iconClass} />,
-        name: "All Leads",
-        path: "/leads", // Fixed path
+        name: "All Users",
+        path: "/all-users", // Fixed path
         element: (
           <PrivateRoute>
             <Leads />
@@ -66,73 +69,62 @@ export const routes = [
       },
       {
         icon: <ArchiveBoxArrowDownIcon className={iconClass} />,
-        name: "Share QR",
-        path: "/qr", // Fixed path
+        name: "Create Banner",
+        path: "/creare-banner", // Fixed path
         element: (
           <PrivateRoute>
-            <Qr />
+             <BannerManager/>
           </PrivateRoute>
         ),
       },
-      {
-        icon: <UsersIcon className={iconClass} />,
-        name: "All Users",
-        path: "/users", // Main path for "All Users" without any element
-        subPages: [
-          {
-            name: "Users",
-            path: "/users/all",
-            element: (
-              <PrivateRoute>
-                {" "}
-                <Users />{" "}
-              </PrivateRoute>
-            ),
-          },
-          {
-            name: "Professional",
-            path: "/users/professional",
-            element: (
-              <PrivateRoute>
-                {" "}
-                <Professional />{" "}
-              </PrivateRoute>
-            ),
-          },
-          {
-            name: "Client",
-            path: "/users/client",
-            element: (
-              <PrivateRoute>
-                <Client />{" "}
-              </PrivateRoute>
-            ),
-          },
-          {
-            name: "Agency",
-            path: "/users/agency",
-            element: (
-              <PrivateRoute>
-                {" "}
-                <Agency />{" "}
-              </PrivateRoute>
-            ),
-          },
-        ],
-      },
-      {
-        icon: <UsersIcon className={iconClass} />,
-        name: "All Ads Data",
-        path: "/ads", // Main path for "All Users" without any element
-        subPages: [
-          {
-            name: "Travels & Movers Data",
-            path: "/ads/travels-movers",
-            element: <Professional />,
-          },
-          { name: "Active Leads", path: "/users/client", element: <Client /> },
-        ],
-      },
+      
+      // {
+      //   icon: <UsersIcon className={iconClass} />,
+      //   name: "All Users",
+      //   path: "/users", // Main path for "All Users" without any element
+      //   subPages: [
+      //     {
+      //       name: "Users",
+      //       path: "/users/all",
+      //       element: (
+      //         <PrivateRoute>
+      //           {" "}
+      //           <Users />{" "}
+      //         </PrivateRoute>
+      //       ),
+      //     },
+      //     {
+      //       name: "Professional",
+      //       path: "/users/professional",
+      //       element: (
+      //         <PrivateRoute>
+      //           {" "}
+      //           <Professional />{" "}
+      //         </PrivateRoute>
+      //       ),
+      //     },
+      //     {
+      //       name: "Client",
+      //       path: "/users/client",
+      //       element: (
+      //         <PrivateRoute>
+      //           <Client />{" "}
+      //         </PrivateRoute>
+      //       ),
+      //     },
+      //     {
+      //       name: "Agency",
+      //       path: "/users/agency",
+      //       element: (
+      //         <PrivateRoute>
+      //           {" "}
+      //           <Agency />{" "}
+      //         </PrivateRoute>
+      //       ),
+      //     },
+      //   ],
+      // },
+    
       {
         icon: <TagIcon className={iconClass} />,
         name: "UC",
@@ -154,7 +146,7 @@ export const routes = [
             element: <SubSubCategory />,
           },
           {
-            name: "Create Prodcuts",
+            name: "Create Products",
             path: "/products/create",
             element: (
               <PrivateRoute>
@@ -175,170 +167,107 @@ export const routes = [
           },
         ],
       },
-      {
-        icon: <ArrowPathRoundedSquareIcon className={iconClass} />,
-        name: "Travel & Movers",
-        path: "/travel-mover", // Main path for "All Users" without any element
-        subPages: [
-          {
-            name: "Create Prodcuts",
-            path: "/travel-mover/create",
-            element: (
-              <PrivateRoute>
-                {" "}
-                <TravelAddProduct />{" "}
-              </PrivateRoute>
-            ),
-          },
-          {
-            name: "All Orders",
-            path: "/travel-mover/order",
-            element: (
-              <PrivateRoute>
-                {" "}
-                <AllOrder />{" "}
-              </PrivateRoute>
-            ),
-          },
-        ],
-      },
-      {
-        icon: <TextSelection className={iconClass} />,
-        name: "Sooprs Billing",
-        path: "/sooprsbill", // Main path for "All Users" without any element
-        subPages: [
-          {
-            name: "Create Invoice",
-            path: "/sooprsbill/create",
-            element: (
-              <PrivateRoute>
-                {" "}
-                <CreateInvoice />{" "}
-              </PrivateRoute>
-            ),
-          },
-          {
-            name: "All Invoice",
-            path: "/sooprsbill/all",
-            element: (
-              <PrivateRoute>
-                {" "}
-                <AllInvoice />{" "}
-              </PrivateRoute>
-            ),
-          },
-        ],
-      },
-      {
-        icon: <ReceiptPercentIcon className={iconClass} />,
-        name: "Techninza Billing",
-        path: "/techninzabill", // Main path for "All Users" without any element
-        subPages: [
-          {
-            name: "Create Invoice",
-            path: "/techninzabill/billcreate",
-            element: (
-              <PrivateRoute>
-                {" "}
-                <TechninzaCreateInvoice />{" "}
-              </PrivateRoute>
-            ),
-          },
-          {
-            name: "All Invoice",
-            path: "/techninzabill/all",
-            element: (
-              <PrivateRoute>
-                <TechninzaInvoice />{" "}
-              </PrivateRoute>
-            ),
-          },
-        ],
-      },
-      {
-        icon: <BellIcon className={iconClass} />,
-        name: "Subscriber",
-        path: "/subscriber", // Fixed path
-        element: (
-          <PrivateRoute>
-            <Susbscriber />{" "}
-          </PrivateRoute>
-        ),
-      },
+     
+      // {
+      //   icon: <ReceiptPercentIcon className={iconClass} />,
+      //   name: "Techninza Billing",
+      //   path: "/techninzabill", // Main path for "All Users" without any element
+      //   subPages: [
+      //     {
+      //       name: "Create Invoice",
+      //       path: "/techninzabill/billcreate",
+      //       element: (
+      //         <PrivateRoute>
+      //           {" "}
+      //           <TechninzaCreateInvoice />{" "}
+      //         </PrivateRoute>
+      //       ),
+      //     },
+      //     {
+      //       name: "All Invoice",
+      //       path: "/techninzabill/all",
+      //       element: (
+      //         <PrivateRoute>
+      //           <TechninzaInvoice />{" "}
+      //         </PrivateRoute>
+      //       ),
+      //     },
+      //   ],
+      // },
+      // {
+      //   icon: <BellIcon className={iconClass} />,
+      //   name: "Subscriber",
+      //   path: "/subscriber", // Fixed path
+      //   element: (
+      //     <PrivateRoute>
+      //       <Susbscriber />{" "}
+      //     </PrivateRoute>
+      //   ),
+      // },
 
-      {
-        icon: <BellIcon className={iconClass} />,
-        name: "New Subscriber",
-        path: "/newsubscriber", // Fixed path
-        element: (
-          <PrivateRoute>
-            {" "}
-            <Newsubscriber />{" "}
-          </PrivateRoute>
-        ),
-      },
+   
 
-      {
-        icon: <UserCircleIcon className={iconClass} />,
-        name: "Profile",
-        path: "/profile", // Fixed path
-        element: <Profile />,
-      },
-      {
-        icon: <HomeIcon className={iconClass} />,
-        name: "Role",
-        path: "/role", // Fixed path
-        subPages: [
-          {
-            name: "Add Role",
-            path: "/role/addrole",
-            element: (
-              <PrivateRoute>
-                {" "}
-                <Role />{" "}
-              </PrivateRoute>
-            ),
-          },
-          {
-            name: "Add Permissions",
-            path: "/role/Permissions",
-            element: (
-              <PrivateRoute>
-                <Permissions />{" "}
-              </PrivateRoute>
-            ),
-          },
-          {
-            name: "Add User",
-            path: "/role/adduser",
-            element: <AddUserForRole />,
-          },
-        ],
-        element: (
-          <PrivateRoute>
-            {" "}
-            <Role />{" "}
-          </PrivateRoute>
-        ),
-      },
-      {
-        icon: <TableCellsIcon className={iconClass} />,
-        name: "Tables",
-        path: "/tables", // Fixed path
-        element: <Tables />,
-      },
+      // {
+      //   icon: <UserCircleIcon className={iconClass} />,
+      //   name: "Profile",
+      //   path: "/profile", // Fixed path
+      //   element: <Profile />,
+      // },
+      // {
+      //   icon: <HomeIcon className={iconClass} />,
+      //   name: "Role",
+      //   path: "/role", // Fixed path
+      //   subPages: [
+      //     {
+      //       name: "Add Role",
+      //       path: "/role/addrole",
+      //       element: (
+      //         <PrivateRoute>
+      //           {" "}
+      //           <Role />{" "}
+      //         </PrivateRoute>
+      //       ),
+      //     },
+      //     {
+      //       name: "Add Permissions",
+      //       path: "/role/Permissions",
+      //       element: (
+      //         <PrivateRoute>
+      //           <Permissions />{" "}
+      //         </PrivateRoute>
+      //       ),
+      //     },
+      //     {
+      //       name: "Add User",
+      //       path: "/role/adduser",
+      //       element: <AddUserForRole />,
+      //     },
+      //   ],
+      //   element: (
+      //     <PrivateRoute>
+      //       {" "}
+      //       <Role />{" "}
+      //     </PrivateRoute>
+      //   ),
+      // },
+      // {
+      //   icon: <TableCellsIcon className={iconClass} />,
+      //   name: "Tables",
+      //   path: "/tables", // Fixed path
+      //   element: <Tables />,
+      // },
 
-      {
-        icon: <TicketIcon className={iconClass} />,
-        name: "Coupons",
-        path: "/coupons", // Fixed path
-        element: (
-          <PrivateRoute>
-            {" "}
-            <Coupon />
-          </PrivateRoute>
-        ),
-      },
+      // {
+      //   icon: <TicketIcon className={iconClass} />,
+      //   name: "Coupons",
+      //   path: "/coupons", // Fixed path
+      //   element: (
+      //     <PrivateRoute>
+      //       {" "}
+      //       <Coupon />
+      //     </PrivateRoute>
+      //   ),
+      // },
     ],
   },
 ];

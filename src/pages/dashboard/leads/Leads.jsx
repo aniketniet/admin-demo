@@ -60,12 +60,24 @@ function Leads() {
   const fetchLeads = useCallback(
     async (page) => {
       if (!token) return;
+  
+      const body = new URLSearchParams();
+      body.append("page", page);
+      body.append("limit", 10);
+  
       setLoading(true);
       try {
-        const { data } = await axios.get(
-          `${import.meta.env.VITE_BASE_URL}/leads?page=${page}&limit=10`,
-          { headers: { Authorization: `Bearer ${token}` } }
+        const { data } = await axios.post(
+          `${import.meta.env.VITE_BASE_URL}/admin/get-all-users`,
+          body,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/x-www-form-urlencoded",
+            },
+          }
         );
+        console.log("leads", data.data);
         setLeads(data.data);
         setTotalPages(data.pagination.totalPages);
       } catch (error) {
@@ -76,14 +88,12 @@ function Leads() {
     },
     [token]
   );
-
+  
   useEffect(() => {
     if (token) fetchLeads(currentPage);
-    // const hasAccess = accessRoutes.includes(currentRoute);
-    // if (!hasAccess) {
-    //   navigate("/");
-    // }
   }, [token, currentPage, fetchLeads]);
+
+  
 
   const deleteLead = async (id) => {
     try {
@@ -97,86 +107,65 @@ function Leads() {
   };
 
   const handleEdit = (id) => {
-    navigate(`/detail/${id}`); // Redirect to detail page with ID
+    navigate(`/user-detail/${id}`); // Redirect to detail page with ID
   };
 
   const columns = [
     {
-      key: "flag",
-      label: "Origin",
+      key: "profile_img",
+      label: "Profile",
       render: (row) => (
-        <div className="w-8 h-8" title={row.professional?.country_name}>
-          {" "}
-          <img src={row.professional?.flag} alt="Flag" />{" "}
+        <div className="w-10 h-10 rounded-full overflow-hidden">
+          {row.profile_img ? (
+            <img
+              src={`${import.meta.env.VITE_BASE_URL_IMAGE}${row.profile_img}`}
+              alt="Profile"
+              className="object-cover w-full h-full"
+            />
+          ) : (
+            <div className="w-full h-full bg-gray-200 flex items-center justify-center text-gray-500">
+              N/A
+            </div>
+          )}
         </div>
       ),
-      width: "w-12",
+      width: "w-20",
     },
     {
-      key: "project_title",
-      label: "Project Title",
-      render: (row) => (
-        <div title={row.project_title}>
-          {row.project_title.slice(0, 20) + "..."}
-        </div>
-      ),
-      width: "w-70 ",
-    },
-    {
-      key: "professional.name",
-      label: "Client Name",
-      render: (row) => (
-        <div title={row.professional?.name || "N/A"}>
-          {row.professional?.name || "N/A"}
-        </div>
-      ),
-      width: "w-52",
-    },
-    {
-      key: "email",
-      label: "Email & Mobile",
-      render: (row) => (
-        <div title={`${row.email} ${row.mobile}`}>
-          {row.email} <br /> {row.mobile}
-        </div>
-      ),
+      key: "name",
+      label: "Name",
+      render: (row) => <div>{row.name || "N/A"}</div>,
       width: "w-48",
     },
     {
-      key: "budget",
-      label: "Budget",
-      render: (row) => (
-        <div title={`$${row.min_budget} - $${row.max_budget_amount}`}>
-          ${row.min_budget} - ${row.max_budget_amount}
-        </div>
-      ),
-      width: "w-100",
+      key: "mobile",
+      label: "Mobile",
+      render: (row) => <div>{row.mobile || "N/A"}</div>,
+      width: "w-40",
     },
     {
-      key: "service.service_name",
-      label: "Service Name",
-      render: (row) => (
-        <div title={row.service?.service_name}>
-          {row.service?.service_name?.slice(0, 50) + "..."}
-        </div>
-      ),
-      width: "w-100",
+      key: "email",
+      label: "Email",
+      render: (row) => <div>{row.email || "N/A"}</div>,
+      width: "w-60",
     },
-    { key: "bid_count", label: "Bids", width: "w-20" },
-    { key: "mobile_count", label: "Mobile Count", width: "w-24" },
-
+    {
+      key: "dob",
+      label: "DOB",
+      render: (row) => <div>{row.dob || "N/A"}</div>,
+      width: "w-32",
+    },
+    {
+      key: "gender",
+      label: "Gender",
+      render: (row) => <div>{row.gender || "N/A"}</div>,
+      width: "w-32",
+    },
     {
       key: "actions",
       label: "Actions",
       render: (row) => (
-        <div className="px-4 py-2 flex gap-2">
-          <Tooltip content="Add Bid">
-          <button onClick={()=>handleOpen(row.id , row.project_title, row.min_budget,row.max_budget_amount)}>
-               <PlusCircleIcon className="h-5 w-5 text-green-500" />
-          </button>
-       
-         
-          </Tooltip>
+        <div className="flex gap-2">
           <Tooltip content="Edit">
             <button onClick={() => handleEdit(row.id)}>
               <PencilIcon className="h-5 w-5 text-blue-500" />
@@ -189,9 +178,10 @@ function Leads() {
           </Tooltip>
         </div>
       ),
-      width: "w-24",
+      width: "w-28",
     },
   ];
+  
 
   return (
     <Card>
@@ -199,13 +189,13 @@ function Leads() {
         <div className="flex items-center justify-between">
           <div>
             <Typography variant="h5" color="blue-gray">
-              Leads List
+              User List
             </Typography>
             <Typography color="gray" className="mt-1 font-normal">
-              View the current active leads
+              View the current active Users
             </Typography>
           </div>
-          <Button variant="gradient">Add New Lead</Button>
+          {/* <Button variant="gradient">Add New Lead</Button> */}
         </div>
       </CardHeader>
 

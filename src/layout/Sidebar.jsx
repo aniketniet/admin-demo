@@ -13,34 +13,34 @@ import {
   UserIcon,
   UsersIcon,
 } from "@heroicons/react/24/outline";
-import {  useEffect, useState } from "react";
+import {   useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import Cookies from "js-cookie";
+// import Cookies from "js-cookie";
 
 function Sidebar({ routes, isOpen }) {
   const [openDropdown, setOpenDropdown] = useState(null);
-  const [accessTo, setAccessTo] = useState([]);
+  // const [accessTo, setAccessTo] = useState([]);
 
   // const user = Cookies.get("user");
   // const role = JSON.parse(user)?.role || "";
 
 
 
-useEffect(() => {
-  const interval = setInterval(() => {
-    const permissions = Cookies.get("permissions");
-    if (permissions) {
-      try {
-        const accessArray = JSON.parse(permissions);
-        setAccessTo(accessArray);
-        // console.log("Updated Permissions:", accessArray); // Debugging line
-      } catch (error) {
-        console.error("Error parsing permissions:", error);
-      }
-    }
-  }, 1000);
-  return () => clearInterval(interval);
-}, []);
+// useEffect(() => {
+//   const interval = setInterval(() => {
+//     const permissions = Cookies.get("permissions");
+//     if (permissions) {
+//       try {
+//         const accessArray = JSON.parse(permissions);
+//         setAccessTo(accessArray);
+//         // console.log("Updated Permissions:", accessArray); // Debugging line
+//       } catch (error) {
+//         console.error("Error parsing permissions:", error);
+//       }
+//     }
+//   }, 1000);
+//   return () => clearInterval(interval);
+// }, []);
 
     
 
@@ -61,15 +61,15 @@ useEffect(() => {
         }}
       >
         <div className="mb-4 flex items-center gap-4 p-4">
-          <div className="h-10 w-10 rounded-lg flex items-center justify-center">
+          {/* <div className="h-10 w-10 rounded-lg flex items-center justify-center">
             <img
               src="https://sooprs.com/assets/images/sooprs_white_logo.webp"
               alt="brand"
               className="h-full w-full object-cover"
             />
-          </div>
+          </div> */}
           <Typography variant="h5" color="white">
-            Sooprs 
+            Spotser  
           </Typography>
         </div>
         <List>
@@ -78,7 +78,7 @@ useEffect(() => {
             layout === "dashboard"
               ? pages.map(({ name, path, icon, subPages }) => (
                 
-                   accessTo.includes(path.substring(1)) && <div key={path}>
+                 <div key={path}>
                     <NavLink
                       to={subPages ? "#" : path} // Prevents navigation for "All Users"
                       className={({ isActive }) =>

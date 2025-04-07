@@ -283,7 +283,7 @@ margin:0; /* Remove default browser margins (header/footer) */
             <span className="font-semibold">Account Type:</span> Current
           </p>
           <p>
-            <span className="font-semibold">Bank:</span> Kotak Bank
+            <span className="font-semibold">Bank:</span> ICIC Bank
           </p>
         </div>
         <div>

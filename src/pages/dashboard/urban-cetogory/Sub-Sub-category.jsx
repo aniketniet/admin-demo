@@ -13,6 +13,7 @@ import Select from "react-select";
 import axios from "axios";
 import Cookies from "js-cookie";
 import CustomTable from "../../../components/CustomTable";
+import Toaster, { showSuccessToast, showErrorToast } from "../../../components/Toaster";
 import { TrashIcon } from "@heroicons/react/24/solid";
 // import { set } from "lodash";
 // import { ca } from "date-fns/locale";
@@ -37,7 +38,7 @@ const SubSubCategory = () => {
     if (!token) return;
     try {
       const { data } = await axios.get(
-        `${import.meta.env.VITE_BASE_URL_SOOPRS}/get-categories`,
+        `${import.meta.env.VITE_BASE_URL}/admin/get-categories`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -56,7 +57,7 @@ const SubSubCategory = () => {
   
     try {
       const { data } = await axios.get(
-        `${import.meta.env.VITE_BASE_URL_SOOPRS}/get-sub-categories/${
+        `${import.meta.env.VITE_BASE_URL}/admin/get-sub-categories/${
           mainCategoryId ? `${mainCategoryId?.value}` : "0"
         }`,
         {
@@ -76,7 +77,7 @@ const SubSubCategory = () => {
     if (!token) return;
     try {
       const { data } = await axios.get(
-        `${import.meta.env.VITE_BASE_URL_SOOPRS}/get-sub-sub-categories/${
+        `${import.meta.env.VITE_BASE_URL}/admin/get-sub-sub-categories/${
           subCategoryId ? `/${subCategoryId}` : "0"
         }`,
         {
@@ -104,6 +105,23 @@ const SubSubCategory = () => {
   };
 
   const handleSubCategorySubmit = async () => {
+    if (!mainCategoryId) {
+      showErrorToast("Main category is required");
+      return;
+    }
+    if (!subCategoryId) {
+      showErrorToast("Subcategory is required");
+      return;
+    }
+    if (!subCategory) {
+      showErrorToast("Sub-subcategory name is required");
+      return;
+    }
+    if (!image) {
+      showErrorToast("Image is required");
+      return;
+    }
+
     setLoadingSubmit(true);
     try {
       const formData = new FormData();
@@ -114,7 +132,7 @@ const SubSubCategory = () => {
       if (image) formData.append("image", image);
 
       await axios.post(
-        `${import.meta.env.VITE_BASE_URL_SOOPRS}/create-sub-sub-category`,
+        `${import.meta.env.VITE_BASE_URL}/admin/create-sub-sub-category`,
         formData,
         {
           headers: {
@@ -123,6 +141,7 @@ const SubSubCategory = () => {
           },
         }
       );
+      showSuccessToast("Sub-subcategory added successfully");
 
       fetchsubSubCategories(); // Refresh table
       setsubCategoryId(null);
@@ -130,9 +149,11 @@ const SubSubCategory = () => {
       setSubCategory("");
       setImage(null);
     } catch (error) {
+      showErrorToast("Failed to add sub-subcategory");
       console.error("Error submitting subcategory:", error);
     } finally {
       setLoadingSubmit(false);
+
     }
   };
 
@@ -141,38 +162,49 @@ const SubSubCategory = () => {
   const handleStatusToggle = async (id, status) => {
     try {
       await axios.put(
-        `${import.meta.env.VITE_BASE_URL_SOOPRS}/sub-sub-category-status`,
+        `${import.meta.env.VITE_BASE_URL}/admin/sub-sub-category-status`,
         { id, status: status ? 1 : 0 },
         {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
+      showSuccessToast("Status updated successfully");
       fetchsubSubCategories();
     } catch (error) {
+      showErrorToast("Failed to update status");
       console.error("Error updating status:", error);
     }
   };
 
   const handleDelete = async (id) => {
+   
+    if (!window.confirm("Are you sure you want to delete this subcategory?")) {
+      return;
+    }
+
     console.log(id, "id");
     const token = Cookies.get("token");
     if (!token) {
+      // Handle the case where the token is not available (e.g., user not authenticated)
+      showErrorToast("User not authenticated. Please log in.");
       console.error("No token found. User may not be authenticated.");
       return;
     }
 
     try {
-      console.log(token, id, "i");
+      // console.log(token, id, "i");
 
       await axios.post(
-        `${import.meta.env.VITE_BASE_URL_SOOPRS}/delete-sub-sub-category`,
+        `${import.meta.env.VITE_BASE_URL}/admin/delete-sub-sub-category`,
         { id },
         {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
+      showSuccessToast("Sub-sub-category deleted successfully");
       fetchsubSubCategories();
     } catch (error) {
+      showErrorToast("Failed to delete sub-sub-category");
       console.error("Error deleting subcategory:", error);
     }
   };
@@ -227,12 +259,15 @@ const SubSubCategory = () => {
   ];
 
   return (
+    <>
+    <Toaster />
     <div className="flex flex-col lg:flex-row gap-6 mt-10 px-4">
       {/* Left Side - Form */}
       <Card className="p-4 w-full lg:w-1/3 shadow-lg">
         <Typography variant="h5" className="mb-4 text-center">
           Add Sub-Sub-category
         </Typography>
+    
         <CardBody className="space-y-4">
           {/* Main Category Selection */}
           <Select
@@ -307,6 +342,7 @@ const SubSubCategory = () => {
         </CardBody>
       </Card>
     </div>
+    </>
   );
 };
 

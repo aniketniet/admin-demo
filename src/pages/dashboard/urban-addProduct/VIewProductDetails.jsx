@@ -11,18 +11,19 @@ const ViewProductDetails = () => {
 
   const { id } = useParams();
   const productId = parseInt(id);
-      // Fetch product details by ID
+  // Fetch product details by ID
 
   useEffect(() => {
     const fetchDetailProducts = async () => {
       // setLoading(true);
       try {
         const { data } = await axios.get(
-          `${import.meta.env.VITE_BASE_URL}/product/${productId}`,
+          `${import.meta.env.VITE_BASE_URL}/admin/product/${productId}`,
           {
             headers: { Authorization: `Bearer ${token}` },
           }
         );
+        console.log("Product Details:", data.data.descriptions);
         setProduct(data.data);
       } catch (error) {
         console.error("Error fetching products:", error);
@@ -36,7 +37,12 @@ const ViewProductDetails = () => {
 
   const handleDelete = async () => {
     try {
-      await axios.delete(`${import.meta.env.VITE_BASE_URL}/delete/${productId}`);
+      await axios.delete(
+        `${import.meta.env.VITE_BASE_URL}/admin/delete-product/${productId}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
       alert("Product deleted successfully");
       setProduct(null);
     } catch (error) {
@@ -51,55 +57,86 @@ const ViewProductDetails = () => {
       {/* Product Image & Details */}
       <div className="mb-6 flex-1">
         <div className="h-64">
-          <img  src={`${import.meta.env.VITE_BASE_URL_IMAGE}${product.image}`} alt={product.title} className="w-full h-full object-cover rounded-lg" />
+          <img
+            src={`${import.meta.env.VITE_BASE_URL_IMAGE}${product.image}`}
+            alt={product.title}
+            className="w-full h-full object-cover rounded-lg"
+          />
         </div>
         <div className="mt-4">
           <h2 className="text-xl font-bold">{product.title}</h2>
           <p className="text-gray-500">Category ID: {product.category_id}</p>
           <p className="text-gray-500">Quantity: {product.quantity}</p>
-          <p className="text-lg font-semibold text-blue-600">Price: {product.price}</p>
+          <p className="text-lg font-semibold text-blue-600">
+            Price: {product.price}
+          </p>
         </div>
       </div>
 
       <div className="flex-2">
-
-      {/* Descriptions */}
-      <div className="mb-6">
-        <h3 className="text-xl font-semibold mb-2">Descriptions</h3>
-        <div className="space-y-4">
-          {product.descriptions.map((desc, index) => (
-            <div key={index} className="p-4 bg-gray-100 rounded-lg">
-              {desc.heading && <h4 className="text-lg font-semibold">{desc.heading}</h4>}
-              {desc.details.map((detail, idx) => (
-                <div key={idx} className="mt-2">
-                  <p className="text-gray-700">{detail.title && <strong>{detail.title}: </strong>} {detail.desc || detail.detail}</p>
-                  {detail.image && <img src={`${import.meta.env.VITE_BASE_URL_IMAGE}${detail.image}`} alt="desc" className="w-24 h-24 mt-2 rounded-lg" />}
-                </div>
-              ))}
-            </div>
-          ))}
+        {/* Descriptions */}
+        <div className="mb-6">
+          <h3 className="text-xl font-semibold mb-2">Descriptions</h3>
+          <div className="space-y-4">
+            {product.descriptions.map((desc, index) => (
+              <div key={index} className="p-4 bg-gray-100 rounded-lg">
+                {desc.heading && (
+                  <h4 className="text-lg font-semibold">{desc.heading}</h4>
+                )}
+                {desc.details && Array.isArray(desc.details) ? (
+                  desc.details.map((detail, idx) => (
+                    <div key={idx} className="mt-2">
+                      <p className="text-gray-700">
+                        {detail.title && <strong>{detail.title}: </strong>}{" "}
+                        {detail.desc || detail.detail}
+                      </p>
+                      {detail.image && (
+                        <img
+                          src={`${import.meta.env.VITE_BASE_URL_IMAGE}${
+                            detail.image
+                          }`}
+                          alt="desc"
+                          className="w-24 h-24 mt-2 rounded-lg"
+                        />
+                      )}
+                    </div>
+                  ))
+                ) : (
+                  <p className="text-gray-500">No details available</p>
+                )}
+              </div>
+            ))}
+          </div>
         </div>
-      </div>
 
-      {/* FAQs */}
-      <div className="mb-6">
-        <h3 className="text-xl font-semibold mb-2">FAQs</h3>
-        <div className="space-y-4">
-          {product.faqs.map((faq, index) => (
-            <div key={index} className="p-4 border rounded-lg">
-              <h4 className="font-semibold">{faq.question}</h4>
-              <p className="text-gray-700">{faq.answer}</p>
-              {faq.image && <img src={faq.image} alt="faq" className="w-24 h-24 mt-2 rounded-lg" />}
-            </div>
-          ))}
+        {/* FAQs */}
+        <div className="mb-6">
+          <h3 className="text-xl font-semibold mb-2">FAQs</h3>
+          <div className="space-y-4">
+            {product.faqs.map((faq, index) => (
+              <div key={index} className="p-4 border rounded-lg">
+                <h4 className="font-semibold">{faq.question}</h4>
+                <p className="text-gray-700">{faq.answer}</p>
+                {faq.image && (
+                  <img
+                    src={faq.image}
+                    alt="faq"
+                    className="w-24 h-24 mt-2 rounded-lg"
+                  />
+                )}
+              </div>
+            ))}
+          </div>
         </div>
-      </div>
 
-      {/* Delete Button */}
-      <Button onClick={handleDelete} className="bg-red-500 text-white flex items-center gap-2">
-        <Trash2 size={20} />
-        Delete Product
-      </Button>
+        {/* Delete Button */}
+        <Button
+          onClick={handleDelete}
+          className="bg-red-500 text-white flex items-center gap-2"
+        >
+          <Trash2 size={20} />
+          Delete Product
+        </Button>
       </div>
     </div>
   );

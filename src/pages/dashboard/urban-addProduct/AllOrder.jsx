@@ -118,117 +118,77 @@ function AllOrder() {
   };
 
   const columns = [
- 
     {
-        key: "id",
-        label: "Order ID",
-        render: (row) => <div title={row.id}>{row.id || "N/A"}</div>,
-        
-        width: "w-52",
-      },
-      {
-        key: "username",
-        label: "Username",
-        render: (row) => <div title={row.username}>{row.username || "N/A"}</div>, 
-        width: "w-52",
-      },
+      key: "id",
+      label: "Order ID",
+      render: (row) => <div title={row.id}>{row.id || "N/A"}</div>,
+      width: "w-52",
+    },
     {
-        key: "email",
-        label: "Email",
-        render: (row) => <div title={row.email}>{row.email || "N/A"}</div>,
-   
-        
-        width: "w-52",
-      },
-  
+      key: "date",
+      label: "Date",
+      render: (row) => <div title={row.date}>{row.date || "N/A"}</div>,
+      width: "w-52",
+    },
+    {
+      key: "username",
+      label: "Username",
+      render: (row) => <div title={row.username}>{row.username || "N/A"}</div>,
+      width: "w-52",
+    },
+    {
+      key: "email",
+      label: "Email",
+      render: (row) => <div title={row.email}>{row.email || "N/A"}</div>,
+      width: "w-52",
+    },
     {
       key: "cart_id",
       label: "Cart ID",
       render: (row) => <div title={row.cart_id}>{row.cart_id || "N/A"}</div>,
       width: "w-52",
     },
-    
     {
       key: "time_slot_id",
       label: "Time Slot ID",
       render: (row) => <div title={row.time_slot_id}>{row.time_slot_id || "N/A"}</div>,
-      
       width: "w-48",
     },
     {
-      key: "payment_id",
-      label: "Payment ID",
-      render: (row) => <div title={row.payment_id}>{row.payment_id || "N/A"}</div>,
-      
-      
-      width: "w-48",
-    },
-    {
-      key: "status",
+      key: "order_status",
       label: "Status",
-      render: (row) => (
-        <div className="w-10/12">
-          <Typography
-            variant="small"
-            className="mb-1 block text-xs font-medium text-blue-gray-600"
-          >
-            {row.status ? "Active" : "Not Active"}
-          </Typography>
-          <Progress
-            value={row.status ? 100 : 50}
-            variant="gradient"
-            color={row.status ? "green" : "red"}
-            className="h-1"
-          />
-        </div>
-      ),
-      width: "w-32",
-    },
-    // {
-    //   key: "membership",
-    //   label: "Membership",
-    //   render: (row) => (
-    //     <div className="w-10/12 flex items-center justify-center space-x-2">
-    //       <Typography
-    //         variant="small"
-    //         className="mb-1 block text-xs font-medium"
-    //       >
-    //         {row.is_subscriber ? (
-    //           <CheckCircleIcon className="w-5 h-5 text-green-600" />
-    //         ) : (
-    //           <XCircleIcon className="w-5 h-5 text-red-600" />
-    //         )}
-    //       </Typography>
-    //       {/* <Progress value={row.is_subscriber ? 100 : 50} variant="gradient" color={row.is_subscriber ? "green" : "red"} className="h-1" /> */}
-    //     </div>
-    //   ),
-    //   width: "w-32",
-    // },
-    // {
-    //   key: "agency",
-    //   label: "Agency",
-    //   render: (row) => (
-    //     <div className="w-10/12 flex items-center space-x-2">
-    //       <Typography
-    //         variant="small"
-    //         className="mb-1 block text-xs font-medium"
-    //       >
-    //         {row.is_company ? (
-    //           <CheckCircleIcon className="w-5 h-5 text-blue-600" />
-    //         ) : (
-    //           <XCircleIcon className="w-5 h-5 text-red-600" />
-    //         )}
-    //       </Typography>
-    //       {/* <Progress value={row.is_company ? 100 : 50} variant="gradient" color={row.is_company ? "blue" : "red"} className="h-1" /> */}
-    //     </div>
-    //   ),
-    //   width: "w-32",
-    // },
-    {
-      key: "address",
-      label: "Address",
-      render: (row) => <div>{row.address}</div>,
-      
+      render: (row) => {
+        let statusText = "Not Assigned";
+        let progressValue = 50;
+        let progressColor = "red";
+
+        if (row.order_status === 1) {
+          statusText = "Partial Assigned";
+          progressValue = 50;
+          progressColor = "yellow";
+        } else if (row.order_status === 2) {
+          statusText = "Complete Assigned";
+          progressValue = 100;
+          progressColor = "green";
+        }
+
+        return (
+          <div className="w-10/12">
+            <Typography
+              variant="small"
+              className="mb-1 block text-xs font-medium text-blue-gray-600"
+            >
+              {statusText}
+            </Typography>
+            <Progress
+              value={progressValue}
+              variant="gradient"
+              color={progressColor}
+              className="h-1"
+            />
+          </div>
+        );
+      },
       width: "w-32",
     },
     {
@@ -243,12 +203,9 @@ function AllOrder() {
       render: (row) => (
         <div className="px-4 py-2 flex gap-2">
           <Tooltip content="Edit">
-             <button onClick={() => handleEdit(row.id)}>
+            <button onClick={() => handleEdit(row.id)}>
               <PencilIcon className="h-5 w-5 text-blue-500" />
-            </button> 
-            {/* <button>
-              <PencilIcon className="h-5 w-5 text-blue-500" />
-            </button> */}
+            </button>
           </Tooltip>
           <Tooltip content="Delete">
             <button onClick={() => handleDelete(row.id)}>
@@ -258,7 +215,7 @@ function AllOrder() {
         </div>
       ),
       width: "w-32",
-    }
+    },
   ];
 
   return (

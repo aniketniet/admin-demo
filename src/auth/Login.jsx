@@ -17,23 +17,22 @@ const Login = () => {
     }
 
     try {
-      // const formData = new URLSearchParams();
-      // formData.append("email", email);
-      // formData.append("password", password);
+      const formData = new URLSearchParams();
+      formData.append("email", email);
+      formData.append("password", password);
 
       const res = await axios.post(
-        `${import.meta.env.VITE_BASE_URL}/auth/login`,
-        { email: email, password: password },
+        `${import.meta.env.VITE_BASE_URL}/public/admin-login`,
+        formData,
         {
+          headers: { "Content-Type": "application/x-www-form-urlencoded" },
           withCredentials: true, // Ensure cookies are included
         }
       );
-
+      console.log("Response:", res.data);
       if (res.data.success) {
         console.log("Login Success");
-        const token = res.data.data.token;
-        const user = res.data.data.user;
-
+        const token = res.data.token;
 
         // Store the token in cookies
         Cookies.set("token", token, {
@@ -41,10 +40,6 @@ const Login = () => {
           secure: false,
           sameSite: "Strict",
         });
-        Cookies.set("user", JSON.stringify(user), { expires: 7 });
-        const permissions = user.permissions
-        console.log("permissions",permissions);
-        Cookies.set("permissions", JSON.stringify(permissions), { expires: 7 });
         console.log("cookies set");
 
         // Redirect to dashboard
@@ -66,9 +61,12 @@ const Login = () => {
       <div className="lg:w-1/2 xl:max-w-screen-sm">
         <div className="py-12 bg-indigo-100 lg:bg-white flex justify-center lg:justify-start lg:px-12">
           <div className="cursor-pointer flex items-center">
-            <div className="w-32 h-4 text-indigo-800 tracking-wide ml-2 font-semibold">
+            {/* <div className="w-32 h-4 text-indigo-800 tracking-wide ml-2 font-semibold">
               <img src="https://sooprs.com/images/sooprs_logo.png" alt="Logo" />
-            </div>
+            </div> */}
+            <div className=" text-3xl text-indigo-800 tracking-wide ml-2 font-semibold">
+            Spotser Admin
+              </div>
           </div>
         </div>
         <div className="mt-10 px-12 sm:px-24 md:px-48 lg:px-12 xl:px-24 xl:max-w-2xl">
@@ -94,12 +92,6 @@ const Login = () => {
                 <label className="text-sm font-bold text-gray-700">
                   Password
                 </label>
-                <a
-                  href="#"
-                  className="text-xs font-semibold text-indigo-600 hover:text-indigo-800 cursor-pointer"
-                >
-                  Forgot Password?
-                </a>
               </div>
               <input
                 className="w-full text-lg py-2 border-b border-gray-300 focus:outline-none focus:border-indigo-500"
@@ -113,21 +105,13 @@ const Login = () => {
             <div className="mt-10">
               <button
                 type="submit"
-                className="bg-indigo-500 text-gray-100 p-4 w-full rounded-full tracking-wide font-semibold hover:bg-indigo-600 shadow-lg"
+                className="bg-gradient-to-br from-gray-800 to-gray-900 text-gray-100 p-4 w-full rounded-full tracking-wide font-semibold hover:bg-indigo-600 shadow-lg"
               >
                 Log In
               </button>
             </div>
           </form>
-          <div className="mt-12 text-sm text-gray-700 text-center">
-            Don&apos;t have an account?{" "}
-            <a
-              href="#"
-              className="cursor-pointer text-indigo-600 hover:text-indigo-800"
-            >
-              Sign up
-            </a>
-          </div>
+        
         </div>
       </div>
       <div className="hidden lg:flex items-center justify-center bg-indigo-100 flex-1 h-screen">

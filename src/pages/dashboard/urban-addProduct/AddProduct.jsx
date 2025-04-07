@@ -16,6 +16,8 @@ import Toaster, {
 } from "@/components/Toaster";
 import CustomTable from "@/components/CustomTable";
 import { PlusCircleIcon, TrashIcon, ViewfinderCircleIcon } from "@heroicons/react/24/solid";
+
+
 import { Link } from "react-router-dom";
 
 function AddProduct() {
@@ -44,7 +46,7 @@ function AddProduct() {
     setLoading(true);
     try {
       const { data } = await axios.get(
-        `${import.meta.env.VITE_BASE_URL_SOOPRS}/get-products`,
+        `${import.meta.env.VITE_BASE_URL}/admin/get-products`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -62,7 +64,7 @@ function AddProduct() {
     if (!token) return;
     try {
       const { data } = await axios.get(
-        `${import.meta.env.VITE_BASE_URL_SOOPRS}/get-categories`,
+        `${import.meta.env.VITE_BASE_URL}/admin/get-categories`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -81,7 +83,7 @@ function AddProduct() {
       if (!token || !categoryId) return;
       try {
         const { data } = await axios.get(
-          `${import.meta.env.VITE_BASE_URL_SOOPRS}/get-sub-categories/${
+          `${import.meta.env.VITE_BASE_URL}/admin/get-sub-categories/${
             categoryId ? categoryId : 0
           }`,
           { headers: { Authorization: `Bearer ${token}` } }
@@ -103,8 +105,8 @@ function AddProduct() {
       try {
         const { data } = await axios.get(
           `${
-            import.meta.env.VITE_BASE_URL_SOOPRS
-          }/get-sub-sub-categories/${subCategoryId}`,
+            import.meta.env.VITE_BASE_URL
+          }/admin/get-sub-sub-categories/${subCategoryId}`,
           { headers: { Authorization: `Bearer ${token}` } }
         );
         setSubSubCategories(data.data); // Only set related sub-subcategories
@@ -154,6 +156,50 @@ function AddProduct() {
   };
 
   const handleSubmit = async (e) => {
+
+    if (!product.image) {
+      showErrorToast("Please select an image");
+      return;
+    }
+    if (!product.title) {
+      showErrorToast("Product title is required");
+      return;
+    }
+    if (!product.quantity) {
+      showErrorToast("Product quantity is required");
+
+      return;
+    }
+    if (!product.price) {
+      showErrorToast("Product price is required");
+      return;
+    }
+    if (!product.categoryId) {
+      showErrorToast("Please select a category");
+      return;
+    }
+    if (!product.subCategoryId) {
+      showErrorToast("Please select a subcategory");
+      return;
+    }
+    if (!product.subSubCategoryId) {
+      showErrorToast("Please select a sub-subcategory");
+      return;
+    }
+    if (product.quantity <= 0) {
+      showErrorToast("Quantity must be greater than 0");
+      return;
+    }
+    if (product.price <= 0) {
+      showErrorToast("Price must be greater than 0");
+      return;
+    }
+    if (product.title.length < 3) {
+      showErrorToast("Product title must be at least 3 characters long");
+      return;
+    }
+    
+
     e.preventDefault();
     try {
       const formData = new FormData();
@@ -166,7 +212,7 @@ function AddProduct() {
       formData.append("subSubCategoryId", product.subSubCategoryId?.value);
 
       await axios.post(
-        `${import.meta.env.VITE_BASE_URL_SOOPRS}/create-product`,
+        `${import.meta.env.VITE_BASE_URL}/admin/create-product`,
         formData,
         {
           headers: {
@@ -196,9 +242,8 @@ function AddProduct() {
 
   const handleDelete = async (id) => {
     try {
-      await axios.post(
-        `${import.meta.env.VITE_BASE_URL}/delete-product`,
-        { id },
+      await axios.delete(
+        `${import.meta.env.VITE_BASE_URL}/admin/delete-product/${id}`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
       fetchProducts();

@@ -14,6 +14,8 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import CustomTable from "../../../components/CustomTable";
 import { TrashIcon } from "@heroicons/react/24/solid";
+import Toaster, { showSuccessToast, showErrorToast } from "../../../components/Toaster";
+// import { sub } from "date-fns";
 
 const SubCategory = () => {
   const [subCategories, setSubCategories] = useState([]);
@@ -31,13 +33,14 @@ const SubCategory = () => {
     if (!token) return;
     try {
       const { data } = await axios.get(
-        `${import.meta.env.VITE_BASE_URL_SOOPRS}/get-categories`,
+        `${import.meta.env.VITE_BASE_URL}/admin/get-categories`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
       setMainCategories(data.data);
     } catch (error) {
+      showErrorToast(error.response?.data?.message || "Failed to fetch categories");
       console.error("Error fetching categories:", error);
     } finally {
       setLoading(false);
@@ -49,7 +52,7 @@ const SubCategory = () => {
     if (!token) return;
     try {
       const { data } = await axios.get(
-        `${import.meta.env.VITE_BASE_URL_SOOPRS}/get-sub-categories/${
+        `${import.meta.env.VITE_BASE_URL}/admin/get-sub-categories/${
           categoryId ? categoryId : 0
         }`,
         {
@@ -58,6 +61,7 @@ const SubCategory = () => {
       );
       setSubCategories(data.data);
     } catch (error) {
+      showErrorToast(error.response?.data?.message || "Failed to fetch subcategories");
       console.error("Error fetching subcategories:", error);
     } finally {
       setLoading(false);
@@ -76,6 +80,24 @@ const SubCategory = () => {
   };
 
   const handleSubCategorySubmit = async () => {
+
+
+    if (!mainCategoryId) {
+
+      showErrorToast("Please select a main category");
+      return;
+    }
+    if (!subCategory) {
+      showErrorToast("Subcategory name is required");
+      console.error("Subcategory name is required");
+      return;
+    }
+    if (!image) {
+      showErrorToast("Image is required");
+      console.error("Image is required");
+      return;
+    }
+
     setLoadingSubmit(true);
     try {
       const formData = new FormData();
@@ -84,7 +106,7 @@ const SubCategory = () => {
       if (image) formData.append("image", image);
 
       await axios.post(
-        `${import.meta.env.VITE_BASE_URL_SOOPRS}/create-sub-category`,
+        `${import.meta.env.VITE_BASE_URL}/admin/create-sub-category`,
         formData,
         {
           headers: {
@@ -93,6 +115,7 @@ const SubCategory = () => {
           },
         }
       );
+      showSuccessToast("Subcategory added successfully");
 
       fetchSubCategories(); // Refresh table
       setMainCategoryId(null);
@@ -101,6 +124,7 @@ const SubCategory = () => {
       null;
       setImage(null);
     } catch (error) {
+      showErrorToast(error.response?.data?.message || "Failed to add subcategory");
       console.error("Error submitting subcategory:", error);
     } finally {
       setLoadingSubmit(false);
@@ -110,20 +134,26 @@ const SubCategory = () => {
   const handleStatusToggle = async (id, status) => {
     try {
       await axios.put(
-        `${import.meta.env.VITE_BASE_URL_SOOPRS}/sub-category-status`,
+        `${import.meta.env.VITE_BASE_URL}/admin/sub-category-status`,
         { id, status: status ? 1 : 0 },
         {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
+      showSuccessToast("Subcategory status updated successfully");
       fetchSubCategories();
     } catch (error) {
+      showErrorToast(error.response?.data?.message || "Failed to update status");
       console.error("Error updating status:", error);
     }
   };
 
   const handleDelete = async (id) => {
-    console.log(id, "id");
+    // console.log(id, "id");
+    if (!window.confirm("Are you sure you want to delete this subcategory?")) {
+      return;
+    }
+
     if (!token) {
       console.error("No token found. User may not be authenticated.");
       return;
@@ -131,14 +161,16 @@ const SubCategory = () => {
 
     try {
       await axios.post(
-        "https://t5bdtk0b-3004.inc1.devtunnels.ms/api/delete-sub-category",
+        `${import.meta.env.VITE_BASE_URL}/admin/delete-sub-category`,
         { id: id },
         {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
+      showSuccessToast("Subcategory deleted successfully");
       fetchSubCategories();
     } catch (error) {
+      showErrorToast(error.response?.data?.message || "Failed to delete subcategory");
       console.error("Error deleting subcategory:", error);
     }
   };
@@ -187,6 +219,8 @@ const SubCategory = () => {
   ];
 
   return (
+    <>
+    <Toaster />
     <div className="flex flex-col lg:flex-row gap-6 mt-10 px-4">
       {/* Left Side - Form */}
       <Card className="p-4 w-full lg:w-1/3 shadow-lg">
@@ -257,6 +291,7 @@ const SubCategory = () => {
         </CardBody>
       </Card>
     </div>
+    </>
   );
 };
 

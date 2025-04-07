@@ -68,12 +68,12 @@ export function DashboardNavbar({ isOpen, setIsOpen }) {
           </Typography>
         </div>
         <div className="flex items-center">
-          <div className="mr-auto md:mr-4 md:w-56">
+          {/* <div className="mr-auto md:mr-4 md:w-56">
             <Input
               label="Search"
               className="border border-gray-500 !border-t-gray-500 focus:!border-gray-700 px-3 py-2 focus:border-t-0 focus:outline-none focus:ring-0"
             />
-          </div>
+          </div> */}
           <IconButton
             variant="text"
             color="gray"

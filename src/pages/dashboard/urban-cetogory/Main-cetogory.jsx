@@ -30,7 +30,7 @@ const MainCategory = () => {
     if (!token) return;
     try {
       const { data } = await axios.get(
-        `${import.meta.env.VITE_BASE_URL_SOOPRS}/get-categories` ,
+        `${import.meta.env.VITE_BASE_URL}/admin/get-categories` ,
         { headers: { Authorization: `Bearer ${token}` } }
       );
       setLeads(data.data);
@@ -59,7 +59,7 @@ const MainCategory = () => {
       if (image) formData.append("image", image);
 
       await axios.post(
-        `${import.meta.env.VITE_BASE_URL_SOOPRS}/create-category`,
+        `${import.meta.env.VITE_BASE_URL}/admin/create-category`,
         formData,
         {
           headers: {
@@ -85,7 +85,7 @@ const MainCategory = () => {
     try {
       const newStatus = currentStatus === 1 ? 0 : 1;
       await axios.put(
-        `${import.meta.env.VITE_BASE_URL_SOOPRS}/category-status`,
+        `${import.meta.env.VITE_BASE_URL}/admin/category-status`,
         { status: newStatus,
           id: id
          },
@@ -119,7 +119,7 @@ const MainCategory = () => {
         console.log(token, id, 'i');
         
       await axios.post(
-        `${import.meta.env.VITE_BASE_URL_SOOPRS}/delete-category`,
+        `${import.meta.env.VITE_BASE_URL}/delete-category`,
         { id },
         {
           headers: { Authorization: `Bearer ${token}` },

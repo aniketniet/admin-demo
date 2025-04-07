@@ -38,7 +38,7 @@ function AddDescription() {
 
     try {
       const { data } = await axios.post(
-        `${import.meta.env.VITE_BASE_URL_SOOPRS}/upload`,
+        `${import.meta.env.VITE_BASE_URL}/admin/upload`,
         formData,
         {
           headers: {
@@ -118,7 +118,7 @@ function AddDescription() {
 
     try {
       await axios.post(
-        `${import.meta.env.VITE_BASE_URL_SOOPRS}/add-description`,
+        `${import.meta.env.VITE_BASE_URL}/admin/add-description`,
         {
           productId,
           heading: product.heading,
@@ -147,7 +147,7 @@ function AddDescription() {
 
     try {
       await axios.post(
-        `${import.meta.env.VITE_BASE_URL_SOOPRS}/add-faq`,
+        `${import.meta.env.VITE_BASE_URL}/admin/add-faq`,
         {
           productId: parseInt(productId, 10),
           faqs: product.faq,
