@@ -38,6 +38,7 @@ import SubSubCategory from "@/pages/dashboard/urban-cetogory/Sub-Sub-category";
 import AddProduct from "@/pages/dashboard/urban-addProduct/AddProduct";
 import AllOrder from "@/pages/dashboard/urban-addProduct/AllOrder";
 import BannerManager from "@/pages/dashboard/BannerManager";
+import Vendors from "@/pages/dashboard/vendor/Vendor";
 // import AddProduct from "@/pages/dashboard/urban-addProduct/AddProduct";
 
 // import Qr from "@/pages/Qr";
@@ -64,6 +65,16 @@ export const routes = [
         element: (
           <PrivateRoute>
             <Leads />
+          </PrivateRoute>
+        ),
+      },
+      {
+        icon: <ArchiveBoxArrowDownIcon className={iconClass} />,
+        name: "All Vendors",
+        path: "/all-vendors", // Fixed path
+        element: (
+          <PrivateRoute>
+            <Vendors />
           </PrivateRoute>
         ),
       },
