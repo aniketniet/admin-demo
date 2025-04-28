@@ -99,6 +99,7 @@ const BannerManager = () => {
           },
         }
       );
+      
 
       showSuccessToast("Banner added successfully");
       setTitle("");

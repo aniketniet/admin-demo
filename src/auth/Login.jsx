@@ -17,22 +17,29 @@ const Login = () => {
     }
 
     try {
-      const formData = new URLSearchParams();
-      formData.append("email", email);
-      formData.append("password", password);
+      // const formData = new URLSearchParams();
+
+      // formData.append("email", email);
+      // formData.append("password", password);
+
+      const payload = {
+        email: email,
+        password: password,
+      };
 
       const res = await axios.post(
-        `${import.meta.env.VITE_BASE_URL}/public/admin-login`,
-        formData,
+        `${import.meta.env.VITE_BASE_URL}/auth/admin/login`,
+        // formData,
+        payload,
         {
-          headers: { "Content-Type": "application/x-www-form-urlencoded" },
+          headers: { "Content-Type": "application/json" },
           withCredentials: true, // Ensure cookies are included
         }
       );
       console.log("Response:", res.data);
-      if (res.data.success) {
+      if (res.data.status === 200) {
         console.log("Login Success");
-        const token = res.data.token;
+        const token = res.data.data.token;
 
         // Store the token in cookies
         Cookies.set("token", token, {
@@ -65,7 +72,7 @@ const Login = () => {
               <img src="https://sooprs.com/images/sooprs_logo.png" alt="Logo" />
             </div> */}
             <div className=" text-3xl text-indigo-800 tracking-wide ml-2 font-semibold">
-            Spotser Admin
+            Stanley Admin
               </div>
           </div>
         </div>

@@ -18,7 +18,7 @@ import { PencilIcon, PlusCircleIcon, TrashIcon } from "@heroicons/react/24/solid
 
 import AddCustomBid from "./addCustomBid";
 
-function Leads() {
+function Users() {
   const [leads, setLeads] = useState([]);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
@@ -61,25 +61,20 @@ function Leads() {
     async (page) => {
       if (!token) return;
   
-      const body = new URLSearchParams();
-      body.append("page", page);
-      body.append("limit", 10);
-  
       setLoading(true);
       try {
-        const { data } = await axios.post(
-          `${import.meta.env.VITE_BASE_URL}/admin/get-all-users`,
-          body,
+        const { data } = await axios.get(
+          `${import.meta.env.VITE_BASE_URL}/admin/users?page=${page}&limit=10`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
-              "Content-Type": "application/x-www-form-urlencoded",
+              "Content-Type": "application/json",
             },
           }
         );
-        console.log("leads", data.data);
-        setLeads(data.data);
-        setTotalPages(data.pagination.totalPages);
+        console.log("leads", data.users);
+        setLeads(data.users); // ← updated here
+        setTotalPages(data.meta.totalPages); // ← updated here
       } catch (error) {
         console.error("Error fetching leads:", error);
       } finally {
@@ -88,6 +83,7 @@ function Leads() {
     },
     [token]
   );
+
   
   useEffect(() => {
     if (token) fetchLeads(currentPage);
@@ -97,7 +93,7 @@ function Leads() {
 
   const deleteLead = async (id) => {
     try {
-      await axios.delete(`${import.meta.env.VITE_BASE_URL}/leads/${id}`, {
+      await axios.delete(`${import.meta.env.VITE_BASE_URL}/admin/users/delete/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setLeads(leads.filter((lead) => lead.id !== id));
@@ -112,13 +108,13 @@ function Leads() {
 
   const columns = [
     {
-      key: "profile_img",
+      key: "profilePic",
       label: "Profile",
       render: (row) => (
         <div className="w-10 h-10 rounded-full overflow-hidden">
-          {row.profile_img ? (
+          {row.profilePic ? (
             <img
-              src={`${import.meta.env.VITE_BASE_URL_IMAGE}${row.profile_img}`}
+              src={`${import.meta.env.VITE_BASE_URL_IMAGE}${row.profilePic}`}
               alt="Profile"
               className="object-cover w-full h-full"
             />
@@ -138,9 +134,9 @@ function Leads() {
       width: "w-48",
     },
     {
-      key: "mobile",
+      key: "phone",
       label: "Mobile",
-      render: (row) => <div>{row.mobile || "N/A"}</div>,
+      render: (row) => <div>{row.phone || "N/A"}</div>,
       width: "w-40",
     },
     {
@@ -149,18 +145,18 @@ function Leads() {
       render: (row) => <div>{row.email || "N/A"}</div>,
       width: "w-60",
     },
-    {
-      key: "dob",
-      label: "DOB",
-      render: (row) => <div>{row.dob || "N/A"}</div>,
-      width: "w-32",
-    },
-    {
-      key: "gender",
-      label: "Gender",
-      render: (row) => <div>{row.gender || "N/A"}</div>,
-      width: "w-32",
-    },
+    // {
+    //   key: "dob",
+    //   label: "DOB",
+    //   render: (row) => <div>{row.dob || "N/A"}</div>,
+    //   width: "w-32",
+    // },
+    // {
+    //   key: "gender",
+    //   label: "Gender",
+    //   render: (row) => <div>{row.gender || "N/A"}</div>,
+    //   width: "w-32",
+    // },
     {
       key: "actions",
       label: "Actions",
@@ -272,9 +268,9 @@ function Leads() {
         </Button>
       </CardFooter>
     
-      <AddCustomBid open={open} handleOpen={handleOpen} bidId={bidId} />
+      {/* <AddCustomBid open={open} handleOpen={handleOpen} bidId={bidId} /> */}
     </Card>
   );
 }
 
-export default Leads;
+export default Users;

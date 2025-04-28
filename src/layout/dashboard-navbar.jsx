@@ -5,7 +5,7 @@ import {
   Button,
   IconButton,
   Breadcrumbs,
-  Input,
+
   Menu,
   MenuHandler,
   MenuList,
@@ -101,7 +101,7 @@ export function DashboardNavbar({ isOpen, setIsOpen }) {
             <UserCircleIcon className="h-5 w-5 text-gray-500" />
           </IconButton>
 
-          <Menu>
+          {/* <Menu>
             <MenuHandler>
               <IconButton variant="text" color="gray">
                 <BellIcon className="h-5 w-5 text-gray-500" />
@@ -178,7 +178,7 @@ export function DashboardNavbar({ isOpen, setIsOpen }) {
                 </div>
               </MenuItem>
             </MenuList>
-          </Menu>
+          </Menu> */}
           <IconButton variant="text" color="gray">
             <Cog6ToothIcon className="h-5 w-5 text-gray-500" />
           </IconButton>

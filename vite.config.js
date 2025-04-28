@@ -8,7 +8,7 @@ export default defineConfig({
     tailwindcss(),
 
   ],
-  base:"/admin/",
+  base:"/",
   resolve: {
     alias: [{ find: "@", replacement: "/src" }],
 
