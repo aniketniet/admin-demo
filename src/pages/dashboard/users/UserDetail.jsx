@@ -4,6 +4,10 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import { Input } from "@material-tailwind/react";
 import { PhotoIcon } from "@heroicons/react/24/solid";
+ import Toaster, {
+    showSuccessToast,
+    showErrorToast,
+  } from "../../../components/Toaster";
 
 
 const UserDetail = () => {
@@ -40,6 +44,7 @@ const UserDetail = () => {
         return data?.url;
       } catch (error) {
         console.error("Error uploading file:", error);
+        showErrorToast("Failed to upload image");
         throw new Error("Failed to upload");
       }
     };
@@ -76,6 +81,7 @@ const UserDetail = () => {
         }
       } catch (error) {
         console.error("Error fetching user:", error);
+        showErrorToast("Failed to fetch user data");
       } finally {
         setLoading(false);
       }
@@ -115,12 +121,14 @@ const UserDetail = () => {
       );
 
       if (response.status === 200) {
-        alert("User profile updated successfully!");
+        // alert("User profile updated successfully!");
+        showSuccessToast("User profile updated successfully!");
         fetchUser(); // Refresh user data after update
       }
     } catch (error) {
       console.error("Error updating profile:", error);
-      alert("Failed to update user profile.");
+      showErrorToast("Failed to update user profile");
+      // alert("Failed to update user profile.");
     }
   };
 
@@ -152,14 +160,16 @@ const UserDetail = () => {
       );
      
       
-        alert("Password updated successfully!");
+        // alert("Password updated successfully!");
+        showSuccessToast("Password updated successfully!");
         setPassword("");
         setConfirmPassword("");
 
     
     } catch (error) {
       console.error("Error updating password:", error);
-      alert("Failed to update password.");
+      // alert("Failed to update password.");
+      showErrorToast("Failed to update password");
     }
   };
 
@@ -172,6 +182,7 @@ const UserDetail = () => {
 
   return (
     <>
+    <Toaster />
     <div className="p-6 max-w-3xl mx-auto border rounded-lg shadow-md bg-white">
       <h2 className="text-2xl font-semibold mb-4">Edit User</h2>
       <form

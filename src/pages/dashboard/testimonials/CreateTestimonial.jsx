@@ -26,6 +26,7 @@ import Toaster, {
 } from "../../../components/Toaster";
 import { ViewColumnsIcon } from "@heroicons/react/24/outline";
 import { useNavigate } from "react-router-dom";
+import { Eye } from "lucide-react";
 
 function CreateTestimonial() {
   const [Testimonial, setTestimonial] = useState([]);
@@ -190,9 +191,9 @@ function CreateTestimonial() {
       label: "Actions",
       render: (row) => (
         <div className="flex items-center gap-2">
-          <Tooltip content="Edit">
+          <Tooltip content="Detail">
             <button onClick={() => handleView(row.id)}>
-              <ViewColumnsIcon className="h-5 w-5 text-blue-500" />
+              <Eye className="h-5 w-5 text-blue-500" />
             </button>
           </Tooltip>
         <Tooltip content="Delete">
