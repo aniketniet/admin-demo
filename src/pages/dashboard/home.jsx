@@ -1,16 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { Typography } from "@material-tailwind/react";
-import { ArrowUpIcon, ClockIcon, QuestionMarkCircleIcon } from "@heroicons/react/24/outline";
-import {
-  BanknotesIcon,
-  UserPlusIcon,
-  UsersIcon,
-  ChartBarIcon,
-} from "@heroicons/react/24/solid";
+import { QuestionMarkCircleIcon } from "@heroicons/react/24/outline";
+import { UsersIcon } from "@heroicons/react/24/solid";
 import axios from "axios";
 import Cookies from "js-cookie";
 import { StatisticsCard } from "@/widgets/cards";
-import { StatisticsChart } from "@/widgets/charts";
+// import { StatisticsChart } from "@/widgets/charts";
 import { AudioLinesIcon, Video } from "lucide-react";
 
 export function Home() {
@@ -132,7 +127,6 @@ export function Home() {
   //     footer: "updated 1 minute ago",
   //   },
   // ] : [];
-  
 
   return (
     <div className="mt-12">

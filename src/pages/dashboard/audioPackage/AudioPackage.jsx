@@ -25,7 +25,7 @@ import Toaster, {
   showErrorToast,
 } from "../../../components/Toaster";
 import CustomTable from "../../../components/CustomTable";
-import { Eye, PencilIcon } from "lucide-react";
+import { Eye } from "lucide-react";
 import { useNavigate } from "react-router-dom"; // Import useNavigate
 
 const AudioPackage = () => {
@@ -293,7 +293,7 @@ const AudioPackage = () => {
                     const imageUrl = await uploadImgFile(file);
                     setImageFile(imageUrl);
                   } catch (error) {
-                    showErrorToast("Failed to upload image");
+                    showErrorToast("Failed to upload image", error);
                   }
                 }
               }}

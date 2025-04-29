@@ -1,4 +1,4 @@
-import  { useEffect, useState } from "react";
+import  { useCallback, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import Cookies from "js-cookie";
@@ -46,7 +46,7 @@ const UserDetail = () => {
   
 
 
-    const fetchUser = async () => {
+    const fetchUser = useCallback(async () => {
       try {
       
         if (!token) {
@@ -79,11 +79,13 @@ const UserDetail = () => {
       } finally {
         setLoading(false);
       }
-    };
+    }, [id, token]);
+
+
     useEffect(() => {
 
     fetchUser();
-  }, [id, token]); // Fetch user data when component mounts or id changes
+  }, [id, token,fetchUser]); // Fetch user data when component mounts or id changes
 
   //  handle form data change
 
@@ -254,7 +256,7 @@ const UserDetail = () => {
                     const imageUrl = await uploadImgFile(file);
                     setImageFile(imageUrl);
                   } catch (error) {
-                    console.log("Failed to upload image");
+                    console.log("Failed to upload image", error);
                   }
                 }
               }}

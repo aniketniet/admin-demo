@@ -1,13 +1,6 @@
 import { HomeIcon,  UserIcon, QuestionMarkCircleIcon } from "@heroicons/react/24/solid";
 import Home from "./src/pages/dashboard/home"; // Fixed path
-
-
-
 import PrivateRoute from "@/components/PrivateRoute";
-
-// import BannerManager from "@/pages/dashboard/BannerManager";
-// import Vendors
-//  from "@/pages/dashboard/vendor/Vendor";
 import CreateFaq from "@/pages/dashboard/Faq/CreateFaq";
 import Audiobooks from "@/pages/dashboard/audio/Audiobooks";
 import VideoBooks from "@/pages/dashboard/video/VideoBook";
@@ -55,16 +48,7 @@ export const routes = [
           </PrivateRoute>
         ),
       },
-      {
-        icon: <AudioLinesIcon className={iconClass} />,
-        name: "Free Audio Book",
-        path: "/free-audio-book", // Fixed path
-        element: (
-          <PrivateRoute>
-            <FreeAudiobooks/>
-          </PrivateRoute>
-        ),
-      },
+      
       {
         icon: <AudioLinesIcon className={iconClass} />,
         name: "Audio Package",
@@ -72,6 +56,16 @@ export const routes = [
         element: (
           <PrivateRoute>
             <AudioPackage/>
+          </PrivateRoute>
+        ),
+      },
+      {
+        icon: <AudioLinesIcon className={iconClass} />,
+        name: "Free Audio Book",
+        path: "/free-audio-book", // Fixed path
+        element: (
+          <PrivateRoute>
+            <FreeAudiobooks/>
           </PrivateRoute>
         ),
       },

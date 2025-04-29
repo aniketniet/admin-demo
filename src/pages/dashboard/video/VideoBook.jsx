@@ -229,7 +229,7 @@ import {
                       const imageUrl = await uploadFile(file);
                       setImageFile(imageUrl);
                     } catch (error) {
-                      showErrorToast("Failed to upload image");
+                      showErrorToast("Failed to upload image",error);
                     }
                   }
                 }}
