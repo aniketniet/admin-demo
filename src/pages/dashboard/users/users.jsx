@@ -14,9 +14,9 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import CustomTable from "../../../components/CustomTable";
 import { useNavigate } from "react-router-dom"; // Import useNavigate
-import { PencilIcon, PlusCircleIcon, TrashIcon } from "@heroicons/react/24/solid";
+import { PencilIcon, TrashIcon } from "@heroicons/react/24/solid";
 
-import AddCustomBid from "./addCustomBid";
+// import AddCustomBid from "./addCustomBid";
 
 function Users() {
   const [leads, setLeads] = useState([]);
@@ -24,25 +24,25 @@ function Users() {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const token = Cookies.get("token");
-  const [open, setOpen] = useState(false);
-  const [bidId, setBidId] = useState(null);
+  // const [open, setOpen] = useState(false);
+  // const [bidId, setBidId] = useState(null);
   
 
 
-  const handleOpen = (id,projectTitle,min,max) =>{
+  // const handleOpen = (id,projectTitle,min,max) =>{
 
-    const bids ={
-      id:id,
-      projectTitle:projectTitle,
-      min:min,
-      max:max
-    }
+  //   const bids ={
+  //     id:id,
+  //     projectTitle:projectTitle,
+  //     min:min,
+  //     max:max
+  //   }
 
-    setOpen(!open);
-    setBidId(bids);
+  //   setOpen(!open);
+  //   setBidId(bids);
    
 
-  } 
+  // } 
   
   // const permissions = Cookies.get("permissions");
   // const currentRoute = useLocation().pathname;

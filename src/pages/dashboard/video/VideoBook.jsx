@@ -26,7 +26,7 @@ import {
     showErrorToast,
   } from "../../../components/Toaster";
   import CustomTable from "../../../components/CustomTable";
-  import { PencilIcon } from "lucide-react";
+  import { Eye } from "lucide-react";
   import { useNavigate } from "react-router-dom";
   
   const VideoBooks = () => {
@@ -170,7 +170,7 @@ import {
           <div className="flex items-center gap-2">
             <Tooltip content="Edit">
               <button onClick={() => handleEdit(row.id)}>
-                <PencilIcon className="h-5 w-5 text-blue-500" />
+                <Eye className="h-5 w-5 text-blue-500" />
               </button>
             </Tooltip>
             <Tooltip content="Delete">

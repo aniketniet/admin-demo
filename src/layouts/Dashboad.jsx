@@ -7,6 +7,8 @@ import { useState } from "react";
 import UserDetail from "@/pages/dashboard/users/UserDetail";
 import AudiobookDetail from "@/pages/dashboard/audio/AudiobookDetail";
 import VideoDetail from "@/pages/dashboard/video/VideoDetail";
+import TestimonailDetail from "@/pages/dashboard/testimonials/TestimonialDetail";
+import AudioPackageDetail from "@/pages/dashboard/audioPackage/AudioPackageDetail";
 
 const Dashboard = () => {
   // Local state for toggling sidebar visibility on mobile
@@ -32,6 +34,8 @@ const Dashboard = () => {
           <Route path="/user-detail/:id" element={<UserDetail />} />
           <Route path="/audio-detail/:id" element={<AudiobookDetail />} />
           <Route path="/video-detail/:id" element={<VideoDetail />} />
+          <Route path="/testimonials-detail/:id" element={<TestimonailDetail />} />
+          <Route path="/audio-package-detail/:id" element={<AudioPackageDetail />} />
 
           {routes.map(({ layout, pages }) =>
             layout === "dashboard"

@@ -138,7 +138,7 @@ export function Home() {
     <div className="mt-12">
       {/* Statistics Cards */}
       <div className="mb-12 grid gap-y-10 gap-x-6 md:grid-cols-2 xl:grid-cols-4">
-        {statisticsCardsData.map(({ color, icon, title, footer, value }, index) => (
+        {statisticsCardsData.map(({ color, icon, title, value }, index) => (
           <StatisticsCard
             key={index}
             title={title}
@@ -147,12 +147,12 @@ export function Home() {
             icon={React.createElement(icon, {
               className: "w-6 h-6 text-white",
             })}
-            footer={
-              <Typography className="font-normal text-blue-gray-600">
-                <strong className={footer.color}>{footer.value}</strong>
-                &nbsp;{footer.label}
-              </Typography>
-            }
+            // footer={
+            //   <Typography className="font-normal text-blue-gray-600">
+            //     <strong className={footer.color}>{footer.value}</strong>
+            //     &nbsp;{footer.label}
+            //   </Typography>
+            // }
           />
         ))}
       </div>

@@ -25,10 +25,10 @@ import Toaster, {
   showErrorToast,
 } from "../../../components/Toaster";
 import CustomTable from "../../../components/CustomTable";
-import { Eye, PencilIcon } from "lucide-react";
+import { Eye} from "lucide-react";
 import { useNavigate } from "react-router-dom"; // Import useNavigate
 
-const Audiobooks = () => {
+const FreeAudiobooks = () => {
   const token = Cookies.get("token");
   const [audiobooks, setAudiobooks] = useState([]);
   const [imageFile, setImageFile] = useState(null);
@@ -42,7 +42,7 @@ const Audiobooks = () => {
   // Form state
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [price, setPrice] = useState("");
+ 
 
   const [creating, setCreating] = useState(false);
 
@@ -97,12 +97,12 @@ const uploadImgFile = async (file) => {
         const { data } = await axios.get(
           `${
             import.meta.env.VITE_BASE_URL
-          }/admin/audiobook?page=${page}&limit=10`,
+          }/admin/audiobook/free?page=${page}&limit=10`,
           {
             headers: { Authorization: `Bearer ${token}` },
           }
         );
-        setAudiobooks(data.audiobooks || []);
+        setAudiobooks(data.data || []);
         setTotalPages(data.meta?.totalPages || 1);
       } catch (error) {
         console.error("Error fetching audiobooks:", error);
@@ -119,7 +119,7 @@ const uploadImgFile = async (file) => {
   }, [fetchAudiobooks, currentPage]);
 
   const handleCreate = async () => {
-    if (!title || !description || !imageFile || !audioFile || !price) {
+    if (!title || !description || !imageFile || !audioFile) {
       showErrorToast("All fields are required.");
       return;
     }
@@ -135,11 +135,11 @@ const uploadImgFile = async (file) => {
 
       // Send the URLs in the create audiobook request
       await axios.post(
-        `${import.meta.env.VITE_BASE_URL}/admin/audiobook/create`,
+        `${import.meta.env.VITE_BASE_URL}/admin/audiobook/create/free`,
         {
           title,
           description,
-          price: parseFloat(price),
+          
           image: imageFile,
           audio: audioFile,
         },
@@ -156,7 +156,7 @@ const uploadImgFile = async (file) => {
       setDescription("");
       setImageFile(null);
       setAudioFile(null);
-      setPrice("");
+     
       fetchAudiobooks(currentPage);
     } catch (err) {
       console.error("Error creating audiobook:", err);
@@ -190,7 +190,6 @@ const uploadImgFile = async (file) => {
   const columns = [
     { key: "image", label: "Image", render: (row) => <img src={`${import.meta.env.VITE_BASE_URL_IMAGE}${row.image}`} alt={row.title} className="w-16 h-16 rounded" /> },
     { key: "title", label: "Title", render: (row) => `${row.title}` },
-    { key: "price", label: "Price", render: (row) => `${row.price}` },
     { key: "audio", label: "Audio", render: (row) => <audio controls src={`${import.meta.env.VITE_BASE_URL_IMAGE}${row.audio}`} /> },
   
 
@@ -260,7 +259,7 @@ const uploadImgFile = async (file) => {
                     const imageUrl = await uploadImgFile(file);
                     setImageFile(imageUrl);
                   } catch (error) {
-                    showErrorToast("Failed to upload image");
+                    showErrorToast("Failed to upload image",error);
                   }
                 }
               }}
@@ -284,12 +283,7 @@ const uploadImgFile = async (file) => {
               }}
               icon={<SpeakerWaveIcon className="h-5 w-5 text-gray-400" />}
             />
-            <Input
-              label="Price"
-              value={price}
-              type="number"
-              onChange={(e) => setPrice(e.target.value)}
-            />
+        
           </div>
         </DialogBody>
         <DialogFooter>
@@ -355,4 +349,4 @@ const uploadImgFile = async (file) => {
   );
 };
 
-export default Audiobooks;
+export default FreeAudiobooks;

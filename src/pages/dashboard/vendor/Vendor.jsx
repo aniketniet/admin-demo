@@ -14,7 +14,8 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import CustomTable from "../../../components/CustomTable";
 import { useNavigate } from "react-router-dom"; // Import useNavigate
-import { PencilIcon, TrashIcon } from "@heroicons/react/24/solid";
+import {  TrashIcon } from "@heroicons/react/24/solid";
+import { Eye } from "lucide-react";
 
 
 
@@ -168,7 +169,7 @@ function Vendors() {
         <div className="flex gap-2">
           <Tooltip content="Edit">
             <button onClick={() => handleEdit(row.id)}>
-              <PencilIcon className="h-5 w-5 text-blue-500" />
+              <Eye className="h-5 w-5 text-blue-500" />
             </button>
           </Tooltip>
           <Tooltip content="Delete">

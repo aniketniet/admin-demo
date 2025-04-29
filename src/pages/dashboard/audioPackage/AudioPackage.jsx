@@ -15,7 +15,7 @@ import {
   Tooltip,
   Typography,
 } from "@material-tailwind/react";
-import { PhotoIcon, SpeakerWaveIcon } from "@heroicons/react/24/solid";
+import { PhotoIcon } from "@heroicons/react/24/solid";
 import { TrashIcon } from "@heroicons/react/24/solid";
 import axios from "axios";
 import Cookies from "js-cookie";
@@ -28,11 +28,12 @@ import CustomTable from "../../../components/CustomTable";
 import { Eye, PencilIcon } from "lucide-react";
 import { useNavigate } from "react-router-dom"; // Import useNavigate
 
-const Audiobooks = () => {
+const AudioPackage = () => {
   const token = Cookies.get("token");
   const [audiobooks, setAudiobooks] = useState([]);
+  const [audioPackage, setAudioPackage] = useState([]);
   const [imageFile, setImageFile] = useState(null);
-  const [audioFile, setAudioFile] = useState(null);
+  const [audioFile, setAudioFile] = useState([]);
   const [loading, setLoading] = useState(true);
   const [openModal, setOpenModal] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
@@ -43,52 +44,53 @@ const Audiobooks = () => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState("");
+  const [discountPrice, setDiscountPrice] = useState("");
 
   const [creating, setCreating] = useState(false);
 
-const uploadFile = async (file) => {
-  const formData = new FormData();
-  formData.append("file", file); // fixed key here
+  // const uploadFile = async (file) => {
+  //   const formData = new FormData();
+  //   formData.append("file", file); // fixed key here
 
-  try {
-    const { data } = await axios.post(
-      `${import.meta.env.VITE_BASE_URL}/audio-upload`,
-      formData,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "multipart/form-data",
-        },
-      }
-    );
-    return data?.url;
-  } catch (error) {
-    console.error("Error uploading file:", error);
-    throw new Error("Failed to upload");
-  }
-};
+  //   try {
+  //     const { data } = await axios.post(
+  //       `${import.meta.env.VITE_BASE_URL}/audio-upload`,
+  //       formData,
+  //       {
+  //         headers: {
+  //           Authorization: `Bearer ${token}`,
+  //           "Content-Type": "multipart/form-data",
+  //         },
+  //       }
+  //     );
+  //     return data?.url;
+  //   } catch (error) {
+  //     console.error("Error uploading file:", error);
+  //     throw new Error("Failed to upload");
+  //   }
+  // };
 
-const uploadImgFile = async (file) => {
-  const formData = new FormData();
-  formData.append("file", file); // fixed key here
+  const uploadImgFile = async (file) => {
+    const formData = new FormData();
+    formData.append("file", file); // fixed key here
 
-  try {
-    const { data } = await axios.post(
-      `${import.meta.env.VITE_BASE_URL}/upload`,
-      formData,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "multipart/form-data",
-        },
-      }
-    );
-    return data?.url;
-  } catch (error) {
-    console.error("Error uploading file:", error);
-    throw new Error("Failed to upload");
-  }
-};
+    try {
+      const { data } = await axios.post(
+        `${import.meta.env.VITE_BASE_URL}/upload`,
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      return data?.url;
+    } catch (error) {
+      console.error("Error uploading file:", error);
+      throw new Error("Failed to upload");
+    }
+  };
 
   const fetchAudiobooks = useCallback(
     async (page) => {
@@ -113,10 +115,32 @@ const uploadImgFile = async (file) => {
     },
     [token]
   );
+  const fetchAudioPackage = useCallback(
+    async (page) => {
+      try {
+        setLoading(true);
+        const { data } = await axios.get(
+          `${import.meta.env.VITE_BASE_URL}/admin/pack?page=${page}&limit=10`,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
+        setAudioPackage(data.packs || []);
+        setTotalPages(data.meta?.totalPages || 1);
+      } catch (error) {
+        console.error("Error fetching audiobooks:", error);
+        showErrorToast("Failed to fetch audiobooks");
+      } finally {
+        setLoading(false);
+      }
+    },
+    [token]
+  );
 
   useEffect(() => {
     fetchAudiobooks(currentPage);
-  }, [fetchAudiobooks, currentPage]);
+    fetchAudioPackage(currentPage);
+  }, [fetchAudiobooks, currentPage, fetchAudioPackage]);
 
   const handleCreate = async () => {
     if (!title || !description || !imageFile || !audioFile || !price) {
@@ -135,17 +159,18 @@ const uploadImgFile = async (file) => {
 
       // Send the URLs in the create audiobook request
       await axios.post(
-        `${import.meta.env.VITE_BASE_URL}/admin/audiobook/create`,
+        `${import.meta.env.VITE_BASE_URL}/admin/pack`,
         {
           title,
           description,
           price: parseFloat(price),
+          discountedPrice: parseFloat(discountPrice),
           image: imageFile,
-          audio: audioFile,
+          audioBookIds: audioFile,
         },
         {
           headers: {
-        Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${token}`,
           },
         }
       );
@@ -155,9 +180,9 @@ const uploadImgFile = async (file) => {
       setTitle("");
       setDescription("");
       setImageFile(null);
-      setAudioFile(null);
+      setAudioFile([]);
       setPrice("");
-      fetchAudiobooks(currentPage);
+      fetchAudioPackage(currentPage);
     } catch (err) {
       console.error("Error creating audiobook:", err);
       showErrorToast("Failed to create audiobook");
@@ -169,13 +194,13 @@ const uploadImgFile = async (file) => {
   const handleDelete = async (id) => {
     try {
       await axios.delete(
-        `${import.meta.env.VITE_BASE_URL}/admin/audiobook/delete/${id}`,
+        `${import.meta.env.VITE_BASE_URL}/admin/pack/${id}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
       showSuccessToast("Audiobook deleted");
-      fetchAudiobooks(currentPage);
+      fetchAudioPackage(currentPage);
     } catch (err) {
       console.error("Error deleting audiobook:", err);
       showErrorToast("Failed to delete audiobook");
@@ -184,31 +209,39 @@ const uploadImgFile = async (file) => {
 
   const handleEdit = (id) => {
     // Navigate to the edit page with the audiobook ID
-  navigate(`/audio-detail/${id}`);
+    navigate(`/audio-package-detail/${id}`);
   };
 
   const columns = [
-    { key: "image", label: "Image", render: (row) => <img src={`${import.meta.env.VITE_BASE_URL_IMAGE}${row.image}`} alt={row.title} className="w-16 h-16 rounded" /> },
+    {
+      key: "image",
+      label: "Image",
+      render: (row) => (
+        <img
+          src={`${import.meta.env.VITE_BASE_URL_IMAGE}${row.image}`}
+          alt={row.title}
+          className="w-16 h-16 rounded"
+        />
+      ),
+    },
     { key: "title", label: "Title", render: (row) => `${row.title}` },
-    { key: "price", label: "Price", render: (row) => `${row.price}` },
-    { key: "audio", label: "Audio", render: (row) => <audio controls src={`${import.meta.env.VITE_BASE_URL_IMAGE}${row.audio}`} /> },
-  
 
+    { key: "price", label: "Price", render: (row) => `${row.price}` },
     {
       key: "actions",
       label: "Actions",
       render: (row) => (
         <div className="flex items-center gap-2">
-          <Tooltip content="Details">
+          <Tooltip content="detail">
             <button onClick={() => handleEdit(row.id)}>
               <Eye className="h-5 w-5 text-blue-500" />
             </button>
           </Tooltip>
-        <Tooltip content="Delete">
-          <button onClick={() => handleDelete(row.id)}>
-            <TrashIcon className="h-5 w-5 text-red-500" />
-          </button>
-        </Tooltip>
+          <Tooltip content="Delete">
+            <button onClick={() => handleDelete(row.id)}>
+              <TrashIcon className="h-5 w-5 text-red-500" />
+            </button>
+          </Tooltip>
         </div>
       ),
     },
@@ -221,22 +254,22 @@ const uploadImgFile = async (file) => {
         <div className="flex items-center justify-between">
           <div>
             <Typography variant="h5" color="blue-gray">
-              Audiobooks
+              Audiobooks Package
             </Typography>
             <Typography color="gray" className="mt-1 font-normal">
-              Manage all audiobooks
+              Manage all Audiobooks packages here.
             </Typography>
           </div>
           <Button className="bg-blue-500" onClick={() => setOpenModal(true)}>
-            Add Audiobook
+            Add Audiobook Package
           </Button>
         </div>
       </CardHeader>
 
-      <Dialog open={openModal} handler={() => setOpenModal(false)}>
+      <Dialog open={openModal} handler={() => setOpenModal(false)} size="md">
         <DialogHeader>Add a New Audiobook</DialogHeader>
         <DialogBody divider>
-          <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-4 h-[500px] p-2 overflow-y-auto">
             <Input
               label="Title"
               value={title}
@@ -267,28 +300,46 @@ const uploadImgFile = async (file) => {
               icon={<PhotoIcon className="h-5 w-5 text-gray-400" />}
             />
 
-            <Input
-              label="Audio"
-              type="file"
-              accept="audio/*"
-              onChange={async (e) => {
-                const file = e.target.files[0];
-                if (file) {
-                  try {
-                    const audioUrl = await uploadFile(file);
-                    setAudioFile(audioUrl);
-                  } catch (error) {
-                    showErrorToast("Failed to upload audio",error);
-                  }
-                }
-              }}
-              icon={<SpeakerWaveIcon className="h-5 w-5 text-gray-400" />}
-            />
+            <label className="text-sm text-gray-700 font-medium">
+              Select Audiobooks
+            </label>
+            <div className="max-h-40 overflow-y-auto border rounded p-2 space-y-2">
+              {audiobooks.map((audio) => (
+                <div key={audio.id} className="flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    id={`audio-${audio.id}`}
+                    value={audio.id}
+                    checked={audioFile.includes(audio.id)}
+                    onChange={(e) => {
+                      const id = audio.id;
+                      setAudioFile(
+                        (prev) =>
+                          e.target.checked
+                            ? [...prev, id] // add
+                            : prev.filter((item) => item !== id) // remove
+                      );
+                    }}
+                  />
+                  <label htmlFor={`audio-${audio.id}`} className="text-sm font-semibold">
+                    {audio.title}
+                  </label>
+                </div>
+              ))}
+            </div>
+
             <Input
               label="Price"
               value={price}
               type="number"
               onChange={(e) => setPrice(e.target.value)}
+            />
+
+            <Input
+              label="Discounted Price"
+              value={discountPrice}
+              type="number"
+              onChange={(e) => setDiscountPrice(e.target.value)}
             />
           </div>
         </DialogBody>
@@ -316,7 +367,7 @@ const uploadImgFile = async (file) => {
             <Spinner className="h-8 w-8 text-blue-500" />
           </div>
         ) : (
-          <CustomTable columns={columns} data={audiobooks} />
+          <CustomTable columns={columns} data={audioPackage} />
         )}
       </CardBody>
 
@@ -355,4 +406,4 @@ const uploadImgFile = async (file) => {
   );
 };
 
-export default Audiobooks;
+export default AudioPackage;
