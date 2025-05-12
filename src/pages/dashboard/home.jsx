@@ -11,32 +11,63 @@ import { AudioLinesIcon, Video } from "lucide-react";
 export function Home() {
   const token = Cookies.get("token");
   const [dashboardData, setDashboardData] = useState(null);
+const [isLoading, setIsLoading] = useState(true);
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const response = await axios.get(
+  //         `${import.meta.env.VITE_BASE_URL}/admin/dashboard`,
+  //         {
+  //           headers: {
+  //             Authorization: `Bearer ${token}`,
+  //             "Content-Type": "application/x-www-form-urlencoded",
+  //           },
+  //         }
+  //       );
+  //       // console.log(response.data.data, "response.data.data");
+  //       setDashboardData(response.data.data);
+  //     } catch (error) {
+  //       console.error("Error fetching data:", error);
+  //     }
+  //   };
+
+  //   if (token) {
+  //     fetchData();
+  //   } else {
+  //     // navigate("/login");
+  //   }
+  // }, [token]);
+
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(
-          `${import.meta.env.VITE_BASE_URL}/admin/dashboard`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-              "Content-Type": "application/x-www-form-urlencoded",
-            },
-          }
-        );
-        // console.log(response.data.data, "response.data.data");
-        setDashboardData(response.data.data);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-
-    if (token) {
-      fetchData();
-    } else {
-      // navigate("/login");
+  const fetchData = async () => {
+    setIsLoading(true); // Set loading to true when starting
+    try {
+      const response = await axios.get(
+        `${import.meta.env.VITE_BASE_URL}/admin/dashboard`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/x-www-form-urlencoded",
+          },
+        }
+      );
+      console.log(response.data.data, "response.data.data"); // Uncomment to debug
+      setDashboardData(response.data.data);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    } finally {
+      setIsLoading(false); // Set loading to false when done
     }
-  }, [token]);
+  };
+
+  if (token) {
+    fetchData();
+  } else {
+    setIsLoading(false); // Set loading to false if no token
+  }
+}, [token]);
+
 
   if (!dashboardData) {
     return (

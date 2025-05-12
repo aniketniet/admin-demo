@@ -9,6 +9,7 @@ import AudiobookDetail from "@/pages/dashboard/audio/AudiobookDetail";
 import VideoDetail from "@/pages/dashboard/video/VideoDetail";
 import TestimonailDetail from "@/pages/dashboard/testimonials/TestimonialDetail";
 import AudioPackageDetail from "@/pages/dashboard/audioPackage/AudioPackageDetail";
+import Home from "@/pages/dashboard/home";
 
 const Dashboard = () => {
   // Local state for toggling sidebar visibility on mobile
@@ -30,7 +31,8 @@ const Dashboard = () => {
         <DashboardNavbar isOpen={isOpen} setIsOpen={setIsOpen} />
         <Routes>
           {/* Redirect /dashboard to /dashboard/home */}
-          <Route path="/" element={<Navigate to="/home" replace />} />
+          <Route path="/" element={<Home />} />
+          
           <Route path="/user-detail/:id" element={<UserDetail />} />
           <Route path="/audio-detail/:id" element={<AudiobookDetail />} />
           <Route path="/video-detail/:id" element={<VideoDetail />} />
@@ -43,7 +45,7 @@ const Dashboard = () => {
                   <>
                     <Route
                       key={path}
-                      path={path.replace("/", "")}
+                      path={path?.replace("/", "")}
                       element={element}
                     />
                     {/* Handle subpages routing */}
